@@ -1,7 +1,8 @@
+import {Link} from "react-router"
 function Form(props) {
     return (
         <>
-            <form className={props.className + " min-w-4/5 max-w-4/5 flex flex-col"}>
+            <form className={props.className + " min-w-4/5 max-w-4/5 flex flex-col"} onSubmit={props.onSubmit}>
                 {props.children}
             </form>
         </>
@@ -22,7 +23,7 @@ function Input(props) {
         <>
             <div className="flex-col flex gap-0.5">
                 {props.children}
-                <input type={props.type} placeholder={props.text} className={"bg-light-base p-2.5 text-sm rounded-md w-full " + props.className} id={props.id + "-input"} />
+                <input type={props.type} placeholder={props.text} className={"bg-light-base p-2.5 text-sm rounded-md w-full " + props.className} id={props.id} name={props.id} onChange={props.onChange} />
             </div>
         </>
     )
@@ -32,7 +33,7 @@ function Checkbox(props) {
     return (
         <>
             <div className="flex gap-0.5 items-center">
-                <input type="checkbox" className={"bg-light-base text-sm rounded-md  " + props.className} id={props.id + "-checkbox"} />
+                <input type="checkbox" className={"bg-light-base text-sm rounded-md  " + props.className} id={props.id + "_checkbox"} defaultChecked={ props.isChecked ? "true" : false}/>
                 {props.children}
             </div>
         </>
@@ -53,7 +54,7 @@ function Button(props) {
 function FormLink(props) {
     return (
         <>
-            <span className="text-light-links text-sm  hover:cursor-pointer">{props.children}</span>
+            <Link to={props.link}><span className="text-light-links text-sm  hover:cursor-pointer">{props.children}</span></Link>
         </>
     )
 }
