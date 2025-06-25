@@ -79,7 +79,7 @@ export default function Register() {
                             <CardSubtitle id="login">Already have an account? <FormLink link="/login ">Login here</FormLink></CardSubtitle>
                         </CardHeader>
 
-                        <FormControl className=" gap-3 " >
+                        <FormControl className="gap-3" >
 
                             <FormGroup className="gap-3">
                                 <Input type="text" id="fname" text="Enter your first name" onChange={handleChange}>
