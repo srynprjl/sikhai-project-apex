@@ -2,16 +2,18 @@ import NavBar from "./components/NavBar";
 import HomeSVG from "../assets/home.svg";
 import ProductComponent from "./components/ProductComponent";
 import ProductivitySVG from "../assets/productivity.svg";
+import { MapPin, Mail, Phone, FacebookIcon, Instagram, Twitter } from 'lucide-react'
 import { useNavigate } from "react-router-dom";
 import SessionBox from "./components/SessionBox";
 import Test from "../assets/test.png";
 import PremiumExperience from "../assets/premium-experience.svg"
+import StudentTestimony from "./components/StudentTestimony";
 
 export default function LandingPage() {
     let navigate = useNavigate()
     return (
         <>
-            <div className="landingpage-container flex flex-col gap-24">
+            <div className="flex flex-col gap-24">
                 <NavBar />
 
                 <section id="home" className="flex justify-center items-center ">
@@ -78,7 +80,7 @@ export default function LandingPage() {
                             </div>
                         </div>
                         <div className="flex gap-5 items-center">
-                            <img src={ProductivitySVG} alt=""  className="w-14 p-2 bg-btn rounded-xl"  />
+                            <img src={ProductivitySVG} alt="" className="w-14 p-2 bg-btn rounded-xl" />
                             <div>
                                 <div className="font-medium text-xl">Easily Accessible</div>
                                 <div className="text-gray-600 text-sm">Access quality education from any device, anytime, anywhere in Nepal.</div>
@@ -89,6 +91,69 @@ export default function LandingPage() {
 
 
                 <hr className="my-12" />
+
+                <section id="testimony">
+                    <h1 className="text-4xl font-bold text-center mb-5">What students say? </h1>
+                    <div className="grid grid-cols-3 gap-5">
+                        <StudentTestimony name="ABC XYZ">
+                            SIKHAI's notes are a lifesaver! I used to spend hours searching, but now everything is organized and easy to understand. My grades have definitely improved.
+                        </StudentTestimony>
+                        <StudentTestimony name="NMPZ NPZ">
+                            "Preparing for my entrance exams felt overwhelming until I found SIKHAI. The mock tests were crucial, and booking a tutor was incredibly simple and effective."
+                        </StudentTestimony>
+                        <StudentTestimony name="ABCDE">
+                            "This platform is a game-changer! From managing my daily tasks to accessing quality teachers, SIKHAI has truly streamlined my entire study routine. Highly recommend!"
+                        </StudentTestimony>
+                    </div>
+                </section>
+
+                <hr className="my-12" />
+
+                <section id="contact">
+
+                    <div className="flex gap-8">
+
+                        <div className="w-1/2 border-r-2 border-dotted ">
+                            <h1 className="text-4xl font-black text-center">Contact Us</h1>
+                            <div className="flex flex-col gap-3 justify-center h-full">
+                                <div className="flex gap-2"><MapPin /> 1261 Devkota Sadak, Mid-Baneshwor, Kathmandu</div>
+                                <div className="flex gap-2"><Mail /> sikhai@sysnefo.com</div>
+                                <div className="flex gap-2"><Phone /> +977-9849025027</div>
+                                <hr className="w-24" />
+                                <div className="flex gap-2"><FacebookIcon /> sikhaiapp</div>
+                                <div className="flex gap-2"><Instagram /> sikhaiapp</div>
+                                <div className="flex gap-2"><Twitter /> sikhaiapp</div>
+                            </div>
+                        </div>
+                        <div className="w-1/2">
+                            <h1 className="text-4xl font-black mb-5 text-center">Send us a Message</h1>
+                            <form action="" className="flex flex-col gap-4">
+                                <div className="flex-col flex">
+                                    <label htmlFor="" className="font-semibold">Name</label>
+                                    <input type="text" name="" id="" className="bg-white p-4" />
+                                </div>
+                                <div className="flex-col flex">
+
+                                    <label htmlFor="" className="font-semibold">Email</label>
+                                    <input type="email" name="" id="" className="bg-white p-4" />
+                                </div>
+
+                                <div className="flex-col flex">
+                                    <label htmlFor="" className="font-semibold">Message</label>
+                                    <textarea name="" rows="8" id="" className="bg-white"></textarea>
+                                </div>
+
+                                <button type="submit" className="bg-btn text-white font-medium p-4 rounded-3xl">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <hr />
+
+                <footer className="">
+                    FOOTER HERE
+                </footer>
 
             </div>
         </>
