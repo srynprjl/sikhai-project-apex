@@ -1,10 +1,11 @@
-import NavBar from "./NavBar";
+import NavBar from "./components/NavBar";
 import HomeSVG from "../assets/home.svg";
-import ProductComponent from "./ProductComponent";
+import ProductComponent from "./components/ProductComponent";
 import ProductivitySVG from "../assets/productivity.svg";
 import { useNavigate } from "react-router-dom";
-import SessionBox from "./SessionBox";
+import SessionBox from "./components/SessionBox";
 import Test from "../assets/test.png";
+import PremiumExperience from "../assets/premium-experience.svg"
 
 export default function LandingPage() {
     let navigate = useNavigate()
@@ -49,14 +50,46 @@ export default function LandingPage() {
                     </div>
                 </div>
 
+
+                <hr className="my-12" />
+
                 <section id="our-services">
                     <h1 className="font-black text-center text-4xl mb-8">Our Services</h1>
                     <div className="grid grid-cols-3 gap-16">
-                    <SessionBox img={Test} tutor="Prajina Bhattarai" rating={5} subject="Object Oriented with Java"/>
-                    <SessionBox img={Test} tutor="Prajina Bhattarai" rating={4} subject="Database Management System"/>
-                    <SessionBox img={Test} tutor="Prajina Bhattarai" rating={3} subject="Introduction to Programming with Python" />
+                        <SessionBox img={Test} tutor="Prajina Bhattarai" rating={5} subject="Object Oriented with Java" />
+                        <SessionBox img={Test} tutor="Jiban Khatri" rating={4} subject="Database Management System" />
+                        <SessionBox img={Test} tutor="Aabash Sharma" rating={3} subject="Introduction to Programming with Python" />
                     </div>
                 </section>
+
+                <hr className="my-12" />
+
+                <section id="premium-learning-experience" className="flex justify-between">
+                    <div>
+                        <img src={PremiumExperience} alt="" className="w-64 h-auto relative bottom-24" />
+                    </div>
+                    <div className="flex flex-col gap-6">
+                        <h1 className="font-black text-5xl w-10/12">Premium <span className="text-orange-400">Learning</span> Experience</h1>
+                        <div className="flex gap-5 items-center">
+                            <img src={ProductivitySVG} alt="" className="w-14 p-2 bg-btn rounded-xl" />
+                            <div>
+                                <div className="font-medium text-xl">Fun learning experience</div>
+                                <div className="text-gray-600 text-sm">Benefit from the professional support for effective and enjoyable learning.</div>
+                            </div>
+                        </div>
+                        <div className="flex gap-5 items-center">
+                            <img src={ProductivitySVG} alt=""  className="w-14 p-2 bg-btn rounded-xl"  />
+                            <div>
+                                <div className="font-medium text-xl">Easily Accessible</div>
+                                <div className="text-gray-600 text-sm">Access quality education from any device, anytime, anywhere in Nepal.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+                <hr className="my-12" />
+
             </div>
         </>
     );
