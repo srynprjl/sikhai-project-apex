@@ -2,8 +2,12 @@ import NavBar from "./NavBar";
 import HomeSVG from "../assets/home.svg";
 import ProductComponent from "./ProductComponent";
 import ProductivitySVG from "../assets/productivity.svg";
+import { useNavigate } from "react-router-dom";
+import SessionBox from "./SessionBox";
+import Test from "../assets/test.png";
 
 export default function LandingPage() {
+    let navigate = useNavigate()
     return (
         <>
             <div className="landingpage-container flex flex-col gap-24">
@@ -20,7 +24,7 @@ export default function LandingPage() {
                             tutoring
                         </div>
                         <div>
-                            <button className="py-2 px-7.5 bg-btn rounded-full text-white">
+                            <button className="py-2 px-7.5 bg-btn rounded-full text-white" onClick={() => navigate('/register')}>
                                 Get Started
                             </button>
                         </div>
@@ -44,6 +48,15 @@ export default function LandingPage() {
                         </ProductComponent>
                     </div>
                 </div>
+
+                <section id="our-services">
+                    <h1 className="font-black text-center text-4xl mb-8">Our Services</h1>
+                    <div className="grid grid-cols-3 gap-16">
+                    <SessionBox img={Test} tutor="Prajina Bhattarai" rating={5} subject="Object Oriented with Java"/>
+                    <SessionBox img={Test} tutor="Prajina Bhattarai" rating={4} subject="Database Management System"/>
+                    <SessionBox img={Test} tutor="Prajina Bhattarai" rating={3} subject="Introduction to Programming with Python" />
+                    </div>
+                </section>
             </div>
         </>
     );

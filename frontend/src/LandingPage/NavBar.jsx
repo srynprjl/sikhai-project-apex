@@ -1,4 +1,7 @@
+import {useNavigate} from 'react-router-dom'
 export default function NavBar() {
+  let navigate = useNavigate()
+
   return (
     <nav className="flex justify-between items-center font-sans">
       <div className="font-bold text-4xl">SIKHAI</div>
@@ -11,10 +14,10 @@ export default function NavBar() {
           <li>Contact Us</li>
         </ul>
         <div className="flex gap-1.5 font-bold">
-          <button className="py-2 px-8.5 bg-btn rounded-full text-white">
+          <button className="py-2 px-8.5 bg-btn rounded-full text-white" onClick={() => navigate('/login')}>
             Sign In
           </button>
-          <button className="py-2 px-7.5 bg-btn rounded-full text-white">
+          <button className="py-2 px-7.5 bg-btn rounded-full text-white " onClick={() => navigate('/register')}>
             Register
           </button>
         </div>
