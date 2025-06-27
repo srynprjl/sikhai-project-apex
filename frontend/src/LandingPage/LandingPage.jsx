@@ -55,8 +55,8 @@ export default function LandingPage() {
 
                 <hr className="my-12" />
 
-                <section id="our-services">
-                    <h1 className="font-black text-center text-4xl mb-8">Our Services</h1>
+                <section id="our-sessions">
+                    <h1 className="font-black text-center text-4xl mb-8">Our Sessions</h1>
                     <div className="grid grid-cols-3 gap-16">
                         <SessionBox img={Test} tutor="Prajina Bhattarai" rating={5} subject="Object Oriented with Java" />
                         <SessionBox img={Test} tutor="Jiban Khatri" rating={4} subject="Database Management System" />

@@ -7,11 +7,11 @@ export default function NavBar() {
       <div className="font-bold text-4xl">SIKHAI</div>
       <div className="flex space-x-24 items-center">
         <ul className="flex list-none space-x-8 text-sm font-semibold">
-          <li>Home</li>
+          <a href='#home'><li>Home</li></a>
           <li>About Us</li>
           <li>Courses</li>
-          <li>Our Services</li>
-          <li>Contact Us</li>
+          <a href='#our-sessions'><li>Our Sessions</li></a>
+          <a href='#contact'><li>Contact Us</li></a>
         </ul>
         <div className="flex gap-1.5 font-bold">
           <button className="py-2 px-8.5 bg-btn rounded-full text-white" onClick={() => navigate('/login')}>
