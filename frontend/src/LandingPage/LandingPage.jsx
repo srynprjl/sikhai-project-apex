@@ -13,7 +13,7 @@ export default function LandingPage() {
     let navigate = useNavigate()
     return (
         <>
-            <div className="flex flex-col gap-24">
+            <div className="flex flex-col gap-24 p-[5rem]">
                 <NavBar />
 
                 <section id="home" className="flex justify-center items-center ">
@@ -60,7 +60,7 @@ export default function LandingPage() {
                     <div className="grid grid-cols-3 gap-16">
                         <SessionBox img={Test} tutor="Prajina Bhattarai" rating={5} subject="Object Oriented with Java" />
                         <SessionBox img={Test} tutor="Jiban Khatri" rating={4} subject="Database Management System" />
-                        <SessionBox img={Test} tutor="Aabash Sharma" rating={3} subject="Introduction to Programming with Python" />
+                        <SessionBox img={Test} tutor="Aabhash Sharma" rating={3} subject="Introduction to Programming with Python" />
                     </div>
                 </section>
 

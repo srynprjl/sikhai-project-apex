@@ -9,15 +9,10 @@
   --color-error: #f00;
   --color-btn: #4D2C5E;
   --color-productivity-bg: rgba(255,255,255,0.2);
-
+  --color-sidebar-items: rgba(51, 102, 255, 0.2);
   --font-sans: 'Roboto';
 }
 
-
-#root{
-  padding: 5rem;
-
-}
 body{
   background-color: #FDF8EE;
 }
