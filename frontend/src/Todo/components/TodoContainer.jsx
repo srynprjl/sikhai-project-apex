@@ -1,4 +1,4 @@
-import { Trash } from "lucide-react";
+import { Delete, Trash } from "lucide-react";
 
 export default function TodoContainer(props) {
   return (
