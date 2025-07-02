@@ -1,4 +1,3 @@
-import data from '../data'
 import { Card, CardHeader, CardSubtitle, CardTitle } from './components/Card'
 import { Form, Button, Input, FormLink, FormGroup, FormLabel, FormError, FormControl, Checkbox } from './components/Form'
 import Container from './components/Container'
@@ -51,8 +50,6 @@ export default function Login() {
         }
     }
 
-
-
     
     return (
         <div className="flex">
@@ -60,7 +57,7 @@ export default function Login() {
                 <Card id="login">
                     <Form className="gap-16" onSubmit={formSubmit}>
                         <CardHeader id="login-title">
-                            <CardTitle id="login">Login to {data.companyName.toUpperCase()}</CardTitle>
+                            <CardTitle id="login">Login to SIKHAI</CardTitle>
                             <CardSubtitle id="login">Don't have an account? <FormLink link="/register">Register here</FormLink></CardSubtitle>
                         </CardHeader>
 
@@ -90,7 +87,7 @@ export default function Login() {
 
 
             <Container id="login-right" className="bg-light-secondary flex-col justify-between ">
-                <div className='text-5xl font-black'>{ data.companyName.toUpperCase() }</div>
+                <div className='text-5xl font-black'>SIKHAI</div>
                 <div><img src={LoginArt} alt="" /></div>
                 <div className='font-semibold'>&copy; sysnefo {new Date().getFullYear()}</div>
             </Container>

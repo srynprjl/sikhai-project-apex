@@ -97,7 +97,7 @@ export default function Whiteboard() {
   };
 
   return (
-    <div className="h-11/12 excalidraw_sikhai">
+    <div className="h-[89vh] excalidraw_sikhai">
       <Excalidraw
         ref={excalidrawRef}
         onChange={handleExcalidrawChange}

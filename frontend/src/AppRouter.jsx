@@ -9,6 +9,7 @@ import Whiteboard from "./Whiteboard/Whiteboard";
 import TodoCreate from "./Todo/TodoCreate";
 import NoteCreate from "./Notes/NoteCreate";
 import NotePage from "./Notes/components/NotePage";
+import PublicNotesView from "./Notes/PublicNotesView";
 
 const AppRouter = () => {
   return (
@@ -39,6 +40,17 @@ const AppRouter = () => {
             </DashboardLayout>
           }
         />
+
+        <Route
+          path="/notes/browse"
+          element={
+            <DashboardLayout>
+              <PublicNotesView />
+            </DashboardLayout>
+          }
+        />
+
+
         <Route
           path="/todos"
           element={

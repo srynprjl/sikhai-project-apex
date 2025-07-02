@@ -10,7 +10,9 @@ export default function TodoView(){
     const navigate = useNavigate()
     return(
         <div className="p-8 flex flex-col gap-3">
-            <div className="search"><input type="search" className="bg-white w-full h-10 rounded-md border-btn border-2 p-2 focus:outline-0" placeholder="Search..."/> </div>
+            <input type="search"  placeholder="Search..." className="text-xl font-bold outline-0"/>
+            
+            <hr />
            <div className="flex justify-between">
              <h1 className="font-bold text-2xl">Your Todos <span className="text-gray-500"> ({count})</span></h1>
             <button className="flex items-center bg-btn p-2 rounded-4xl text-white font-semibold text-xs" onClick={() => navigate("/todos/create")}> <Plus size={16}/>Create Todo</button>
