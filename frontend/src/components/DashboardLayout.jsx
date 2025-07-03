@@ -6,7 +6,7 @@ export default function DashboardLayout(props){
         <>
         <div className="flex">
                 <Sidebar />
-                <div className="w-full">
+                <div className="w-full h-full ml-16">
                     <TopBar />
                     {props.children}
                 </div>

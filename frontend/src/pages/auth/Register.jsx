@@ -1,8 +1,7 @@
-import data from '../data'
 import { Card, CardHeader, CardSubtitle, CardTitle } from './components/Card'
 import { Form, Button, Input, FormLink, FormGroup, FormLabel, FormError, FormControl} from './components/Form'
 import Container from './components/Container'
-import RegisterArt from './assets/register-art.svg';
+import RegisterArt from '../../assets/register-art.svg';
 import { useState } from 'react';
 
 export default function Register() {
@@ -65,7 +64,7 @@ export default function Register() {
         <div className="flex">
 
             <Container id="login-right" className="bg-light-secondary flex-col justify-between">
-                <div className='text-5xl font-black'>{data.companyName.toUpperCase()}</div>
+                <div className='text-5xl font-black'>SIKHAI</div>
                 <div><img src={RegisterArt} alt="" /></div>
                 <div className='font-semibold'>&copy; sysnefo {new Date().getFullYear()}</div>
             </Container>
@@ -75,7 +74,7 @@ export default function Register() {
                 <Card id="login">
                     <Form className="gap-10" onSubmit={handleSubmit}>
                         <CardHeader id="login-title">
-                            <CardTitle id="login">Register to {data.companyName.toUpperCase()}</CardTitle>
+                            <CardTitle id="login">Register to SIKHAI</CardTitle>
                             <CardSubtitle id="login">Already have an account? <FormLink link="/login ">Login here</FormLink></CardSubtitle>
                         </CardHeader>
 
