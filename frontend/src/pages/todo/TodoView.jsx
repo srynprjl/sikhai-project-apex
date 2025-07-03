@@ -10,6 +10,7 @@ export default function TodoView() {
 
   return (
     <DashboardView
+      firstContainer
       btnName="Todo"
       btnSrc="/todos/create"
       btnVisible

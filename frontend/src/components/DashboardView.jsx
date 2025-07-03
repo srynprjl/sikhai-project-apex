@@ -8,7 +8,7 @@ export default function DashboardView(props) {
 
   return (
 
-    <div className="p-8 flex flex-col gap-3">
+    <div className={(props.firstContainer ? "p-8 " : "") + "flex flex-col gap-3"}>
         <input type="search"  placeholder="Search..." className="text-xl font-bold outline-0"/>
         <hr />
       <div className="flex justify-between">

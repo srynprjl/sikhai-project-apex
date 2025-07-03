@@ -8,7 +8,7 @@ export default function TutorHub() {
   const [count, setCount] = useState(0);
   const [tutors, setTutors] = useState([]);
   return (
-    <DashboardView btnName="Booking" btnSrc="/tutors/create" btnVisible title="All Bookings" count={count}>
+    <DashboardView firstContainer btnName="Booking" btnSrc="/tutors/create" btnVisible title="All Bookings" count={count}>
       
       <SessionBox
         img={Test}
