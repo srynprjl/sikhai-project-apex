@@ -27,7 +27,20 @@ import PublicNotesView from "./pages/notes/PublicNotesView";
 import TutorHub from "./pages/tutor_booking/TutorHub";
 import TutorCreateBooking from "./pages/tutor_booking/TutorCreateBooking";
 import TutorInfo from "./pages/tutor_booking/TutorInfo";
+
+import ProtectedRoute from "./components/ProtectedRoute";
 // exams
+
+function Logout() {
+  localStorage.clear()
+  return <Navigate to="/login" />
+}
+
+function RegisterAndLogout() {
+  localStorage.clear()
+  return <Register />
+}
+
 
 const AppRouter = () => {
   return (
@@ -39,36 +52,44 @@ const AppRouter = () => {
           <Route
             index
             element={
+              <ProtectedRoute>
               <DashboardLayout>
                 <NoteView />
               </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path=":id"
             element={
+              <ProtectedRoute>
               <DashboardLayout>
                 <NotePage />
               </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="create"
             element={
+              <ProtectedRoute>
               <DashboardLayout>
                 <NoteCreate />
               </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="browse"
             element={
+              <ProtectedRoute>
               <DashboardLayout>
                 <PublicNotesView />
               </DashboardLayout>
+              </ProtectedRoute>
             }
           />
         </Route>
@@ -77,18 +98,22 @@ const AppRouter = () => {
           <Route
             index
             element={
+              <ProtectedRoute>
               <DashboardLayout>
                 <TodoView />
               </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="create"
             element={
+              <ProtectedRoute>
               <DashboardLayout>
                 <TodoCreate />
               </DashboardLayout>
+              </ProtectedRoute>
             }
           />
         </Route>
@@ -96,9 +121,11 @@ const AppRouter = () => {
         <Route
           path="/whiteboard"
           element={
+            <ProtectedRoute>
             <DashboardLayout>
               <Whiteboard />
             </DashboardLayout>
+            </ProtectedRoute>
           }
         />
 
@@ -106,25 +133,31 @@ const AppRouter = () => {
           <Route
             index
             element={
+              <ProtectedRoute>
               <DashboardLayout>
                 <TutorHub />
               </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="create"
             element={
+              <ProtectedRoute>
               <DashboardLayout>
                 <TutorCreateBooking />
               </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
           <Route
           path=":id"
           element={
+            <ProtectedRoute>
             <DashboardLayout><TutorInfo /></DashboardLayout>
+            </ProtectedRoute>
           } 
           />
 
@@ -132,7 +165,8 @@ const AppRouter = () => {
 
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<RegisterAndLogout />} />
+        <Route path="/logout" element={<Logout />} />
       </Routes>
     </Router>
   );

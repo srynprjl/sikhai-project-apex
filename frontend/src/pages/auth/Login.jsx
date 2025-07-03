@@ -33,6 +33,7 @@ export default function Login() {
     function formSubmit(event){
         event.preventDefault();
 
+
         if(user.username == ""){
             setUsernameError("Enter your username")
         } else if(user.username != testData.email){
@@ -48,7 +49,15 @@ export default function Login() {
         } else {
             setPasswordError("")
         }
+
+        // login to db
+
+
+
     }
+
+
+
 
     
     return (
