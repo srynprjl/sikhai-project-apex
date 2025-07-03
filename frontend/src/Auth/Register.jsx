@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardSubtitle, CardTitle } from './components/Card'
 import { Form, Button, Input, FormLink, FormGroup, FormLabel, FormError, FormControl} from './components/Form'
 import Container from './components/Container'
-import RegisterArt from './assets/register-art.svg';
+import RegisterArt from '../assets/register-art.svg';
 import { useState } from 'react';
 
 export default function Register() {
