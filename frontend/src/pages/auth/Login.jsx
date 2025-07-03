@@ -1,7 +1,7 @@
 import { Card, CardHeader, CardSubtitle, CardTitle } from './components/Card'
 import { Form, Button, Input, FormLink, FormGroup, FormLabel, FormError, FormControl, Checkbox } from './components/Form'
 import Container from './components/Container'
-import LoginArt from '../assets/login-art.svg';
+import LoginArt from '../../assets/login-art.svg';
 import { useState } from 'react';
 
 export default function Login() {

@@ -1,7 +1,7 @@
 import NavBar from "./components/NavBar";
-import HomeSVG from "../assets/home.svg";
+import HomeSVG from "../../assets/home.svg";
 import ProductComponent from "./components/ProductComponent";
-import ProductivitySVG from "../assets/productivity.svg";
+import ProductivitySVG from "../../assets/productivity.svg";
 import {
   MapPin,
   Mail,
@@ -12,8 +12,8 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import SessionBox from "./components/SessionBox";
-import Test from "../assets/test.png";
-import PremiumExperience from "../assets/premium-experience.svg";
+import Test from "../../assets/test.png";
+import PremiumExperience from "../../assets/premium-experience.svg";
 import StudentTestimony from "./components/StudentTestimony";
 
 export default function LandingPage() {

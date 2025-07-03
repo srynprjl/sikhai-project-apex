@@ -1,30 +1,32 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router";
 
 // Auth Pages
-import Login from "./pages/Auth/Login";
-import Register from "./pages/Auth/Register";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
 
 // Landing Page
-import LandingPage from "./pages/LandingPage/LandingPage";
+import LandingPage from "./pages/landing_page/LandingPage";
 
 // Dashboard
-import DashboardLayout from "./pages/Dashboard/DashboardLayout";
+import DashboardLayout from "./pages/dashboard/DashboardLayout";
 
 
 //whiteboard
-import Whiteboard from "./pages/Whiteboard/Whiteboard";
+import Whiteboard from "./pages/whiteboard/Whiteboard";
 
 // todo
-import TodoView from "./pages/Todo/TodoView";
-import TodoCreate from "./pages/Todo/TodoCreate";
+import TodoView from "./pages/todo/TodoView";
+import TodoCreate from "./pages/todo/TodoCreate";
 
 //notes
-import NoteView from "./pages/Notes/NoteView";
-import NoteCreate from "./pages/Notes/NoteCreate";
-import NotePage from "./pages/Notes/components/NotePage";
-import PublicNotesView from "./pages/Notes/PublicNotesView";
+import NoteView from "./pages/notes/NoteView";
+import NoteCreate from "./pages/notes/NoteCreate";
+import NotePage from "./pages/notes/components/NotePage";
+import PublicNotesView from "./pages/notes/PublicNotesView";
 
 // tutors
+
+
 
 // exams
 
