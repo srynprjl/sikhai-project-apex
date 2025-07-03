@@ -1,5 +1,5 @@
 import { useState } from "react";
-import EditorJS from "./Editor";
+import EditorJS from "../../components/Editor";
 import { useParams } from "react-router";
 
 export default function NotePage(props) {
@@ -31,7 +31,7 @@ export default function NotePage(props) {
           </h1>
           <div className="properties"></div>
           <hr />
-          <div id="editor" className="prose">
+          <div id="editor" className="">
             <EditorJS
               data={data}
               onChange={setData}

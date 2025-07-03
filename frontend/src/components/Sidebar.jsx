@@ -17,7 +17,7 @@ export default function Sidebar(props){
                 <span><button className="hover:bg-sidebar-items p-2 rounded-md" onClick={() => navigate('/notes/browse')}><Notebook /></button></span>
                 <span><button className="hover:bg-sidebar-items p-2 rounded-md" onClick={() => navigate('/whiteboard')}><Presentation /></button></span>
                 <span><button className="hover:bg-sidebar-items p-2 rounded-md" onClick={() => navigate('/')}><Pencil /></button></span>
-                <span><button className="hover:bg-sidebar-items p-2 rounded-md" onClick={() => navigate('/')}><BookCheck /></button></span>
+                <span><button className="hover:bg-sidebar-items p-2 rounded-md" onClick={() => navigate('/tutors')}><BookCheck /></button></span>
             </div>
 
             <div className="flex flex-col gap-6 items-center">

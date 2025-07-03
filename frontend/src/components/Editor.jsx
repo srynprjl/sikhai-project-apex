@@ -26,7 +26,7 @@ const Editor = ({data, onChange, editorBlock}) => {
         }
     }, [])
 
-    return <div id={editorBlock} />
+    return <div id={editorBlock} className='prose' />
 }
 
 

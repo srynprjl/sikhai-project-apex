@@ -1,6 +1,6 @@
 import { Plus } from "lucide-react";
 import { useState } from "react";
-import NoteContainer from "./components/NoteContainer";
+import NoteContainer from "../../components/NoteContainer";
 import { useNavigate } from "react-router";
 
 export default function NoteView() {
@@ -58,6 +58,7 @@ export default function NoteView() {
           facere sequi dolores!
         </NoteContainer>
       </div>
+      
     </div>
   );
 }

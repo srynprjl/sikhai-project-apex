@@ -1,6 +1,6 @@
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useState } from "react";
-import UserPhoto from "../../assets/test.png";
+import UserPhoto from "../assets/test.png";
 
 export default function TopBar() {
   const [darkMode, setDarkMode] = useState(false);

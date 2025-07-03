@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import EditorJS from './components/Editor';
+import EditorJS from '../../components/Editor';
 
 const INITIAL_DATA = {
   time: new Date().getTime(),
