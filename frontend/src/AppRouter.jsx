@@ -26,6 +26,7 @@ import PublicNotesView from "./pages/notes/PublicNotesView";
 // tutors
 import TutorHub from "./pages/tutor_booking/TutorHub";
 import TutorCreateBooking from "./pages/tutor_booking/TutorCreateBooking";
+import TutorInfo from "./pages/tutor_booking/TutorInfo";
 // exams
 
 const AppRouter = () => {
@@ -119,6 +120,14 @@ const AppRouter = () => {
               </DashboardLayout>
             }
           />
+
+          <Route
+          path=":id"
+          element={
+            <DashboardLayout><TutorInfo /></DashboardLayout>
+          } 
+          />
+
         </Route>
 
         <Route path="/" element={<LandingPage />} />

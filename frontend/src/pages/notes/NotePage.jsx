@@ -36,6 +36,7 @@ export default function NotePage(props) {
               data={data}
               onChange={setData}
               editorBlock="editorjs-container"
+                
             />
           </div>
         </form>

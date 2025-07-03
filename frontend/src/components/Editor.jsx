@@ -2,7 +2,7 @@ import React, { memo, useEffect, useRef} from 'react'
 import EditorJS from '@editorjs/editorjs'
 import { EDITOR_JS_TOOLS } from './Tools'
 
-const Editor = ({data, onChange, editorBlock}) => {
+const Editor = ({data, onChange, editorBlock, isPublic}) => {
     const ref = useRef()
 
     useEffect(() => {
@@ -14,7 +14,8 @@ const Editor = ({data, onChange, editorBlock}) => {
                 async onChange(api, event) {
                     const data = await api.saver.save()
                     onChange(data)
-                }
+                },
+                readOnly: (isPublic ? true : false)
             })
             ref.current = editor
         }
