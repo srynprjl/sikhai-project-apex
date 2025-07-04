@@ -3,51 +3,46 @@ import { Form, Button, Input, FormLink, FormGroup, FormLabel, FormError, FormCon
 import Container from './components/Container'
 import LoginArt from '../../assets/login-art.svg';
 import { useState } from 'react';
+import api from "../../api";
+import { useNavigate } from "react-router-dom";
+import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
 
 export default function Login() {
     document.title = "Login - Sikhai"
-    const [user, setUser] = useState(
-        {
-            username: "",
-            password: "",
-            rememberMe: ""
-        }
-    )
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
     const [ usernameError, setUsernameError ] = useState("");
     const [ passwordError, setPasswordError ] = useState("");
-
-    const testData = {
-        email: "dummy@sikhai.com",
-        password: "1234"
-    }
-
-    function handleChange(event){
-        const {name, value} = event.target;
-        setUser((prev) => ({
-            ...prev, 
-            [name]: value
-        }))
-    }
+    const navigate = useNavigate()
 
 
-    function formSubmit(event){
+    async function formSubmit(event){
         event.preventDefault();
-
-        if(user.username == ""){
+        
+        if(username == ""){
             setUsernameError("Enter your username")
-        } else if(user.username != testData.email){
-            setUsernameError("Incorrect username")
+            return
         } else {
             setUsernameError("")
         }
 
-        if(user.password == ""){
+        if(password == ""){
             setPasswordError("Enter your password")
-        } else if(user.password != testData.password){
-            setPasswordError("Incorrect password")
+            return
         } else {
             setPasswordError("")
         }
+
+        try{
+            const res = await api.post("/api/token/", { username, password })
+
+            localStorage.setItem(ACCESS_TOKEN, res.data.access);
+            localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+            navigate("/dashboard")
+        }catch(e){
+            console.log(e)
+            setUsernameError("Incorrect details")
+        } 
     }
 
     
@@ -63,11 +58,11 @@ export default function Login() {
 
                         <FormControl className=" gap-7 ">
 
-                            <Input type="text" id="username" text="Enter your Username" onChange={handleChange}>
+                            <Input type="text" id="username" text="Enter your Username" onChange={(e) => setUsername(e.target.value)}>
                                 {usernameError == "" ? <FormLabel className="font-semibold">Username / Email</FormLabel> : <FormError>{usernameError}</FormError>}
                             </Input>
 
-                            <Input type="password" id="password" text="Enter your password" onChange={handleChange}>
+                            <Input type="password" id="password" text="Enter your password" onChange={(e) => setPassword(e.target.value)}>
                                 <FormGroup>
                                     {passwordError == "" ? <FormLabel className="font-semibold">Password</FormLabel> : <FormError>{passwordError}</FormError>}
                                     <FormLink>Forgot your password?</FormLink>

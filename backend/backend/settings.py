@@ -4,16 +4,11 @@ from datetime import timedelta
 from dotenv import load_dotenv
 import os
 
-
 load_dotenv()
-
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-jr(-3g2b2a2a=7mbqjj8#os(e(a#!d&0e+&qv*975he@9ez82j'
-
 DEBUG = True
-
 ALLOWED_HOSTS = ["*"]
 
 REST_FRAMEWORK = {
@@ -40,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'Authentication',
+        "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -50,6 +46,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -123,3 +120,7 @@ STATIC_URL = 'static/'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWS_CREDENTIALS = True

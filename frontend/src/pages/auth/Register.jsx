@@ -3,60 +3,69 @@ import { Form, Button, Input, FormLink, FormGroup, FormLabel, FormError, FormCon
 import Container from './components/Container'
 import RegisterArt from '../../assets/register-art.svg';
 import { useState } from 'react';
+import api from "../../api";
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function Register() {
+const navigate = useNavigate()
     document.title = "Register - Sikhai"
     const [usernameError, setUserNameError] = useState("")
     const [emailError, setEmailError] = useState("")
     const [confirmPasswordError, setConfirmPasswordError] = useState("")
 
-    const testData = {
-        username: "sikhai",
-        email: "dummy@sikhai.com",
-        password: "password"
-    }
+    
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [first_name, setFname] = useState("");
+  const [last_name, setLname] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("")
 
-    const [user, setUser] = useState(
-        {
-            fname: "",
-            lname: "",
-            username: "",
-            email: "",
-            password: "",
-            confirm_password: "",
-        }
-    )
 
-    function handleChange(event){
-        const {name, value} = event.target;
-        setUser((prev) => ({
-            ...prev, 
-            [name]: value
-        }))
-    }
-
-    function handleSubmit(e){
+    async function handleSubmit(e){
         e.preventDefault();
 
-        console.log(user)
-
-        if(user.username == testData.username){
-            setUserNameError("Username is already taken")
+        if(username == ""){
+            setUserNameError("Enter a username")
         } else {
             setUserNameError("")
         }
 
-        if(user.email == testData.email){
-            setEmailError("Email is already used")
+        if(email == ""){
+            setEmailError("Enter an email")
+        } else {
+            setEmailError("")
+        }
+
+        if(password == ""){
+            setEmailError("Enter an password")
+        } else {
+            setEmailError("")
+        }
+
+        if(password.length < 4){
+            setEmailError("Password must be greater than 8")
         } else {
             setEmailError("")
         }
  
-        if(user.password != user.confirm_password){
+        if(password != confirmPassword){
             setConfirmPasswordError("Password doesnt match")
         } else {
             setConfirmPasswordError("")
         }
+
+
+        try{
+            const res = await api.post("/api/user/register/", {username, email, first_name, last_name, password})
+            console.log(res.data)
+            navigate("/login")
+        }catch(e){
+            console.log(e)
+            setUserNameError("User already exists")
+        } 
     }
 
 
@@ -81,27 +90,27 @@ export default function Register() {
                         <FormControl className="gap-3" >
 
                             <FormGroup className="gap-3">
-                                <Input type="text" id="fname" text="Enter your first name" onChange={handleChange}>
+                                <Input type="text" id="fname" text="Enter your first name" onChange={(e) => setFname(e.target.value)}>
                                     <FormLabel className="font-semibold">First Name</FormLabel>
                                 </Input>
 
-                                <Input type="text" id="lname" text="Enter your last name"  onChange={handleChange}>
+                                <Input type="text" id="lname" text="Enter your last name"  onChange={(e) => setLname(e.target.value)}>
                                     <FormLabel className="font-semibold">Last Name</FormLabel>
                                 </Input>
                             </FormGroup>
 
-                            <Input type="text" id="username" text="Enter your username"  onChange={handleChange}>
+                            <Input type="text" id="username" text="Enter your username"  onChange={(e) => setUsername(e.target.value)}>
                                 {usernameError == "" ? <FormLabel className="font-semibold">Username</FormLabel> : (<FormError>{usernameError}</FormError>)}
                             </Input>
-                            <Input type="email" id="email" text="Enter your email"  onChange={handleChange}>
+                            <Input type="email" id="email" text="Enter your email"  onChange={(e) => setEmail(e.target.value)}>
                                 {emailError == "" ? <FormLabel className="font-semibold">Email</FormLabel> : <FormError>{emailError}</FormError>}
                             </Input>
 
-                            <Input type="password" id="password" text="Enter your password"  onChange={handleChange} >
+                            <Input type="password" id="password" text="Enter your password"  onChange={(e) => setPassword(e.target.value)} >
                                 <FormLabel className="font-semibold">Password</FormLabel>
                             </Input>
 
-                            <Input type="password" id="confirm_password" text="Enter your password again"  onChange={handleChange}>
+                            <Input type="password" id="confirm_password" text="Enter your password again"  onChange={(e) => setConfirmPassword(e.target.value)}>
                                 {confirmPasswordError == "" ? <FormLabel className="font-semibold">Confirm Password</FormLabel> : <FormError>{confirmPasswordError}</FormError>}
                             </Input>
 
