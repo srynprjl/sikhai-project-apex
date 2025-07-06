@@ -15,6 +15,9 @@ export default function Login() {
     const [ passwordError, setPasswordError ] = useState("");
     const navigate = useNavigate()
 
+    if(localStorage.getItem(ACCESS_TOKEN)){
+        navigate("/dashboard")
+    }
 
     async function formSubmit(event){
         event.preventDefault();

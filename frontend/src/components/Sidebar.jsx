@@ -22,7 +22,7 @@ export default function Sidebar(props){
 
             <div className="flex flex-col gap-6 items-center">
                 <div className="hover:bg-sidebar-items p-2 rounded-md"><Bolt /></div>
-                <div className="hover:bg-sidebar-items p-2 rounded-md"><LogOut /></div>
+                <div className="hover:bg-sidebar-items p-2 rounded-md" onClick={ () => navigate('/logout')}><LogOut /></div>
             </div>
         </div>
 

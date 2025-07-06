@@ -10,6 +10,11 @@ import { useNavigate } from "react-router-dom";
 
 export default function Register() {
 const navigate = useNavigate()
+
+    if(localStorage.getItem(ACCESS_TOKEN)){
+        navigate("/dashboard")
+    }
+    
     document.title = "Register - Sikhai"
     const [usernameError, setUserNameError] = useState("")
     const [emailError, setEmailError] = useState("")
