@@ -1,21 +1,32 @@
-from rest_framework import viewsets
+# views.py
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated # Import IsAuthenticated for authentication
 from .models import SikhaiWhiteboard
-from .serializers import SikhaiBoardSerializer
+from .serializers import SikhaiSerializer
 
-class SikhaiBoardViewSet(viewsets.ModelViewSet):
-    serializer_class = SikhaiBoardSerializer
-    permission_classes = [IsAuthenticated] 
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated])
+def board_view(request):
+    user = request.user
 
-    def get_queryset(self):
-        if self.request.user.is_authenticated:
-            return SikhaiWhiteboard.objects.filter(user=self.request.user)
-        return SikhaiWhiteboard.objects.none() 
+    if request.method == "GET":
+        try:
+            board = SikhaiWhiteboard.objects.get(user=user)
+            serializer = SikhaiSerializer(board)
+            return Response(serializer.data)
+        except SikhaiWhiteboard.DoesNotExist:
+            return Response({"detail": "No board found"}, status=status.HTTP_404_NOT_FOUND)
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    elif request.method == "POST":
+        try:
+            board = SikhaiWhiteboard.objects.get(user=user)
+            serializer = SikhaiSerializer(board, data=request.data)
+        except SikhaiWhiteboard.DoesNotExist:
+            serializer = SikhaiSerializer(data=request.data)
 
-    def perform_update(self, serializer):
-        serializer.save()
+        if serializer.is_valid():
+            serializer.save(user=user)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
