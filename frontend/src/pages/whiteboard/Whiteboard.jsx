@@ -21,6 +21,8 @@ export default function Whiteboard() {
       setElements(elements);
       setAppState(appState);
       setFiles(files);
+    } else {
+      //get data from server
     }
   }, []);
 
@@ -40,6 +42,8 @@ export default function Whiteboard() {
         files,
       })
     );
+
+    // save data to the
   }, []);
 
   const handleExportPNG = async () => {
