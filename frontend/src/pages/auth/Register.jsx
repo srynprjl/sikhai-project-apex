@@ -5,7 +5,7 @@ import RegisterArt from '../../assets/register-art.svg';
 import { useState } from 'react';
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
-
+import { ACCESS_TOKEN } from '../../constants';
 
 
 export default function Register() {

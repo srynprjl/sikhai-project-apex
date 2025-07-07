@@ -11,10 +11,11 @@ import api from "../../api";
 export default function Whiteboard() {
   const excalidrawRef = useRef(null);
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
-  const [dataLoaded, setDataLoaded] = useState(false); // ✅ Track data load
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [elements, setElements] = useState([]);
   const [appState, setAppState] = useState({});
   const [files, setFiles] = useState({});
+  const [localUsage, setLocalUsage] = useState(false);
 
   useEffect(() => {
     const fetchBoard = async () => {
@@ -23,14 +24,12 @@ export default function Whiteboard() {
         const loadedElements = data.elements || [];
         const loadedAppState = data.app_state || {};
         const loadedFiles = data.files || {};
-
         setElements(loadedElements);
         setAppState(loadedAppState);
         setFiles(loadedFiles);
-        setDataLoaded(true); // ✅ trigger update after data arrives
+        setDataLoaded(true);
       } catch (error) {
         console.warn("Failed to fetch board, using localStorage fallback");
-
         const savedData = localStorage.getItem("sikhaiWhiteboardData");
         if (savedData) {
           const { elements, appState, files } = JSON.parse(savedData);
@@ -38,6 +37,7 @@ export default function Whiteboard() {
           setAppState(appState || {});
           setFiles(files || {});
           setDataLoaded(true);
+          setLocalUsage(true);
         }
       }
     };
@@ -45,7 +45,8 @@ export default function Whiteboard() {
     fetchBoard();
   }, []);
 
-  // ✅ Update scene after data is fetched
+
+
   useEffect(() => {
     if (dataLoaded && excalidrawAPI) {
       excalidrawAPI.updateScene({
@@ -61,11 +62,9 @@ export default function Whiteboard() {
 
   const handleExcalidrawChange = useCallback(
     async (updatedElements, updatedAppState, updatedFiles) => {
-      const activeElements = updatedElements.filter((el) => !el.isDeleted);
-
       const payload = {
         title: "Sikhai Whiteboard",
-        elements: activeElements,
+        elements: updatedElements,
         app_state: {
           ...updatedAppState,
           viewBackgroundColor: "#FDF8EE",
@@ -76,13 +75,15 @@ export default function Whiteboard() {
 
       localStorage.setItem("sikhaiWhiteboardData", JSON.stringify(payload));
 
-      try {
-        await api.post("/api/board/", payload);
-      } catch (error) {
-        console.error("Failed to save board:", error);
+      if (!localUsage) {
+        try {
+          await api.post("/api/board/", payload);
+        } catch (error) {
+          console.error("Failed to save board:", error);
+        }
       }
 
-      setElements(activeElements);
+      setElements(updatedElements);
       setAppState(updatedAppState);
       setFiles(updatedFiles);
     },
@@ -99,14 +100,14 @@ export default function Whiteboard() {
         files,
         mimeType: type === "svg" ? "image/svg+xml" : "image/png",
         quality: 1,
-        exportPadding: 10,
+        exportPadding: 24,
         darkmode: appState.theme === "dark",
       });
 
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `sikhai-whiteboard.${type}`;
+      a.download = `sikhai.${type}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -117,7 +118,7 @@ export default function Whiteboard() {
   };
 
   return (
-    <div className="h-[89vh] excalidraw_sikhai">
+    <div className="h-[89vh] w-full excalidraw_sikhai">
       <Excalidraw
         ref={excalidrawRef}
         onChange={handleExcalidrawChange}
