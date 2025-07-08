@@ -11,8 +11,6 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     password = models.CharField(max_length=150)
-    rating = models.FloatField()
-    role = models.ForeignKey("Roles", on_delete=models.CASCADE)
 
     def __str__(self):
 
