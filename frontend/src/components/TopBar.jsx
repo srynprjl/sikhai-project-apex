@@ -11,8 +11,9 @@ export default function TopBar() {
 
    async function fetchInfo() {
     try{
-      const {data} = await api.get("/api/user/info/");
-    if(data){
+      const {data } = await api.get("/api/user/info/");
+      console.log(data)
+      if(data){
       setUserName(data.username)
       setFirstName(data.firstName)
       setLastName(data.lastName)
@@ -21,7 +22,6 @@ export default function TopBar() {
       setUserName("")
     }
   } 
-
 
   useEffect(() => {
     fetchInfo()

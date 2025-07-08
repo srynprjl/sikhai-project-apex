@@ -15,4 +15,4 @@ class CreateUserView(generics.CreateAPIView):
 class UsernameView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
-        return Response({'username': request.user.username, 'first_name': request.user.first_name, 'last_name': request.user.last_name, 'email': request.user.email})
+        return Response({'username': request.user.username, 'first_name': request.user.first_name, 'last_name': request.user.last_name, 'email': request.user.email , 'is_admin': request.user.is_superuser})

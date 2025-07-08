@@ -31,6 +31,12 @@ import PublicNotesView from "./pages/notes/PublicNotesView";
 import TutorHub from "./pages/tutor_booking/TutorHub";
 import TutorCreateBooking from "./pages/tutor_booking/TutorCreateBooking";
 import TutorInfo from "./pages/tutor_booking/TutorInfo";
+import AdminHub from "./pages/admin/AdminHub";
+import AcceptTutor from "./pages/admin/AcceptTutor";
+import ManageNotes from "./pages/admin/ManageNotes";
+import ManageUsers from "./pages/admin/ManageUsers";
+import ViewReports from "./pages/admin/ViewReports";
+import ViewSuggestions from "./pages/admin/ViewSuggestions";
 // exams
 
 
@@ -173,9 +179,22 @@ const AppRouter = () => {
           />
         </Route>
 
+        <Route path="/admin">
+            <Route index element={<AdminHub />} />
+            <Route path="tutors" element={<AcceptTutor />} />
+            <Route path="users" element={<ManageUsers />} />
+            <Route path="notes" element={<ManageNotes />} />
+            <Route path="reports" element={<ViewReports />} />
+            <Route path="feedbacks" element={<ViewSuggestions />} />
+            <Route path="roles" element={<LandingPage />} />
+        </Route>
+
         <Route path="/" element={<LandingPage />} />
+        
         <Route path="/login" element={<Login />} />
+        
         <Route path="/register" element={<RegisterAndLogout />} />
+
         <Route path="/logout" element={<Logout />} />
         
       </Routes>

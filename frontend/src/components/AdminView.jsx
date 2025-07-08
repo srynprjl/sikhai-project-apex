@@ -1,12 +1,15 @@
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-export default function DashboardView(props) {
+export default function AdminView(props) {
   const [count, setCount] = useState(props.count);
-  const [title, setTitle ] = useState(props.title)
   const navigate = useNavigate()
+  const [title, setTitle] = useState(props.title)
 
+  useEffect(()=>{
+    setCount(props.count)
+  } ,[count])
   return (
 
     <div className={(props.firstContainer ? "p-8 " : "") + "flex flex-col gap-3"}>
@@ -15,7 +18,7 @@ export default function DashboardView(props) {
       <div className="flex justify-between">
         {props.titleVisible ? <div className="flex gap-4 items-center">
           <h1 className="font-extrabold text-2xl">{title}</h1>
-          <span className="text-gray-600 text-xl font-bold">({count})</span>
+          <span className="text-gray-600 text-xl font-bold">( {count} )</span>
         </div> : null}
         <div>
           {props.btnVisible ? <button
@@ -28,7 +31,7 @@ export default function DashboardView(props) {
           </button> : null}
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 w-full gap-6">
         {props.children}
       </div>
       
