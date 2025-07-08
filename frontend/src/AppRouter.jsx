@@ -37,6 +37,8 @@ import ManageNotes from "./pages/admin/ManageNotes";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ViewReports from "./pages/admin/ViewReports";
 import ViewSuggestions from "./pages/admin/ViewSuggestions";
+
+import ProtectedRoute from "./components/ProtectedRoute";
 // exams
 
 
