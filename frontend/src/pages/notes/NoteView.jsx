@@ -23,15 +23,16 @@ const navigate = useNavigate()
     }, [])
 
 function navigatePage(id){
-  return navigate(`/notes/${id}`)
+  return navigate(`/notes/${id}/`)
 }
 
   const notesList = notes.map((data, index)=> {
     console.log(data.content.blocks.slice(0,2))
-data.content = {
-  ...data.content,
-  blocks: data.content.blocks.slice(0, 1) 
-}
+    console.log(data.id)
+    data.content = {
+      ...data.content,
+    blocks: data.content.blocks.slice(0, 1) 
+    }
       return <NoteContainer id={data.id} key={data.id} name={data.title} onClick={() => navigatePage(data.id)}>
         <Output data={ data.content } />
       </NoteContainer>

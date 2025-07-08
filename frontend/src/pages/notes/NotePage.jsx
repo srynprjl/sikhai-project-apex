@@ -1,44 +1,34 @@
 import { useEffect, useState } from "react";
 import EditorJS from "../../components/Editor";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router";
+import api from "../../api";
 
 export default function NotePage(props) {
-    useEffect(() => {
-        async function fetchData(id) {
-            const {data} = await api.get(`/api/notes/${id}`)
-            console.log(data)
-            setUsers(data)
-        }
-        fetchData(props.id)
-    }, [])
-
-    function updateNote(){
-
-    }
-
-    async function deleteNote(id){
-        const response = await api.delete(`/api/notes/${id}/`)
-        navigate(0)
-    }
-
-  const INITIAL_DATA = {
-    time: new Date().getTime(),
-    blocks: [
-      {
-        type: "header",
-        data: {
-          text: "This is a tutorial of Editor js",
-          level: 2,
-        },
-      },
-    ],
-  };
+  const params = useParams();
 
   const [title, setTitle] = useState("");
-  const [data, setData] = useState(INITIAL_DATA);    
-  const navigate = useNavigate()
-  const {id} = useParams();
 
+  const [noteData, setData] = useState(null);
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    async function fetchData(id) {
+      const { data } = await api.get(`/api/notes/${id}/`);
+      setTitle(data.title);
+      setData(data.content);
+    }
+
+    fetchData(params.id);
+  }, []);
+
+  function updateNote() {}
+
+  async function deleteNote(id) {
+    const response = await api.delete(`/api/notes/${id}/`);
+    navigate(0);
+  }
 
   return (
     <>
@@ -48,17 +38,21 @@ export default function NotePage(props) {
             <input
               placeholder="Title"
               className="text-6xl font-black outline-0"
-              value={id}
+              value={title}
             />
           </h1>
           <div className="properties"></div>
           <hr />
           <div id="editor" className="">
-            <EditorJS
-              data={data}
-              onChange={setData}
-              editorBlock="editorjs-container"            
-            />
+            {noteData && noteData.blocks ? (
+              <EditorJS
+                data={noteData}
+                onChange={setData}
+                editorBlock="editorjs-container"
+              />
+            ) : (
+              <p>Loading...</p>
+            )}
           </div>
         </form>
       </div>
