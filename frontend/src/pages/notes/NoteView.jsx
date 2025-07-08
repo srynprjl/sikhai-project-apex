@@ -6,7 +6,7 @@ const [count, setCount] = useState(0);
 const [notes, setNotes] = useState([]);
 
   return (
-    <DashboardView firstContainer title="Your Notes" count={count} btnName={"Note"} btnSrc={"/notes/create"} btnVisible={true}>
+    <DashboardView searchVisible titleVisible firstContainer title="Your Notes" count={count} btnName={"Note"} btnSrc={"/notes/create"} btnVisible={true}>
         <NoteContainer name="A">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt doloremque pariatur praesentium facilis minus delectus commodi officiis eaque explicabo sunt quae, ratione tenetur laborum tempore vitae voluptas animi sequi dolorum repudiandae aliquid.
         </NoteContainer>

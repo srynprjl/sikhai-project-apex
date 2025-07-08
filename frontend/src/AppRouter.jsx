@@ -1,4 +1,8 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router";
+import { Navigate } from "react-router-dom";
+//Protected Route
+
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // Auth Pages
 import Login from "./pages/auth/Login";
@@ -27,48 +31,80 @@ import PublicNotesView from "./pages/notes/PublicNotesView";
 import TutorHub from "./pages/tutor_booking/TutorHub";
 import TutorCreateBooking from "./pages/tutor_booking/TutorCreateBooking";
 import TutorInfo from "./pages/tutor_booking/TutorInfo";
+import AdminHub from "./pages/admin/AdminHub";
+import AcceptTutor from "./pages/admin/AcceptTutor";
+import ManageNotes from "./pages/admin/ManageNotes";
+import ManageUsers from "./pages/admin/ManageUsers";
+import ViewReports from "./pages/admin/ViewReports";
+import ViewSuggestions from "./pages/admin/ViewSuggestions";
 // exams
+
+
+function Logout() {
+  localStorage.clear()
+  return <Navigate to="/login" />
+}
+
+function RegisterAndLogout() {
+  localStorage.clear()
+  return <Register />
+}
 
 const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/dashboard" element={<DashboardLayout />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="/notes">
           <Route
             index
             element={
-              <DashboardLayout>
-                <NoteView />
-              </DashboardLayout>
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <NoteView />
+                </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path=":id"
             element={
-              <DashboardLayout>
-                <NotePage />
-              </DashboardLayout>
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <NotePage />
+                </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="create"
             element={
-              <DashboardLayout>
-                <NoteCreate />
-              </DashboardLayout>
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <NoteCreate />
+                </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="browse"
             element={
-              <DashboardLayout>
-                <PublicNotesView />
-              </DashboardLayout>
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <PublicNotesView />
+                </DashboardLayout>
+              </ProtectedRoute>
             }
           />
         </Route>
@@ -77,18 +113,22 @@ const AppRouter = () => {
           <Route
             index
             element={
-              <DashboardLayout>
-                <TodoView />
-              </DashboardLayout>
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <TodoView />
+                </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="create"
             element={
-              <DashboardLayout>
-                <TodoCreate />
-              </DashboardLayout>
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <TodoCreate />
+                </DashboardLayout>
+              </ProtectedRoute>
             }
           />
         </Route>
@@ -96,9 +136,11 @@ const AppRouter = () => {
         <Route
           path="/whiteboard"
           element={
-            <DashboardLayout>
-              <Whiteboard />
-            </DashboardLayout>
+            <ProtectedRoute>
+              <DashboardLayout>
+                <Whiteboard />
+              </DashboardLayout>
+            </ProtectedRoute>
           }
         />
 
@@ -106,33 +148,55 @@ const AppRouter = () => {
           <Route
             index
             element={
-              <DashboardLayout>
-                <TutorHub />
-              </DashboardLayout>
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <TutorHub />
+                </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="create"
             element={
-              <DashboardLayout>
-                <TutorCreateBooking />
-              </DashboardLayout>
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <TutorCreateBooking />
+                </DashboardLayout>
+              </ProtectedRoute>
             }
           />
 
           <Route
-          path=":id"
-          element={
-            <DashboardLayout><TutorInfo /></DashboardLayout>
-          } 
+            path=":id"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <TutorInfo />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
           />
+        </Route>
 
+        <Route path="/admin">
+            <Route index element={<AdminHub />} />
+            <Route path="tutors" element={<AcceptTutor />} />
+            <Route path="users" element={<ManageUsers />} />
+            <Route path="notes" element={<ManageNotes />} />
+            <Route path="reports" element={<ViewReports />} />
+            <Route path="feedbacks" element={<ViewSuggestions />} />
+            <Route path="roles" element={<LandingPage />} />
         </Route>
 
         <Route path="/" element={<LandingPage />} />
+        
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        
+        <Route path="/register" element={<RegisterAndLogout />} />
+
+        <Route path="/logout" element={<Logout />} />
+        
       </Routes>
     </Router>
   );

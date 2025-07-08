@@ -5,104 +5,124 @@ import {
   exportToBlob,
 } from "@excalidraw/excalidraw";
 import "@excalidraw/excalidraw/index.css";
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import api from "../../api";
 
 export default function Whiteboard() {
   const excalidrawRef = useRef(null);
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
   const [elements, setElements] = useState([]);
   const [appState, setAppState] = useState({});
   const [files, setFiles] = useState({});
+  const [localUsage, setLocalUsage] = useState(false);
 
   useEffect(() => {
-    const savedData = localStorage.getItem("sikhaiWhiteboardData");
-    if (savedData) {
-      const { elements, appState, files } = JSON.parse(savedData);
-      setElements(elements);
-      setAppState(appState);
-      setFiles(files);
-    }
+    const fetchBoard = async () => {
+      try {
+        const { data } = await api.get("/api/board/");
+        const loadedElements = data.elements || [];
+        const loadedAppState = data.app_state || {};
+        const loadedFiles = data.files || {};
+        setElements(loadedElements);
+        setAppState(loadedAppState);
+        setFiles(loadedFiles);
+        setDataLoaded(true);
+      } catch (error) {
+        console.warn("Failed to fetch board, using localStorage fallback");
+        const savedData = localStorage.getItem("sikhaiWhiteboardData");
+        if (savedData) {
+          const { elements, appState, files } = JSON.parse(savedData);
+          setElements(elements || []);
+          setAppState(appState || {});
+          setFiles(files || {});
+          setDataLoaded(true);
+          setLocalUsage(true);
+        }
+      }
+    };
+
+    fetchBoard();
   }, []);
 
-  const handleExcalidrawChange = useCallback((elements, appState, files) => {
-    setElements(elements);
-    setAppState(appState);
-    setFiles(files);
-    localStorage.setItem(
-      "sikhaiWhiteboardData",
-      JSON.stringify({
+
+
+  useEffect(() => {
+    if (dataLoaded && excalidrawAPI) {
+      excalidrawAPI.updateScene({
         elements,
         appState: {
           ...appState,
           viewBackgroundColor: "#FDF8EE",
-          collaborators: [],
         },
         files,
-      })
-    );
-  }, []);
-
-  const handleExportPNG = async () => {
-    if (excalidrawAPI) {
-      try {
-        const blob = await exportToBlob({
-          elements: excalidrawAPI.getSceneElements(),
-          appState: excalidrawAPI.getAppState(),
-          files: files,
-          mimeType: "image/png",
-          quality: 1,
-          exportPadding: 10,
-          darkmode: appState.theme === "dark",
-        });
-
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "my-excalidraw-drawing.png";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      } catch (error) {
-        console.error("Error exporting to PNG:", error);
-      }
+      });
     }
-  };
+  }, [dataLoaded, excalidrawAPI]);
 
-  const handleExportSVG = async () => {
-    if (excalidrawAPI) {
-      try {
-        const blob = await exportToBlob({
-          elements: excalidrawAPI.getSceneElements(),
-          appState: excalidrawAPI.getAppState(),
-          files: files,
-          mimeType: "image/svg+xml",
-          quality: 1,
-          exportPadding: 10,
-          darkmode: appState.theme === "dark",
-        });
+  const handleExcalidrawChange = useCallback(
+    async (updatedElements, updatedAppState, updatedFiles) => {
+      const payload = {
+        title: "Sikhai Whiteboard",
+        elements: updatedElements,
+        app_state: {
+          ...updatedAppState,
+          viewBackgroundColor: "#FDF8EE",
+          collaborators: [],
+        },
+        files: updatedFiles || {},
+      };
 
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "my-excalidraw-drawing.svg";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-      } catch (error) {
-        console.error("Error exporting to PNG:", error);
+      localStorage.setItem("sikhaiWhiteboardData", JSON.stringify(payload));
+
+      if (!localUsage) {
+        try {
+          await api.post("/api/board/", payload);
+        } catch (error) {
+          console.error("Failed to save board:", error);
+        }
       }
+
+      setElements(updatedElements);
+      setAppState(updatedAppState);
+      setFiles(updatedFiles);
+    },
+    []
+  );
+
+  const handleExport = async (type) => {
+    if (!excalidrawAPI) return;
+
+    try {
+      const blob = await exportToBlob({
+        elements: excalidrawAPI.getSceneElements(),
+        appState: excalidrawAPI.getAppState(),
+        files,
+        mimeType: type === "svg" ? "image/svg+xml" : "image/png",
+        quality: 1,
+        exportPadding: 24,
+        darkmode: appState.theme === "dark",
+      });
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `sikhai.${type}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(`Error exporting to ${type.toUpperCase()}:`, error);
     }
   };
 
   return (
-    <div className="h-[89vh] excalidraw_sikhai">
+    <div className="h-[89vh] w-full excalidraw_sikhai">
       <Excalidraw
         ref={excalidrawRef}
         onChange={handleExcalidrawChange}
-        initialData={{ elements, appState, files }}
-        excalidrawAPI={(api) => setExcalidrawAPI(api)}
+        excalidrawAPI={setExcalidrawAPI}
       >
         <WelcomeScreen>
           <WelcomeScreen.Center>
@@ -113,11 +133,11 @@ export default function Whiteboard() {
         </WelcomeScreen>
 
         <MainMenu>
-          <MainMenu.Item onSelect={handleExportPNG}>
-            Export to Desktop as PNG
+          <MainMenu.Item onSelect={() => handleExport("png")}>
+            Export as PNG
           </MainMenu.Item>
-          <MainMenu.Item onSelect={handleExportSVG}>
-            Export to Desktop as SVG
+          <MainMenu.Item onSelect={() => handleExport("svg")}>
+            Export as SVG
           </MainMenu.Item>
         </MainMenu>
       </Excalidraw>
