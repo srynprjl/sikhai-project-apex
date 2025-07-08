@@ -9,6 +9,7 @@ class Note(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
     author = models.ForeignKey(CustomUser, on_delete = models.CASCADE, related_name="notes")
     isPublic = models.BooleanField(default=False)
+    
 
     def _str_(self):
        return self.title

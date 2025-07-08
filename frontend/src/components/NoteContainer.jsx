@@ -12,9 +12,7 @@ export default function NoteContainer(props) {
           </button>
         </div>
         <div className="tasks text-justify flex flex-col gap-2 prose">
-          <ReactMarkdown>
-            {props.children.toString().substr(0, 500)}
-          </ReactMarkdown>
+            {props.children}
         </div>
         <div className="btn flex justify-between items-center">
           <div className="space-x-4 flex items-center">
