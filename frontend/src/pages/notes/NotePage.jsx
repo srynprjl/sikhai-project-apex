@@ -1,61 +1,61 @@
 import { useEffect, useState } from "react";
-import EditorJS from "../../components/Editor";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
+import EditorJSComponent from "../../components/Editor";
 import api from "../../api";
 
-export default function NotePage(props) {
-  const params = useParams();
+export default function NoteEdit() {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
+  const [data, setData] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const [noteData, setData] = useState(null);
-  const navigate = useNavigate();
-  const { id } = useParams();
-
+  // Load note data on mount
   useEffect(() => {
-    async function fetchData(id) {
-      const { data } = await api.get(`/api/notes/${id}/`);
-      setTitle(data.title);
-      setData(data.content);
+    async function fetchNote() {
+      try {
+        const res = await api.get(`/api/notes/${id}/`);
+        setTitle(res.data.title);
+        setData(res.data.content);
+        setIsLoaded(true);
+      } catch (error) {
+        console.error("Error loading note:", error);
+      }
     }
+    fetchNote();
+  }, [id]);
 
-    fetchData(params.id);
-  }, []);
+  // Auto-save on title or content change with debounce
+  useEffect(() => {
+    if (!isLoaded) return;
+    const timeout = setTimeout(() => {
+      api.put(`/api/notes/update/${id}/`, { title, content: data }).catch((err) => {
+        console.error("Auto-save error:", err);
+      });
+    }, 100);
 
-  function updateNote() {}
-
-  async function deleteNote(id) {
-    const response = await api.delete(`/api/notes/${id}/`);
-    navigate(0);
-  }
+    return () => clearTimeout(timeout);
+  }, [title, data, id, isLoaded]);
+  
+  if (!isLoaded) return <p>Loading...</p>;
 
   return (
-    <>
-      <div className="p-10">
-        <form action="">
-          <h1>
-            <input
-              placeholder="Title"
-              className="text-6xl font-black outline-0"
-              value={title}
-            />
-          </h1>
-          <div className="properties"></div>
-          <hr />
-          <div id="editor" className="">
-            {noteData && noteData.blocks ? (
-              <EditorJS
-                data={noteData}
-                onChange={setData}
-                editorBlock="editorjs-container"
-              />
-            ) : (
-              <p>Loading...</p>
-            )}
-          </div>
-        </form>
-      </div>
-    </>
+    <div className="p-10">
+      <form>
+        <h1>
+          <input
+            placeholder="Title"
+            className="text-6xl font-black outline-0"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </h1>
+        <hr />
+        <div id="editor" className="prose-em">
+          <EditorJSComponent data={data} onChange={setData} editorBlock="editorjs-container" />
+        </div>
+      </form>
+    </div>
   );
 }

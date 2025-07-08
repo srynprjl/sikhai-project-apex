@@ -16,7 +16,7 @@ export default function NoteContainer(props) {
         </div>
         <div className="btn flex justify-between items-center">
           <div className="space-x-4 flex items-center">
-            <div className="bg-red-400 p-2 rounded-full w-10 h-10"><button><Trash  /></button></div>
+            <div className="bg-red-400 p-2 rounded-full w-10 h-10"><button onClick={props.delete}><Trash  /></button></div>
             {props.isPublic ? <div className="bg-green-400 p-2 rounded-full w-10 h-10"><button><CirclePoundSterling  /></button></div> : null}
           </div>
           

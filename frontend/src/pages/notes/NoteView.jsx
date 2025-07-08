@@ -26,6 +26,10 @@ function navigatePage(id){
   return navigate(`/notes/${id}/`)
 }
 
+async function handleDelete(id){
+  await api.delete(`/api/notes/delete/${id}`)
+}
+
   const notesList = notes.map((data, index)=> {
     console.log(data.content.blocks.slice(0,2))
     console.log(data.id)
