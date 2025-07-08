@@ -1,6 +1,8 @@
 
 import { useState } from 'react';
 import EditorJS from '../../components/Editor';
+import api from "../../api"; 
+import { useNavigate } from "react-router-dom";
 
 const INITIAL_DATA = {
   time: new Date().getTime(),
@@ -8,7 +10,7 @@ const INITIAL_DATA = {
     {
       type: "header",
       data: {
-        text: "This is a tutorial of Editor js",
+        text: "Write your notes here",
         level: 1
       }
     }
@@ -17,12 +19,31 @@ const INITIAL_DATA = {
 
 export default function NoteCreate() {
 
-
+  const [title, setTitle] = useState("");
   const [data, setData] = useState(INITIAL_DATA)
-  return (
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await api.post("/notes/", {
+        title,
+        content: data,
+      });
+
+      alert("Note created successfully!");
+      navigate("/notes"); 
+    } catch (error) {
+      console.error("Error creating note:", error);
+      alert("Failed to create note.");
+    }
+  };
+
+   return (
     <>
       <div className="p-8">
-        <form action="">
+        <form onSubmit={handleSubmit}>
           <h1>
             <input
               placeholder="Title"
