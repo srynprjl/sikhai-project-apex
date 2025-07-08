@@ -27,7 +27,8 @@ function navigatePage(id){
 }
 
 async function handleDelete(id){
-  await api.delete(`/api/notes/delete/${id}`)
+  await api.delete(`/api/notes/delete/${id}/`)
+  navigate(0)
 }
 
   const notesList = notes.map((data, index)=> {
@@ -37,7 +38,7 @@ async function handleDelete(id){
       ...data.content,
     blocks: data.content.blocks.slice(0, 1) 
     }
-      return <NoteContainer id={data.id} key={data.id} name={data.title} onClick={() => navigatePage(data.id)}>
+      return <NoteContainer id={data.id} key={data.id} name={data.title} onClick={() => navigatePage(data.id)} delete={() => {handleDelete(data.id)}}>
         <Output data={ data.content } />
       </NoteContainer>
   })
