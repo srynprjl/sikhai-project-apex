@@ -5,7 +5,7 @@ from Authentication.views import CreateUserView, UsernameView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.routers import DefaultRouter
 from whiteboard.views import board_view
-from admin.views import CustomUserViewSet
+from admins.views import CustomUserViewSet
 
 
 urlpatterns = [

@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-jr(-3g2b2a2a=7mbqjj8#os(e(a#!d&0e+&qv*975he@9ez82j'
 DEBUG = True
@@ -35,7 +36,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'Authentication',
         "corsheaders",
-        "whiteboard"
+        "whiteboard",
+        "notes",
+        "admins"
 ]
 
 MIDDLEWARE = [
