@@ -1,4 +1,4 @@
-import { Trash } from "lucide-react";
+import { Trash, Plus } from "lucide-react";
 
 export default function TodoContainer(props) {
   return (
@@ -10,6 +10,8 @@ export default function TodoContainer(props) {
         </div>
         <div className="tasks text-justify flex flex-col gap-2">
             {props.children}
+            <hr />
+            <button className="flex gap-2" onClick={props.addBtn}><Plus />Add Tasks</button>
         </div>
         <div className="btn flex justify-between items-center">
           <div className="space-x-4 flex items-center">

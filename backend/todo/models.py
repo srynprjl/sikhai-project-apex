@@ -11,7 +11,7 @@ class Todo(models.Model):
 
 class Task(models.Model):  
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)   
-    # todo = models.ForeignKey(Todo, on_delete=models.CASCADE, related_name='tasks')
+    todo = models.ForeignKey(Todo, on_delete=models.CASCADE, related_name='tasks')
     title = models.CharField(max_length=1000)
     completed = models.BooleanField(default=False)
     date = models.DateTimeField(auto_now_add=True)

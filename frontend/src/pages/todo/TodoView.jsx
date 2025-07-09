@@ -8,6 +8,7 @@ import api from "../../api";
 export default function NoteView() {
 const [count, setCount] = useState(0);
 const [todos, setTodos] = useState([]);
+const [tasks, setTasks] = useState([]);
 const navigate = useNavigate()
 
     useEffect(() => {
@@ -20,9 +21,7 @@ const navigate = useNavigate()
         fetchData()
     }, [])
 
-function navigatePage(id){
-  return navigate(`/todos/${id}/`)
-}
+
 
 async function handleDelete(id){
   await api.delete(`/api/todos/delete/${id}/`)
@@ -30,8 +29,15 @@ async function handleDelete(id){
 }
 
   const todosList = todos.map((data, index)=> {
-      return <TodoContainer id={data.id} key={data.id} name={data.title} onClick={() => navigatePage(data.id)} delete={() => {handleDelete(data.id)}}>
-        
+      async function getTasks(id){
+          const {data} = await api.get(`/api/tasks/${id}`)
+          console.log(data)
+      }
+
+      getTasks(data.id)
+
+      return <TodoContainer id={data.id} key={data.id} name={data.title} delete={() => {handleDelete(data.id)}}>
+          
       </TodoContainer>
   })
 
