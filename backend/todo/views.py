@@ -2,7 +2,6 @@ from rest_framework import viewsets
 from .models import Todo, Task
 from .serializers import TodoSerializer, TaskSerializer
 from rest_framework.permissions import IsAuthenticated
-
 from rest_framework import generics, permissions
 from .models import Todo, Task
 from .serializers import TodoSerializer, TaskSerializer
