@@ -1,75 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TodoContainer from "./components/TodoContainer";
-
-import Tasks from "./components/Tasks";
 import DashboardView from "../../components/DashboardView";
 
-export default function TodoView() {
-  const [count, setCount] = useState(0);
-  const [todos, setTodos] = useState([]);
+import { useNavigate } from "react-router";
+import api from "../../api";
+
+export default function NoteView() {
+const [count, setCount] = useState(0);
+const [todos, setTodos] = useState([]);
+const navigate = useNavigate()
+
+    useEffect(() => {
+        async function fetchData() {
+            const {data} = await api.get("/api/todos/")
+            console.log(data)
+            setTodos(data)
+        }
+
+        fetchData()
+    }, [])
+
+function navigatePage(id){
+  return navigate(`/todos/${id}/`)
+}
+
+async function handleDelete(id){
+  await api.delete(`/api/todos/delete/${id}/`)
+  navigate(0)
+}
+
+  const todosList = todos.map((data, index)=> {
+      return <TodoContainer id={data.id} key={data.id} name={data.title} onClick={() => navigatePage(data.id)} delete={() => {handleDelete(data.id)}}>
+        
+      </TodoContainer>
+  })
 
   return (
-    <DashboardView
-    searchVisible
-    titleVisible
-      firstContainer
-      btnName="Todo"
-      btnSrc="/todos/create"
-      btnVisible
-      title="Your Todos"
-      count={count}
-    >
-      <TodoContainer name="A">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta in
-        incidunt ex molestiae vitae, vero quod tempore dolor, iste voluptatibus
-        nulla dolores sed illo assumenda. Quos id quasi velit facere sequi
-        dolores!{" "}
-      </TodoContainer>
-      <TodoContainer name="B">
-        <Tasks
-          name="Do Assignments"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
-          dueDate="now"
-        />
-        <Tasks
-          name="Do Assignments"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
-          dueDate="now"
-        />
-        <Tasks
-          name="Do Assignments"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
-          dueDate="now"
-        />
-      </TodoContainer>
-      <TodoContainer name="C">
-        {" "}
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt sit
-        labore, cum facere corporis architecto enim voluptatem sequi libero
-        ipsa? Enim odio consectetur molestias at alias corporis? Velit quas
-        fugiat iure dolorum!
-      </TodoContainer>
-      <TodoContainer name="D">
-        {" "}
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquid
-        impedit architecto fugiat ea quae exercitationem sequi totam. Quam nam
-        aperiam vero tempora blanditiis accusantium magnam molestiae incidunt
-        ratione dolorum minima facere, asperiores ex, repudiandae quae. Labore,
-        voluptatibus ipsum. Laboriosam, quasi harum. Iste quod nostrum laborum
-        quis nemo! Cumque itaque architecto, animi voluptatibus adipisci quod
-        eveniet eos autem porro impedit minima voluptate aspernatur, nemo,
-        accusamus fuga corporis perferendis in reprehenderit ullam doloribus
-        qui. Ea similique error culpa quas soluta dicta ipsa perspiciatis, nulla
-        facilis fuga. Ratione cum sequi a velit eaque aut, eligendi beatae
-        voluptas. Quo neque optio ut illo veritatis?{" "}
-      </TodoContainer>
-      <TodoContainer name="E">
-        {" "}
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. In delectus
-        corporis minus voluptatibus ratione dolores possimus non ipsam hic a,
-        adipisci mollitia beatae odit molestiae, at numquam ullam totam, ea quae
-        corrupti.{" "}
-      </TodoContainer>
+    <DashboardView searchVisible titleVisible firstContainer title="Your Todos" count={count} btnName={"Todo"} btnSrc={"/todo/create"} btnVisible={true}>
+        {todosList}
     </DashboardView>
   );
 }
