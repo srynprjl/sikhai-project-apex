@@ -12,7 +12,9 @@ class CreateUserView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
-class UsernameView(APIView):
+class SelfView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
-    def get(self, request):
-        return Response({'username': request.user.username, 'first_name': request.user.first_name, 'last_name': request.user.last_name, 'email': request.user.email , 'is_admin': request.user.is_superuser})
+
+    def get_object(self):
+        return self.request.user
