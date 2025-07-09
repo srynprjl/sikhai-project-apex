@@ -27,6 +27,7 @@ SIMPLE_JWT = {
 
 
 INSTALLED_APPS = [
+    'tutor',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
