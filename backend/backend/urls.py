@@ -5,7 +5,7 @@ from Authentication.views import CreateUserView,  SelfView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from whiteboard.views import board_view
-from admin.views import CustomUserViewSet
+from admins.views import CustomUserViewSet
 
 
 urlpatterns = [
@@ -17,8 +17,8 @@ urlpatterns = [
     path("api/board/", board_view, name="board"),
     path('api/users/', CustomUserViewSet.as_view({'get': 'list', 'post': 'create'}), name='user-list'),
     path('api/users/<int:pk>/', CustomUserViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'}), name='user-detail'),
+    path("api/", include("notes.urls")),
     path('api/user/', SelfView.as_view(), name='self_user'),
-
     path("api-auth/", include("rest_framework.urls")),
 
 ]

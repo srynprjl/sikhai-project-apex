@@ -39,6 +39,8 @@ import ManageNotes from "./pages/admin/ManageNotes";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ViewReports from "./pages/admin/ViewReports";
 import ViewSuggestions from "./pages/admin/ViewSuggestions";
+
+// exams
 import CreateUser from "./pages/admin/CreateUser";
 import UpdateUser from "./pages/admin/UpdateUser";
 
