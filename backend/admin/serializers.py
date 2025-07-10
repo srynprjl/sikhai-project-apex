@@ -1,35 +1,25 @@
-# your_app_name/serializers.py
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-
-CustomUser = get_user_model()
+from Authentication.models import CustomUser # Assuming CustomUser model is in the same app's models.py
 
 class CustomUserSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = CustomUser
-        fields = ('id', 'email', 'username', 'first_name', 'last_name', 'is_tutor', 'password')
-        extra_kwargs = {'password': {'write_only': True, 'required': False}}
+        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'is_tutor', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = CustomUser.objects.create_user(
-            email=validated_data['email'],
-            username=validated_data['username'],
-            first_name=validated_data.get('first_name', ''), # Use .get() for optional fields
-            last_name=validated_data.get('last_name', ''),   # Use .get() for optional fields
-            is_tutor=validated_data.get('is_tutor', False),
-            password=validated_data['password']
-        )
+        password = validated_data.pop('password', None)
+        user = CustomUser.objects.create(**validated_data)
+        if password is not None:
+            user.set_password(password)
+        user.save()
         return user
 
     def update(self, instance, validated_data):
-        if 'password' in validated_data:
-            password = validated_data.pop('password')
-            instance.set_password(password)
-
+        password = validated_data.pop('password', None)
         for attr, value in validated_data.items():
-            setattr(instance, instance, value)
-
+            setattr(instance, attr, value)
+        if password is not None:
+            instance.set_password(password)
         instance.save()
         return instance
-
