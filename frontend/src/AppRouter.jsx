@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router";
 import { Navigate } from "react-router-dom";
-//Protected Route
 
+//Protected Route
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Auth Pages
@@ -31,6 +31,8 @@ import PublicNotesView from "./pages/notes/PublicNotesView";
 import TutorHub from "./pages/tutor_booking/TutorHub";
 import TutorCreateBooking from "./pages/tutor_booking/TutorCreateBooking";
 import TutorInfo from "./pages/tutor_booking/TutorInfo";
+
+//admin
 import AdminHub from "./pages/admin/AdminHub";
 import AcceptTutor from "./pages/admin/AcceptTutor";
 import ManageNotes from "./pages/admin/ManageNotes";
@@ -39,16 +41,21 @@ import ViewReports from "./pages/admin/ViewReports";
 import ViewSuggestions from "./pages/admin/ViewSuggestions";
 
 // exams
+import CreateUser from "./pages/admin/CreateUser";
+import UpdateUser from "./pages/admin/UpdateUser";
 
+//settings
+import UserProfile from "./pages/settings/UserProfile";
+import Settings from "./pages/settings/Settings";
 
 function Logout() {
-  localStorage.clear()
-  return <Navigate to="/login" />
+  localStorage.clear();
+  return <Navigate to="/login" />;
 }
 
 function RegisterAndLogout() {
-  localStorage.clear()
-  return <Register />
+  localStorage.clear();
+  return <Register />;
 }
 
 const AppRouter = () => {
@@ -181,23 +188,44 @@ const AppRouter = () => {
         </Route>
 
         <Route path="/admin">
-            <Route index element={<AdminHub />} />
-            <Route path="tutors" element={<AcceptTutor />} />
-            <Route path="users" element={<ManageUsers />} />
-            <Route path="notes" element={<ManageNotes />} />
-            <Route path="reports" element={<ViewReports />} />
-            <Route path="feedbacks" element={<ViewSuggestions />} />
-            <Route path="roles" element={<LandingPage />} />
+          <Route index element={<AdminHub />} />
+          <Route path="tutors" element={<AcceptTutor />} />
+          <Route path="users" element={<ManageUsers />} />
+          <Route path="notes" element={<ManageNotes />} />
+          <Route path="reports" element={<ViewReports />} />
+          <Route path="feedbacks" element={<ViewSuggestions />} />
+          <Route path="roles" element={<LandingPage />} />
+          <Route path="users/create" element={<CreateUser />} />
+          <Route path="users/update/:userID" element={<UpdateUser />} />
         </Route>
 
-        <Route path="/" element={<LandingPage />} />
-        
-        <Route path="/login" element={<Login />} />
-        
-        <Route path="/register" element={<RegisterAndLogout />} />
-
-        <Route path="/logout" element={<Logout />} />
-        
+        <Route path="/">
+          <Route index element={<LandingPage />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<RegisterAndLogout />} />
+          <Route path="logout" element={<Logout />} />
+          <Route
+            path="dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="settings">
+            <Route index element={<Settings />} />
+            <Route
+              path="profile"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <UserProfile />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+        </Route>
       </Routes>
     </Router>
   );

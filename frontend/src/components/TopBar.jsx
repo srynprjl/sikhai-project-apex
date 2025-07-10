@@ -9,48 +9,50 @@ export default function TopBar() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
 
-   async function fetchInfo() {
-    try{
-      const {data } = await api.get("/api/user/info/");
-      console.log(data)
-      if(data){
-      setUserName(data.username)
-      setFirstName(data.firstName)
-      setLastName(data.lastName)
+  async function fetchInfo() {
+    try {
+      const { data } = await api.get("/api/user/");
+      if (data) {
+        setUserName(data.username);
+        setFirstName(data.firstName);
+        setLastName(data.lastName);
+      }
+    } catch (e) {
+      setUserName("undefined");
     }
-    }catch(e){
-      setUserName("")
-    }
-  } 
+  }
 
   useEffect(() => {
-    fetchInfo()
-  }, [])
+    fetchInfo();
+  }, []);
 
-
-  function GetCurrentDate(){
-    var date = new Date()
+  function GetCurrentDate() {
+    var date = new Date();
     var time;
-    console.log(date.getHours())
 
-    if(date.getHours() >= 5 && date.getHours() < 12 ){
-      time = "morning"
-    } else if (date.getHours() >= 12 && date.getHours() < 17){
-      time = "afternoon"
-    } else if(date.getHours() >= 17 && date.getHours() < 21){
-      time = "evening"
+    if (date.getHours() >= 5 && date.getHours() < 12) {
+      time = "morning";
+    } else if (date.getHours() >= 12 && date.getHours() < 17) {
+      time = "afternoon";
+    } else if (date.getHours() >= 17 && date.getHours() < 21) {
+      time = "evening";
     } else {
-      time = "night"
+      time = "night";
     }
 
-    return <span>{time}</span>
+    return <span>{time}</span>;
   }
 
   return (
     <>
       <nav className="flex justify-between p-5">
         <div>
-          <p className="font-semibold">Good {<GetCurrentDate />}, {firstName != undefined || lastName != undefined ? firstName + " " + lastName : username}</p>
+          <p className="font-semibold">
+            Good {<GetCurrentDate />},{" "}
+            {firstName != undefined || lastName != undefined
+              ? firstName + " " + lastName
+              : username}
+          </p>
         </div>
         <div className="flex gap-5">
           <button onClick={() => setDarkMode((prev) => !prev)}>
