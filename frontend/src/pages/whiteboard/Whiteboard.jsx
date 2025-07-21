@@ -53,8 +53,10 @@ export default function Whiteboard() {
         elements,
         appState: {
           ...appState,
-          viewBackgroundColor: "#FDF8EE",
+          // viewBackgroundColor: "#18181a",
+          theme: "dark"          
         },
+
         files,
       });
     }
@@ -67,9 +69,11 @@ export default function Whiteboard() {
         elements: updatedElements,
         app_state: {
           ...updatedAppState,
-          viewBackgroundColor: "#FDF8EE",
+          // viewBackgroundColor: "#18181a",\
+          theme: "dark",
           collaborators: [],
         },
+        
         files: updatedFiles || {},
       };
 
@@ -118,7 +122,7 @@ export default function Whiteboard() {
   };
 
   return (
-    <div className="h-[89vh] w-full excalidraw_sikhai">
+    <div className="h-[89vh] w-full custom-styles">
       <Excalidraw
         ref={excalidrawRef}
         onChange={handleExcalidrawChange}

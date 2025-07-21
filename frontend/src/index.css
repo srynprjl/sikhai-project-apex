@@ -43,3 +43,17 @@ body{
 #editorjs-container, .codex-editor__redactor, .codex-editor--narrow{
   width: 100%;
 }
+
+.custom-styles .excalidraw {
+  --color-primary: #fcc6d9;
+  --color-primary-darker: #f783ac;
+  --color-primary-darkest: #e64980;
+  --color-primary-light: #f2a9c4;
+}
+
+.custom-styles .excalidraw.theme--dark {
+  --color-primary: #212426;
+  --color-primary-darker: #2e3434;
+  --color-primary-darkest: #18181a;
+  --color-primary-light: #dcbec9;
+}
