@@ -61,18 +61,18 @@ export default function Login() {
                         </CardHeader>
                         <FormControl className=" gap-7 ">
                             <Input type="text" id="username" text="Enter your Username" onChange={(e) => setUsername(e.target.value)}>
-                                {usernameError == "" ? <FormLabel className="font-semibold">Username / Email</FormLabel> : <FormError>{usernameError}</FormError>}
+                                <FormLabel className="font-semibold">Username / Email</FormLabel>
                             </Input>
                             <Input type="password" id="password" text="Enter your password" onChange={(e) => setPassword(e.target.value)}>
                                 <FormGroup>
-                                    {passwordError == "" ? <FormLabel className="font-semibold">Password</FormLabel> : <FormError>{passwordError}</FormError>}
+                                    <FormLabel className="font-semibold">Password</FormLabel>
                                 </FormGroup>
                             </Input>
 
                             <Button name="Login" id="login" />
                             <FormGroup>
                                 <FormLink>Forget your password</FormLink>
-                                <FormLink link="/register">Create an Account</FormLink>
+                                <FormLink link="/register">Dont have an account?</FormLink>
                             </FormGroup>
                         </FormControl>
                     </Form>

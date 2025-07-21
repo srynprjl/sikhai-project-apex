@@ -124,11 +124,7 @@ export default function Register() {
                 text="Enter your username"
                 onChange={(e) => setUsername(e.target.value)}
               >
-                {usernameError == "" ? (
                   <FormLabel className="font-semibold">Username</FormLabel>
-                ) : (
-                  <FormError>{usernameError}</FormError>
-                )}
               </Input>
               <Input
                 type="email"
@@ -136,11 +132,8 @@ export default function Register() {
                 text="Enter your email"
                 onChange={(e) => setEmail(e.target.value)}
               >
-                {emailError == "" ? (
                   <FormLabel className="font-semibold">Email</FormLabel>
-                ) : (
-                  <FormError>{emailError}</FormError>
-                )}
+                
               </Input>
               </FormControl>
 
@@ -160,13 +153,10 @@ export default function Register() {
                 text="Enter your password again"
                 onChange={(e) => setConfirmPassword(e.target.value)}
               >
-                {confirmPasswordError == "" ? (
+
                   <FormLabel className="font-semibold">
                     Confirm Password
                   </FormLabel>
-                ) : (
-                  <FormError>{confirmPasswordError}</FormError>
-                )}
               </Input>
               </FormControl>
 
@@ -184,7 +174,9 @@ export default function Register() {
                 }
               }} divClass="w-full"/>
               </FormGroup>
+             
             </FormControl>
+             <FormLink link="/login">Already have an account?</FormLink>
           </Form>
       </Container>
             <Container

@@ -81,7 +81,7 @@ function FormLink(props) {
   return (
     <>
       <Link to={props.link}>
-        <span className="text-gray-400 text-sm  hover:cursor-pointer">
+        <span className="text-gray-400 text-sm hover:cursor-pointer">
           {props.children}
         </span>
       </Link>

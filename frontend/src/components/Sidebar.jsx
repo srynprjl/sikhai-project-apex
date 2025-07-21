@@ -10,217 +10,89 @@ import {
   Bolt,
   LogOut,
   Menu,
+  Bell,
+  MessageCircle
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import api from "../api";
+import UserPhoto from "../assets/test.png";
 
 export default function Sidebar(props) {
   const navigate = useNavigate();
-  const [closed, setClosed] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isTutor, setIsTutor] = useState(false);
-
-  const sidebarClose = (type) => {
-    setTimeout(() => {
-      setClosed(type === "open" ? false : true);
-    }, 200);
-  };
+  const [username, setUserName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   useEffect(() => {
     async function fetchData() {
       const { data } = await api.get("/api/user/");
-      console.log(data);
       setIsAdmin(data.is_superuser);
+      setIsTutor(data.is_tutor);
+      setUserName(data.username);
+      setFirstName(data.firstName);
+      setLastName(data.lastName);
     }
 
     fetchData();
   }, []);
 
+  function GetCurrentDate() {
+    var date = new Date();
+    var time;
+
+    if (date.getHours() >= 5 && date.getHours() < 12) {
+      time = "morning";
+    } else if (date.getHours() >= 12 && date.getHours() < 17) {
+      time = "afternoon";
+    } else if (date.getHours() >= 17 && date.getHours() < 21) {
+      time = "evening";
+    } else {
+      time = "night";
+    }
+
+    return <span>{time}</span>;
+  }
+
+  function NavBarItem(props){
+    return <span className="hover:scale-110 hover:text-gray-200 cursor-pointer" onClick={props.onClick}>{props.children}</span>
+  }
+
   return (
     <>
-      <div
-        className={
-          "flex flex-col left-0 bg-white fixed h-[100vh] justify-between gap-4 p-5 rounded-xl " +
-          (closed ? " w-64 z-50" : " w-16")
-        }
-        onMouseOver={() => sidebarClose("close")}
-        onMouseLeave={() => sidebarClose("open")}
-      >
-        <div
-          className={"flex flex-col gap-2 " + (!closed ? "items-center" : "")}
-        >
-          <span>
-            <button
-              className={
-                "hover:bg-sidebar-items p-1 rounded-md" +
-                (closed ? " w-56" : "")
-              }
-            >
-              {closed ? (
-                <div className="font-black text-xl">SIKHAI</div>
-              ) : (
-                <Menu />
-              )}
-            </button>
-          </span>
-          <span>
-            <button
-              className={
-                "hover:bg-sidebar-items p-1 rounded-md" +
-                (closed ? " w-56" : "")
-              }
-              onClick={() => navigate("/dashboard")}
-            >
-              {closed ? (
-                <div className="font-semibold text-lg flex gap-4">
-                  {" "}
-                  <HomeIcon /> Home
-                </div>
-              ) : (
-                <HomeIcon />
-              )}
-            </button>
-          </span>
-          <span>
-            <button
-              className={
-                "hover:bg-sidebar-items p-1 rounded-md" +
-                (closed ? " w-56" : "")
-              }
-              onClick={() => navigate("/todos")}
-            >
-              {closed ? (
-                <div className="font-semibold text-lg flex gap-4">
-                  <CircleCheckBig /> Tasks
-                </div>
-              ) : (
-                <CircleCheckBig />
-              )}
-            </button>
-          </span>
-          <span>
-            <button
-              className={
-                "hover:bg-sidebar-items p-1 rounded-md" +
-                (closed ? " w-56" : "")
-              }
-              onClick={() => navigate("/notes")}
-            >
-              {closed ? (
-                <div className="font-semibold text-lg flex gap-4">
-                  <NotebookPen /> Notes
-                </div>
-              ) : (
-                <NotebookPen />
-              )}
-            </button>
-          </span>
-          <span>
-            <button
-              className={
-                "hover:bg-sidebar-items p-1 rounded-md" +
-                (closed ? " w-56" : "")
-              }
-              onClick={() => navigate("/notes/browse")}
-            >
-              {closed ? (
-                <div className="font-semibold text-lg flex gap-4">
-                  <Notebook /> Public Notes
-                </div>
-              ) : (
-                <Notebook />
-              )}
-            </button>
-          </span>
-          <span>
-            <button
-              className={
-                "hover:bg-sidebar-items p-1 rounded-md" +
-                (closed ? " w-56" : "")
-              }
-              onClick={() => navigate("/whiteboard")}
-            >
-              {closed ? (
-                <div className="font-semibold text-lg flex gap-4">
-                  <Presentation /> Boards
-                </div>
-              ) : (
-                <Presentation />
-              )}
-            </button>
-          </span>
-          <span>
-            <button
-              className={
-                "hover:bg-sidebar-items p-1 rounded-md" +
-                (closed ? " w-56" : "")
-              }
-              onClick={() => navigate("/tutors")}
-            >
-              {closed ? (
-                <div className="font-semibold text-lg flex gap-4">
-                  <BookCheck /> Tutor
-                </div>
-              ) : (
-                <BookCheck />
-              )}
-            </button>
-          </span>
-          {isAdmin ? (
-            <span>
-              <button
-                className={
-                  "hover:bg-sidebar-items p-1 rounded-md" +
-                  (closed ? " w-56" : "")
-                }
-                onClick={() => navigate("/admin")}
-              >
-                {closed ? (
-                  <div className="font-semibold text-lg flex gap-4">
-                    <UserRoundCog /> Admin
-                  </div>
-                ) : (
-                  <UserRoundCog />
-                )}
-              </button>
-            </span>
-          ) : null}
-        </div>
-
-        <div className="flex flex-col gap-2 items-center">
-          <div
-            className={
-              "hover:bg-sidebar-items p-1 rounded-md" + (closed ? " w-56" : "")
-            }
-          >
-            {closed ? (
-              <div
-                className="font-semibold text-lg flex gap-4"
-                onClick={() => navigate("/settings/profile")}
-              >
-                <Bolt /> Settings
-              </div>
-            ) : (
-              <Bolt />
-            )}
-          </div>
-          <div
-            className={
-              "hover:bg-sidebar-items p-1 rounded-md" + (closed ? " w-56" : "")
-            }
-            onClick={() => navigate("/logout")}
-          >
-            {closed ? (
-              <div className="font-semibold text-lg flex gap-4">
-                <LogOut /> LogOut
-              </div>
-            ) : (
-              <LogOut />
-            )}
+      <nav className="flex justify-between px-4 py-2 items-center bg-dark-secondary text-white">
+        <div className="flex gap-6 items-center">
+          <div className="text-2xl font-logo cursor-pointer" onClick={() => navigate("/dashboard")}>SIKHAI</div>
+          <div className="navElements flex gap-4 ">
+            <NavBarItem onClick={() => navigate('/todos')}>Tasks</NavBarItem>
+            <NavBarItem onClick={() => navigate('/notes')}>Notes</NavBarItem>
+            <NavBarItem onClick={() => navigate('/notes')}>Buy Notes</NavBarItem>
+            <NavBarItem onClick={() => navigate('/whiteboard')}>Boards</NavBarItem>
+            <NavBarItem onClick={() => navigate('/whiteboard')}>Book Tutor</NavBarItem>
+            <NavBarItem onClick={() => navigate('/whiteboard')}>Examination Center</NavBarItem>
+            <NavBarItem onClick={() => navigate('/whiteboard')}>Results</NavBarItem>
+            {isTutor ? <NavBarItem onClick={() => navigate('/whiteboard')}>Tutor</NavBarItem>: null}
+            {isAdmin ? <NavBarItem onClick={() => navigate('/whiteboard')}>Admin</NavBarItem>: null}
           </div>
         </div>
-      </div>
+        <div className="flex gap-5 items-center">
+          <div>
+          <p className="font-semibold">
+            Good {<GetCurrentDate />},{" "}
+            {firstName != undefined || lastName != undefined
+              ? firstName + " " + lastName
+              : username}
+          </p>
+        </div>
+        <MessageCircle size={20} />
+        <Bell size={20}/>
+          <button>
+            <img src={UserPhoto} alt="" className="w-8 h-8 rounded-full" />
+          </button>
+        </div>
+      </nav>
     </>
   );
 }

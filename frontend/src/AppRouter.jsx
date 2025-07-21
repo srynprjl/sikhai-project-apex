@@ -128,17 +128,6 @@ const AppRouter = () => {
               </ProtectedRoute>
             }
           />
-
-          <Route
-            path="create"
-            element={
-              <ProtectedRoute>
-                <DashboardLayout>
-                  <TodoCreate />
-                </DashboardLayout>
-              </ProtectedRoute>
-            }
-          />
         </Route>
 
         <Route

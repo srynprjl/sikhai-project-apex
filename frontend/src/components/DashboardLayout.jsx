@@ -1,13 +1,11 @@
 import Sidebar from "./Sidebar";
-import TopBar from "./TopBar";
 
 export default function DashboardLayout(props){
     return(
         <>
-        <div className="flex">
+        <div className="flex flex-col ">
                 <Sidebar />
-                <div className="w-full h-full ml-16">
-                    <TopBar />
+                <div className="w-full h-full text-white font-sans bg-dark-primary">
                     {props.children}
                 </div>
         </div>
