@@ -21,14 +21,14 @@ function CardHeader(props) {
 function CardTitle(props) {
     return (
         <>
-            <div id={props.id + "-title"} className={"font-black text-4xl  text-light-text" + props.className}>{props.children}</div>
+            <div id={props.id + "-title"} className={"font-black font-logo text-4xl  text-white  text-center " + props.className}>{props.children}</div>
         </>
     )
 }
 
 function CardSubtitle(props) {
     return (
-        <><div id={props.id + "-subtitle"} className={"text-sm text-light-text" + props.className}>{props.children}</div></>
+        <><div id={props.id + "-subtitle"} className={"text-sm text-white" + props.className}>{props.children}</div></>
     )
 }
 

@@ -1,4 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+/* for logo */
+@import url('https://fonts.googleapis.com/css2?family=Slackey&display=swap');
+
+/* for others */
+@import url('https://fonts.googleapis.com/css2?family=Slackey&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
@@ -11,7 +17,17 @@
   --color-btn: #4D2C5E;
   --color-productivity-bg: rgba(255,255,255,0.2);
   --color-sidebar-items: rgba(51, 102, 255, 0.2);
-  --font-sans: 'Roboto';
+
+  --color-accent: #7efff5;
+  --color-dark-primary:#18181a;
+  --color-dark-secondary: #2e3434;
+  --color-dark-tertiary: #212426;
+  --color-dark-input: #B1B2B5;
+  /* --color-light-primary;
+  --color-light-secondary;
+  --color-light-tertiary; */
+  --font-logo: 'Slackey';
+  --font-sans: 'Ubuntu'
 }
 
 body{

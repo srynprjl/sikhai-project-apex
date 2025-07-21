@@ -35,6 +35,8 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const [page, setPage] = useState(0)
+
   async function handleSubmit(e) {
     e.preventDefault();
 
@@ -87,32 +89,15 @@ export default function Register() {
 
   return (
     <div className="flex">
-      <Container
-        id="login-right"
-        className="bg-light-secondary flex-col justify-between"
-      >
-        <div className="text-5xl font-black">SIKHAI</div>
-        <div>
-          <img src={RegisterArt} alt="" />
-        </div>
-        <div className="font-semibold">
-          &copy; sysnefo {new Date().getFullYear()}
-        </div>
-      </Container>
-
-      <Container id="login-left" className="bg-light-base">
-        <Card id="login">
-          <Form className="gap-10" onSubmit={handleSubmit}>
+      <Container id="login-left" className="bg-dark-tertiary">
+          <Form className="gap-10" onSubmit={page == 2 ? handleSubmit : ""}>
             <CardHeader id="login-title">
-              <CardTitle id="login">Register to SIKHAI</CardTitle>
-              <CardSubtitle id="login">
-                Already have an account?{" "}
-                <FormLink link="/login ">Login here</FormLink>
-              </CardSubtitle>
+              <CardTitle id="login">SIKHAI</CardTitle>
             </CardHeader>
 
-            <FormControl className="gap-3">
-              <FormGroup className="gap-3">
+            <FormControl className="gap-16">
+
+              <FormControl className={page==0 ? "gap-8" : "hidden"}>
                 <Input
                   type="text"
                   id="fname"
@@ -130,9 +115,10 @@ export default function Register() {
                 >
                   <FormLabel className="font-semibold">Last Name</FormLabel>
                 </Input>
-              </FormGroup>
+              </FormControl>
 
-              <Input
+              <FormControl className={page==1 ? "gap-8" : "hidden"}>
+                <Input
                 type="text"
                 id="username"
                 text="Enter your username"
@@ -156,8 +142,10 @@ export default function Register() {
                   <FormError>{emailError}</FormError>
                 )}
               </Input>
+              </FormControl>
 
-              <Input
+              <FormControl className={page==2 ? "gap-8" : "hidden"}>
+                <Input
                 type="password"
                 id="password"
                 text="Enter your password"
@@ -180,11 +168,34 @@ export default function Register() {
                   <FormError>{confirmPasswordError}</FormError>
                 )}
               </Input>
+              </FormControl>
 
-              <Button name="Register" id="register" />
+              <FormGroup className="gap-3">
+                {page != 0 ? 
+              <Button name="Previous" id="prev" onClick={(e) => {
+                  e.preventDefault()
+                  setPage(prev => prev-1)
+              }} divClass="w-full"/>: null}  
+
+              <Button name={page != 2 ? "Next" :"Register"} id="register" onClick={(e) => {
+                if(page != 2){
+                  e.preventDefault()
+                  setPage(prev => prev+1)
+                }
+              }} divClass="w-full"/>
+              </FormGroup>
             </FormControl>
           </Form>
-        </Card>
+      </Container>
+            <Container
+        id="login-right"
+        className="bg-dark-primary flex-col justify-between items-center"
+      >
+        <div className="text-4xl font-black font-logo text-white">SIKHAI</div>
+          <img src={RegisterArt} alt="" className="w-4/5" />
+        <div className="font-semibold text-white font-sans">
+          &copy; sysnefo {new Date().getFullYear()}
+        </div>
       </Container>
     </div>
   );

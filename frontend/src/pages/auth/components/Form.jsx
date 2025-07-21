@@ -3,7 +3,7 @@ function Form(props) {
   return (
     <>
       <form
-        className={"min-w-4/5 max-w-4/5 flex flex-col " + props.className}
+        className={"min-w-4/5 max-w-4/5 flex flex-col font-sans " + props.className}
         onSubmit={props.onSubmit}
       >
         {props.children}
@@ -16,7 +16,7 @@ function FormLabel(props) {
   return (
     <>
       {props.icon ? props.icon : null}
-      <label htmlFor={props.id} className={props.className}>
+      <label htmlFor={props.id} className={props.className +  " text-white "}>
         {props.children}
       </label>
     </>
@@ -31,7 +31,7 @@ function Input(props) {
         <input
           type={props.type}
           placeholder={props.text}
-          className={"bg-light-base p-2.5 text-sm rounded-md w-full "}
+          className={"bg-dark-input p-2.5 text-sm text-white w-full outline-0 border-0 "}
           id={props.id}
           name={props.id}
           onChange={props.onChange}
@@ -49,7 +49,7 @@ function Checkbox(props) {
       <div className="flex gap-0.5 items-center">
         <input
           type="checkbox"
-          className={"bg-light-base text-sm rounded-md  " + props.className}
+          className={"bg-light-base text-sm " + props.className}
           id={props.id + "_checkbox"}
           defaultChecked={props.isChecked ? "true" : false}
         />
@@ -62,10 +62,10 @@ function Checkbox(props) {
 function Button(props) {
   return (
     <>
-      <div id={props.id + "-button"}>
+      <div id={props.id + "-button"} className={props.divClass}>
         <button
           className={
-            "p-3 bg-btn w-full rounded-md text-white font-semibold " +
+            "p-3 bg-accent w-full text-white font-semibold " +
             props.className
           }
           onClick={props.onClick}
@@ -81,7 +81,7 @@ function FormLink(props) {
   return (
     <>
       <Link to={props.link}>
-        <span className="text-light-links text-sm  hover:cursor-pointer">
+        <span className="text-gray-400 text-sm  hover:cursor-pointer">
           {props.children}
         </span>
       </Link>
