@@ -44,7 +44,7 @@ async function handleDelete(id){
   })
 
   return (
-    <DashboardView searchVisible titleVisible firstContainer title="Your Notes" count={count} btnName={"Note"} btnSrc={"/notes/create"} btnVisible={true}>
+    <DashboardView searchVisible titleVisible firstContainer title="notes" count={count} btnName={"Note"} btnSrc={"/notes/create"} btnVisible={true}>
         {notesList}
     </DashboardView>
   );

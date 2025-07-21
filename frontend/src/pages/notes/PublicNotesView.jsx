@@ -7,7 +7,7 @@ const [count, setCount] = useState(0);
 
 
   return (
-    <DashboardView searchVisible titleVisible firstContainer title="Public Notes" count={count} btnVisible={false}>
+    <DashboardView searchVisible titleVisible firstContainer title="public notes" count={count} btnVisible={false}>
         <NoteContainer name="A" isPublic={true}>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt doloremque pariatur praesentium facilis minus delectus commodi officiis eaque explicabo sunt quae, ratione tenetur laborum tempore vitae voluptas animi sequi dolorum repudiandae aliquid.
         </NoteContainer>

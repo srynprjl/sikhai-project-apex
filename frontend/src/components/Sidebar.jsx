@@ -68,7 +68,7 @@ export default function Sidebar(props) {
           <div className="navElements flex gap-4 ">
             <NavBarItem onClick={() => navigate('/todos')}>Tasks</NavBarItem>
             <NavBarItem onClick={() => navigate('/notes')}>Notes</NavBarItem>
-            <NavBarItem onClick={() => navigate('/notes')}>Buy Notes</NavBarItem>
+            <NavBarItem onClick={() => navigate('/notes/browse')}>Buy Notes</NavBarItem>
             <NavBarItem onClick={() => navigate('/whiteboard')}>Boards</NavBarItem>
             <NavBarItem onClick={() => navigate('/whiteboard')}>Book Tutor</NavBarItem>
             <NavBarItem onClick={() => navigate('/whiteboard')}>Examination Center</NavBarItem>

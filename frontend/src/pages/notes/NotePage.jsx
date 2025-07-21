@@ -43,16 +43,21 @@ export default function NoteEdit() {
   return (
     <div className="p-10">
       <form>
-        <h1>
-          <input
-            placeholder="Title"
-            className="text-6xl font-black outline-0"
+        <input
+            placeholder="Title..."
+            className="text-4xl font-black outline-0"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-          />
-        </h1>
-        <hr />
-        <div id="editor" className="prose-em">
+          />   
+                  <div>
+          <div>
+            <input type="checkbox" /> <label>Make this note public</label>
+          </div>
+          <div>
+            <label>Price: </label><input type="number" step={0.01} className="w-16 decoration-0 border-b "/> 
+          </div>
+        </div>
+        <div id="editor" className="prose-em prose-invert">
           <EditorJSComponent data={data} onChange={setData} editorBlock="editorjs-container" />
         </div>
       </form>

@@ -37,25 +37,37 @@ export default function NoteCreate() {
   return (
     <div className="p-8">
       <form onSubmit={handleSubmit}>
-        <h1>
+        <div className="flex justify-between items-center">
           <input
-            placeholder="Title"
-            className="text-6xl font-black outline-0"
+            placeholder="Title..."
+            className="text-4xl font-black outline-0"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-          />
-        </h1>
-        <hr />
-        <div id="editor" className="prose-em">
-          <Editor data={data} onChange={setData} editorBlock="editorjs-container" />
-        </div>
+          />     
 
         <button
           type="submit"
-          className="bg-btn rounded-2xl px-2 py-1 text-white font-bold mt-4"
+          className="bg-accent px-4 py-2 text-white font-bold mt-4"
         >
           Create Note
         </button>
+        </div>
+        <div>
+          <div>
+            <input type="checkbox" /> <label>Make this note public</label>
+          </div>
+          <div>
+            <label>Price: </label><input type="number" step={0.01} className="w-16 decoration-0 border-b "/> 
+          </div>
+        </div>
+
+        <div className="flex justify-start">
+          <div id="editor" className="prose-em text-white w-full">
+          <Editor data={data} onChange={setData} editorBlock="editorjs-container" />
+        </div>
+        </div>
+
+        
       </form>
     </div>
   );

@@ -27,7 +27,7 @@ const Editor = ({data, onChange, editorBlock, isPublic}) => {
         }
     }, [])
 
-    return <div id={editorBlock} className='prose' />
+    return <div id={editorBlock} className='prose prose-invert text-white p-0 w-dvw'  />
     
 }
 

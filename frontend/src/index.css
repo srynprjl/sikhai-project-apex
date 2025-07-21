@@ -34,3 +34,12 @@ body{
   background-color: #FDF8EE;
 }
 
+.codex-editor {
+  text-align: left;
+  color: white; 
+}
+
+
+#editorjs-container, .codex-editor__redactor, .codex-editor--narrow{
+  width: 100%;
+}
