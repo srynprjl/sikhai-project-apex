@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Editor from "../../components/api/Editor";
 import api from "../../api";
+import DashboardLayout from "../../components/layouts/DashboardLayout";
 
 const INITIAL_DATA = {
   time: new Date().getTime(),
@@ -35,7 +36,8 @@ export default function NoteCreate() {
   };
 
   return (
-    <div className="p-8">
+    <DashboardLayout>
+          <div className="p-8">
       <form onSubmit={handleSubmit}>
         <div className="flex justify-between items-center">
           <input
@@ -70,5 +72,6 @@ export default function NoteCreate() {
         
       </form>
     </div>
+    </DashboardLayout>
   );
 }

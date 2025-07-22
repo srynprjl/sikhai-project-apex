@@ -7,6 +7,7 @@ import {
 import "@excalidraw/excalidraw/index.css";
 import { useState, useEffect, useRef, useCallback } from "react";
 import api from "../../api";
+import DashboardLayout from "../../components/layouts/DashboardLayout";
 
 export default function Whiteboard() {
   const excalidrawRef = useRef(null);
@@ -122,7 +123,8 @@ export default function Whiteboard() {
   };
 
   return (
-    <div className="h-[89vh] w-full custom-styles">
+    <DashboardLayout>
+          <div className="h-[89vh] w-full custom-styles">
       <Excalidraw
         ref={excalidrawRef}
         onChange={handleExcalidrawChange}
@@ -146,5 +148,6 @@ export default function Whiteboard() {
         </MainMenu>
       </Excalidraw>
     </div>
+    </DashboardLayout>
   );
 }

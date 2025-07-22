@@ -4,6 +4,7 @@ import TodoContainer from "./components/TodoContainer";
 import Tasks from "./components/Tasks";
 import DashboardView from "../../components/layouts/DashboardView";
 import TodoCreate from "./TodoCreate";
+import DashboardLayout from "../../components/layouts/DashboardLayout";
 
 export default function TodoView() {
   const [count, setCount] = useState(0);
@@ -13,7 +14,8 @@ export default function TodoView() {
 
   
   return (
-    <DashboardView
+    <DashboardLayout>
+      <DashboardView
     searchVisible
     titleVisible
       firstContainer
@@ -109,5 +111,6 @@ export default function TodoView() {
       <TodoCreate modalOpen={taskModal} modalClose={() => setTaskModal(false)} mode="task" />
         <div id="modal"></div>
     </DashboardView>
+    </DashboardLayout>
   );
 }

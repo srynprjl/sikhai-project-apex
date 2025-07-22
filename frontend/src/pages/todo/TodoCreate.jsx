@@ -8,7 +8,6 @@ const customStyles = {
 };
 
 export default function TodoCreate(props) {
-    // Modal.setAppElement("#modal")
     console.log("hi")
   return (
     <Modal isOpen={props.modalOpen} className="absolute top-1/2 left-1/2 right-auto bottom-auto bg-dark-primary w-1/2 "  style={customStyles}> 

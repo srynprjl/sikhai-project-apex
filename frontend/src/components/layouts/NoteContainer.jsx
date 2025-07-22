@@ -1,4 +1,4 @@
-import { CirclePoundSterling, Edit, Expand, ExternalLink, Trash } from "lucide-react";
+import { CirclePoundSterling, ExternalLink, Trash } from "lucide-react";
 
 
 export default function NoteContainer(props) {
@@ -17,13 +17,12 @@ export default function NoteContainer(props) {
         <div className="">
           <div className=" flex items-center justify-between">
             <div className="flex gap-4">
-              {props.isPublic ? <><CirclePoundSterling  /> रु {props.price != null ? props.price : "0.00"}</>: null}
+              {props.isPublic ? <><CirclePoundSterling  onClick={props.paymentHandler} /> रु {props.price != null ? props.price : "0.00"}</>: null}
             </div>
 
             <div className="flex gap-3 ">
               <ExternalLink onClick={props.onClick}/>
-              <Edit />
-              <Trash  />
+              <Trash onClick={props.delete}/>
             </div>
           </div>
         </div>

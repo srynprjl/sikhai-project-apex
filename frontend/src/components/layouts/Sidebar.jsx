@@ -6,9 +6,12 @@ import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import api from "../../api";
 import UserPhoto from "../../assets/test.png";
+import DropdownMenu from "../modals/Dropdown";
 
 export default function Sidebar(props) {
   const navigate = useNavigate();
+
+  const [modalOpen, setModalOpen] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false);
   const [isTutor, setIsTutor] = useState(false);
   const [username, setUserName] = useState("");
@@ -77,9 +80,18 @@ export default function Sidebar(props) {
         </div>
         <MessageCircle size={20} />
         <Bell size={20}/>
+        <div className="relative">
+
+        <DropdownMenu trigger={
           <button>
-            <img src={UserPhoto} alt="" className="w-8 h-8 rounded-full" />
+            <img src={UserPhoto} alt="" className="w-8 h-8 rounded-full" onClick={() => setModalOpen(true)}/>
           </button>
+        }>
+        <p className="mb-2 hover:scale-110 p-1 cursor-pointer" onClick={() => navigate('/settings/profile')}>Profile</p>
+        <p className="hover:scale-110 p-1 cursor-pointer" onClick={() => navigate('/logout')}>Logout</p>
+      </DropdownMenu>
+        </div>
+          
         </div>
       </nav>
     </>

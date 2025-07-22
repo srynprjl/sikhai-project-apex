@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import EditorJSComponent from "../../components/api/Editor";
 import api from "../../api";
+import DashboardLayout from "../../components/layouts/DashboardLayout";
 
 export default function NoteEdit() {
   const { id } = useParams();
@@ -41,7 +42,8 @@ export default function NoteEdit() {
   if (!isLoaded) return <p>Loading...</p>;
 
   return (
-    <div className="p-10">
+    <DashboardLayout>
+          <div className="p-10">
       <form>
         <input
             placeholder="Title..."
@@ -62,5 +64,6 @@ export default function NoteEdit() {
         </div>
       </form>
     </div>
+    </DashboardLayout>
   );
 }

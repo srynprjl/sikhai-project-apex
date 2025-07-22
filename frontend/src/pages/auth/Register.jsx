@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardSubtitle, CardTitle } from "./components/Card";
+import {CardHeader, CardTitle } from "./components/Card";
 import {
   Form,
   Button,
@@ -11,7 +11,7 @@ import {
 } from "./components/Form";
 import Container from "./components/Container";
 import RegisterArt from "../../assets/register-art.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN } from "../../constants";
@@ -19,9 +19,13 @@ import { ACCESS_TOKEN } from "../../constants";
 export default function Register() {
   const navigate = useNavigate();
 
+  useEffect(() => {
   if (localStorage.getItem(ACCESS_TOKEN)) {
     navigate("/dashboard");
+  } else {
+    localStorage.clear()
   }
+  }, [])
 
   document.title = "Register - Sikhai";
   const [usernameError, setUserNameError] = useState("");
