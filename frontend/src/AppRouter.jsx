@@ -52,6 +52,7 @@ import NotFound from "./pages/errors/NotFoundError";
 import Forbidden from "./pages/errors/Forbidden"
 import PaymentsStatus from "./pages/payments/PaymentsStatus";
 import ReportFeedbackForm from "./components/form/ReportFeedbackForm";
+import TutorApplicationForm from "./components/form/TutorApplicationForm";
 
 const AppRouter = () => {
   return (
@@ -78,6 +79,8 @@ const AppRouter = () => {
           <Route index element={<TutorHub />} />
           <Route path="create" element={<TutorCreateBooking />} />
           <Route path=":id" element={<TutorInfo />} />
+          <Route path="application" element={<TutorApplicationForm />} />
+          <Route path="application/:id" element={<TutorApplicationForm mode={"view"} />} />
         </Route>
 
 

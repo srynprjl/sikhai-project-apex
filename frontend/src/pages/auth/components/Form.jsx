@@ -43,6 +43,25 @@ function Input(props) {
   );
 }
 
+function TextArea(props) {
+  return (
+    <>
+      <div className={"flex-col flex gap-0.5 " + props.className}>
+        {props.children}
+        <textarea
+          placeholder={props.text}
+          className={"bg-dark-input p-2.5 text-sm text-white w-full outline-0 border-0 h-64"}
+          id={props.id}
+          name={props.id}
+          onChange={props.onChange}
+          value={props.value}
+          disabled={props.disabled}
+        />
+      </div>
+    </>
+  );
+}
+
 function Checkbox(props) {
   return (
     <>
@@ -147,5 +166,6 @@ export {
   FormControl,
   Checkbox,
   Select,
-  Option
+  Option,
+  TextArea
 };
