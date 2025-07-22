@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import EditorJSComponent from "../../components/Editor";
+import EditorJSComponent from "../../components/api/Editor";
 import api from "../../api";
 
 export default function NoteEdit() {

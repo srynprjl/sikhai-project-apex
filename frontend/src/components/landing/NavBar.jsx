@@ -1,5 +1,5 @@
 import {useNavigate} from 'react-router-dom'
-import { ACCESS_TOKEN } from '../constants';
+import { ACCESS_TOKEN } from '../../constants';
 export default function NavBar() {
   let navigate = useNavigate() 
 

@@ -1,22 +1,11 @@
 import {
-  HomeIcon,
-  CircleCheckBig,
-  Notebook,
-  NotebookPen,
-  Presentation,
-  Pencil,
-  UserRoundCog,
-  BookCheck,
-  Bolt,
-  LogOut,
-  Menu,
   Bell,
   MessageCircle
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import api from "../api";
-import UserPhoto from "../assets/test.png";
+import api from "../../api";
+import UserPhoto from "../../assets/test.png";
 
 export default function Sidebar(props) {
   const navigate = useNavigate();
@@ -74,7 +63,7 @@ export default function Sidebar(props) {
             <NavBarItem onClick={() => navigate('/whiteboard')}>Examination Center</NavBarItem>
             <NavBarItem onClick={() => navigate('/whiteboard')}>Results</NavBarItem>
             {isTutor ? <NavBarItem onClick={() => navigate('/whiteboard')}>Tutor</NavBarItem>: null}
-            {isAdmin ? <NavBarItem onClick={() => navigate('/whiteboard')}>Admin</NavBarItem>: null}
+            {isAdmin ? <NavBarItem onClick={() => navigate('/admin')}>Admin</NavBarItem>: null}
           </div>
         </div>
         <div className="flex gap-5 items-center">

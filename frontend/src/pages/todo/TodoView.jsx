@@ -2,7 +2,7 @@ import { useState } from "react";
 import TodoContainer from "./components/TodoContainer";
 
 import Tasks from "./components/Tasks";
-import DashboardView from "../../components/DashboardView";
+import DashboardView from "../../components/layouts/DashboardView";
 import TodoCreate from "./TodoCreate";
 
 export default function TodoView() {

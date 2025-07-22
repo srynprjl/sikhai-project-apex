@@ -49,7 +49,7 @@ function Checkbox(props) {
       <div className="flex gap-0.5 items-center">
         <input
           type="checkbox"
-          className={"bg-light-base text-sm " + props.className}
+          className={"text-sm " + props.className}
           id={props.id + "_checkbox"}
           defaultChecked={props.isChecked ? "true" : false}
         />
@@ -73,6 +73,24 @@ function Button(props) {
           {props.name}
         </button>
       </div>
+    </>
+  );
+}
+
+function Select(props) {
+  return (
+    <>
+      <select id={props.id} name={props.name} className={"bg-dark-input p-2.5 text-sm text-white w-full outline-0 border-0 "} disabled={props.disabled} value={props.defaultValue}>
+        {props.children}
+      </select>
+    </>
+  );
+}
+
+function Option(props) {
+  return (
+    <>
+      <option name={props.name} value={props.value} selected={props.isSelected}>{props.name}</option>
     </>
   );
 }
@@ -128,4 +146,6 @@ export {
   FormError,
   FormControl,
   Checkbox,
+  Select,
+  Option
 };

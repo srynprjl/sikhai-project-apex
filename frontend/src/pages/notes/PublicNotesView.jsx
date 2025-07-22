@@ -1,6 +1,6 @@
 import { useState } from "react";
-import NoteContainer from "../../components/NoteContainer";
-import DashboardView from "../../components/DashboardView";
+import NoteContainer from "../../components/layouts/NoteContainer";
+import DashboardView from "../../components/layouts/DashboardView";
 export default function NoteView() {
 
 const [count, setCount] = useState(0);

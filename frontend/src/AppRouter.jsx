@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router";
 import { Navigate } from "react-router-dom";
 
 //Protected Route
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/layouts/ProtectedRoute";
 
 // Auth Pages
 import Login from "./pages/auth/Login";
@@ -12,14 +12,13 @@ import Register from "./pages/auth/Register";
 import LandingPage from "./pages/landing_page/LandingPage";
 
 // Dashboard
-import DashboardLayout from "./components/DashboardLayout";
+import DashboardLayout from "./components/layouts/DashboardLayout";
 
 //whiteboard
 import Whiteboard from "./pages/whiteboard/Whiteboard";
 
 // todo
 import TodoView from "./pages/todo/TodoView";
-import TodoCreate from "./pages/todo/TodoCreate";
 
 //notes
 import NoteView from "./pages/notes/NoteView";
@@ -46,7 +45,7 @@ import UpdateUser from "./pages/admin/UpdateUser";
 
 //settings
 import UserProfile from "./pages/settings/UserProfile";
-import Settings from "./pages/settings/Settings";
+
 
 function Logout() {
   localStorage.clear();
@@ -183,7 +182,7 @@ const AppRouter = () => {
           <Route path="notes" element={<ManageNotes />} />
           <Route path="reports" element={<ViewReports />} />
           <Route path="feedbacks" element={<ViewSuggestions />} />
-          <Route path="roles" element={<LandingPage />} />
+          <Route path="transcations" element={<LandingPage />} />
           <Route path="users/create" element={<CreateUser />} />
           <Route path="users/update/:userID" element={<UpdateUser />} />
         </Route>
@@ -202,7 +201,6 @@ const AppRouter = () => {
             }
           />
           <Route path="settings">
-            <Route index element={<Settings />} />
             <Route
               path="profile"
               element={

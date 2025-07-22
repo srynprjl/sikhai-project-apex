@@ -1,5 +1,5 @@
 import { CirclePoundSterling, Edit, Expand, ExternalLink, Trash } from "lucide-react";
-import ReactMarkdown from "react-markdown";
+
 
 export default function NoteContainer(props) {
   return (

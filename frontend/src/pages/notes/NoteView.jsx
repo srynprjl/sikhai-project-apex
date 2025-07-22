@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import NoteContainer from "../../components/NoteContainer";
-import DashboardView from "../../components/DashboardView";
-// import Blocks from 'editorjs-blocks-react-renderer';
+import NoteContainer from "../../components/layouts/NoteContainer";
+import DashboardView from "../../components/layouts/DashboardView";
 import Output from 'editorjs-react-renderer';
-
 import { useNavigate } from "react-router";
 import api from "../../api";
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Editor from "../../components/Editor";
+import Editor from "../../components/api/Editor";
 import api from "../../api";
 
 const INITIAL_DATA = {

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import SessionBox from "../../components/SessionBox";
+import SessionBox from "../../components/landing/SessionBox";
 import { Plus } from "lucide-react";
 import Test from "../../assets/test.png";
-import DashboardView from "../../components/DashboardView";
+import DashboardView from "../../components/layouts/DashboardView";
 
 export default function TutorHub() {
   const [count, setCount] = useState(0);

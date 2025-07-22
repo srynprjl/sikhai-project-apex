@@ -1,11 +1,10 @@
-import AdminContainer from "../../components/AdminContainer";
-import AdminView from "../../components/AdminView";
-import DashboardLayout from "../../components/DashboardLayout";
+import AdminContainer from "../../components/layouts/AdminContainer";
+import AdminView from "../../components/layouts/AdminView";
+import DashboardLayout from "../../components/layouts/DashboardLayout";
 export default function ViewReports(){
     return(<>      
         <DashboardLayout>
-                <AdminView firstContainer searchVisible titleVisible title="All Tutor Application" count={count}>
-                  <AdminContainer ></AdminContainer>
+                <AdminView firstContainer searchVisible titleVisible title="reports" count={0}>
                   <AdminContainer></AdminContainer>
                   <AdminContainer></AdminContainer>
                   <AdminContainer></AdminContainer>
