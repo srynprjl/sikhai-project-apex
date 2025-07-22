@@ -2,19 +2,25 @@ import { useState } from "react";
 import TodoContainer from "./components/TodoContainer";
 
 import Tasks from "./components/Tasks";
-import DashboardView from "../../components/DashboardView";
+import DashboardView from "../../components/layouts/DashboardView";
+import TodoCreate from "./TodoCreate";
+import DashboardLayout from "../../components/layouts/DashboardLayout";
 
 export default function TodoView() {
   const [count, setCount] = useState(0);
   const [todos, setTodos] = useState([]);
+  const [todoModal, setTodoModal] = useState(false)
+  const [taskModal, setTaskModal] = useState(false)
 
+  
   return (
-    <DashboardView
+    <DashboardLayout>
+      <DashboardView
     searchVisible
     titleVisible
       firstContainer
       btnName="Todo"
-      btnSrc="/todos/create"
+      btnFnc={() => setTodoModal(true)}
       btnVisible
       title="Your Todos"
       count={count}
@@ -25,7 +31,7 @@ export default function TodoView() {
         nulla dolores sed illo assumenda. Quos id quasi velit facere sequi
         dolores!{" "}
       </TodoContainer>
-      <TodoContainer name="B">
+      <TodoContainer name="B" createTask={() => setTaskModal(true)}>
         <Tasks
           name="Do Assignments"
           description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
@@ -41,6 +47,37 @@ export default function TodoView() {
           description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
           dueDate="now"
         />
+                <Tasks
+          name="Do Assignments"
+          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
+          dueDate="now"
+        />
+                <Tasks
+          name="Do Assignments"
+          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
+          dueDate="now"
+        />
+                <Tasks
+          name="Do Assignments"
+          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
+          dueDate="now"
+        />
+                <Tasks
+          name="Do Assignments"
+          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
+          dueDate="now"
+        />
+                <Tasks
+          name="Do Assignments"
+          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
+          dueDate="now"
+        />
+                <Tasks
+          name="Do Assignments"
+          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
+          dueDate="now"
+        />
+        
       </TodoContainer>
       <TodoContainer name="C">
         {" "}
@@ -70,6 +107,10 @@ export default function TodoView() {
         adipisci mollitia beatae odit molestiae, at numquam ullam totam, ea quae
         corrupti.{" "}
       </TodoContainer>
+      <TodoCreate modalOpen={todoModal} modalClose={() => setTodoModal(false)} />
+      <TodoCreate modalOpen={taskModal} modalClose={() => setTaskModal(false)} mode="task" />
+        <div id="modal"></div>
     </DashboardView>
+    </DashboardLayout>
   );
 }

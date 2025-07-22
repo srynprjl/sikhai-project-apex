@@ -7,6 +7,7 @@ import {
 import "@excalidraw/excalidraw/index.css";
 import { useState, useEffect, useRef, useCallback } from "react";
 import api from "../../api";
+import DashboardLayout from "../../components/layouts/DashboardLayout";
 
 export default function Whiteboard() {
   const excalidrawRef = useRef(null);
@@ -53,8 +54,10 @@ export default function Whiteboard() {
         elements,
         appState: {
           ...appState,
-          viewBackgroundColor: "#FDF8EE",
+          // viewBackgroundColor: "#18181a",
+          theme: "dark"          
         },
+
         files,
       });
     }
@@ -67,9 +70,11 @@ export default function Whiteboard() {
         elements: updatedElements,
         app_state: {
           ...updatedAppState,
-          viewBackgroundColor: "#FDF8EE",
+          // viewBackgroundColor: "#18181a",\
+          theme: "dark",
           collaborators: [],
         },
+        
         files: updatedFiles || {},
       };
 
@@ -118,7 +123,8 @@ export default function Whiteboard() {
   };
 
   return (
-    <div className="h-[89vh] w-full excalidraw_sikhai">
+    <DashboardLayout>
+          <div className="h-[89vh] w-full custom-styles">
       <Excalidraw
         ref={excalidrawRef}
         onChange={handleExcalidrawChange}
@@ -142,5 +148,6 @@ export default function Whiteboard() {
         </MainMenu>
       </Excalidraw>
     </div>
+    </DashboardLayout>
   );
 }

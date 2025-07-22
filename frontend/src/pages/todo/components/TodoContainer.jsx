@@ -1,16 +1,19 @@
-import { Delete, Trash } from "lucide-react";
+import { CirclePlus, Delete, Edit, Trash } from "lucide-react";
 
 export default function TodoContainer(props) {
   return (
     <>
-      <div className="todo-container h-auto bg-[#ffedc9] p-4 rounded-2xl flex flex-col gap-2">
+      <div className="todo-container h-96  bg-dark-secondary p-4 flex flex-col gap-2">
         <div className="flex justify-between">
           <h1 className="font-semibold">{props.name}</h1>
-          <button className="bg-red-300 rounded-full p-2">
-            <Trash size={16} />
-          </button>
+            <div className="flex gap-2 items-center">
+              <CirclePlus size={16} onClick={props.createTask} />
+              <Edit size={16} />
+              <Trash size={16} onClick={() => console.log()} />
+            </div>
+
         </div>
-        <div className="tasks text-justify flex flex-col gap-2">{props.children}</div>
+        <div className="tasks text-justify font-sans text-xs flex flex-col gap-2 overflow-scroll">{props.children}</div>
       </div>
     </>
   );

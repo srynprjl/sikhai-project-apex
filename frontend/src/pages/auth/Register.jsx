@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardSubtitle, CardTitle } from "./components/Card";
+import {CardHeader, CardTitle } from "./components/Card";
 import {
   Form,
   Button,
@@ -11,7 +11,7 @@ import {
 } from "./components/Form";
 import Container from "./components/Container";
 import RegisterArt from "../../assets/register-art.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN } from "../../constants";
@@ -19,9 +19,13 @@ import { ACCESS_TOKEN } from "../../constants";
 export default function Register() {
   const navigate = useNavigate();
 
+  useEffect(() => {
   if (localStorage.getItem(ACCESS_TOKEN)) {
     navigate("/dashboard");
+  } else {
+    localStorage.clear()
   }
+  }, [])
 
   document.title = "Register - Sikhai";
   const [usernameError, setUserNameError] = useState("");
@@ -34,6 +38,8 @@ export default function Register() {
   const [last_name, setLname] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [page, setPage] = useState(0)
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -87,32 +93,15 @@ export default function Register() {
 
   return (
     <div className="flex">
-      <Container
-        id="login-right"
-        className="bg-light-secondary flex-col justify-between"
-      >
-        <div className="text-5xl font-black">SIKHAI</div>
-        <div>
-          <img src={RegisterArt} alt="" />
-        </div>
-        <div className="font-semibold">
-          &copy; sysnefo {new Date().getFullYear()}
-        </div>
-      </Container>
-
-      <Container id="login-left" className="bg-light-base">
-        <Card id="login">
-          <Form className="gap-10" onSubmit={handleSubmit}>
+      <Container id="login-left" className="bg-dark-tertiary">
+          <Form className="gap-10" onSubmit={page == 2 ? handleSubmit : ""}>
             <CardHeader id="login-title">
-              <CardTitle id="login">Register to SIKHAI</CardTitle>
-              <CardSubtitle id="login">
-                Already have an account?{" "}
-                <FormLink link="/login ">Login here</FormLink>
-              </CardSubtitle>
+              <CardTitle id="login">SIKHAI</CardTitle>
             </CardHeader>
 
-            <FormControl className="gap-3">
-              <FormGroup className="gap-3">
+            <FormControl className="gap-16">
+
+              <FormControl className={page==0 ? "gap-8" : "hidden"}>
                 <Input
                   type="text"
                   id="fname"
@@ -130,19 +119,16 @@ export default function Register() {
                 >
                   <FormLabel className="font-semibold">Last Name</FormLabel>
                 </Input>
-              </FormGroup>
+              </FormControl>
 
-              <Input
+              <FormControl className={page==1 ? "gap-8" : "hidden"}>
+                <Input
                 type="text"
                 id="username"
                 text="Enter your username"
                 onChange={(e) => setUsername(e.target.value)}
               >
-                {usernameError == "" ? (
                   <FormLabel className="font-semibold">Username</FormLabel>
-                ) : (
-                  <FormError>{usernameError}</FormError>
-                )}
               </Input>
               <Input
                 type="email"
@@ -150,14 +136,13 @@ export default function Register() {
                 text="Enter your email"
                 onChange={(e) => setEmail(e.target.value)}
               >
-                {emailError == "" ? (
                   <FormLabel className="font-semibold">Email</FormLabel>
-                ) : (
-                  <FormError>{emailError}</FormError>
-                )}
+                
               </Input>
+              </FormControl>
 
-              <Input
+              <FormControl className={page==2 ? "gap-8" : "hidden"}>
+                <Input
                 type="password"
                 id="password"
                 text="Enter your password"
@@ -172,19 +157,41 @@ export default function Register() {
                 text="Enter your password again"
                 onChange={(e) => setConfirmPassword(e.target.value)}
               >
-                {confirmPasswordError == "" ? (
+
                   <FormLabel className="font-semibold">
                     Confirm Password
                   </FormLabel>
-                ) : (
-                  <FormError>{confirmPasswordError}</FormError>
-                )}
               </Input>
+              </FormControl>
 
-              <Button name="Register" id="register" />
+              <FormGroup className="gap-3">
+                {page != 0 ? 
+              <Button name="Previous" id="prev" onClick={(e) => {
+                  e.preventDefault()
+                  setPage(prev => prev-1)
+              }} divClass="w-full"/>: null}  
+
+              <Button name={page != 2 ? "Next" :"Register"} id="register" onClick={(e) => {
+                if(page != 2){
+                  e.preventDefault()
+                  setPage(prev => prev+1)
+                }
+              }} divClass="w-full"/>
+              </FormGroup>
+             
             </FormControl>
+             <FormLink link="/login">Already have an account?</FormLink>
           </Form>
-        </Card>
+      </Container>
+            <Container
+        id="login-right"
+        className="bg-dark-primary flex-col justify-between items-center"
+      >
+        <div className="text-4xl font-black font-logo text-white">SIKHAI</div>
+          <img src={RegisterArt} alt="" className="w-4/5" />
+        <div className="font-semibold text-white font-sans">
+          &copy; sysnefo {new Date().getFullYear()}
+        </div>
       </Container>
     </div>
   );

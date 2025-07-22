@@ -1,5 +1,5 @@
-import DashboardLayout from "../../components/DashboardLayout";
-import CreateUpdateUserForm from "../../components/CreateUpdateUserForm";
+import DashboardLayout from "../../components/layouts/DashboardLayout";
+import CreateUpdateUserForm from "../../components/form/CreateUpdateUserForm";
 import { useParams } from "react-router";
 export default function UpdateUser() {
   const params = useParams();

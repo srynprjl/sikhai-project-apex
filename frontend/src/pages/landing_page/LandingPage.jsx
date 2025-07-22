@@ -1,6 +1,6 @@
-import NavBar from "../../components/NavBar";
+import NavBar from "../../components/landing/NavBar";
 import HomeSVG from "../../assets/home.svg";
-import ProductComponent from "../../components/ProductComponent";
+import ProductComponent from "../../components/landing/ProductComponent";
 import ProductivitySVG from "../../assets/productivity.svg";
 import {
   MapPin,
@@ -11,10 +11,10 @@ import {
   Twitter,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import SessionBox from "../../components/SessionBox";
+import SessionBox from "../../components/landing/SessionBox";
 import Test from "../../assets/test.png";
 import PremiumExperience from "../../assets/premium-experience.svg";
-import StudentTestimony from "../../components/StudentTestimony";
+import StudentTestimony from "../../components/landing/StudentTestimony";
 
 export default function LandingPage() {
   let navigate = useNavigate();

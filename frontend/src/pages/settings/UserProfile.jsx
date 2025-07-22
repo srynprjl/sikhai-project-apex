@@ -1,5 +1,6 @@
-import CreateUpdateUserForm from "../../components/CreateUpdateUserForm";
+import CreateUpdateUserForm from "../../components/form/CreateUpdateUserForm";
+import DashboardLayout from "../../components/layouts/DashboardLayout";
 
 export default function UserProfile() {
-  return <CreateUpdateUserForm mode="update" apiUrl="/api/user/" />;
+  return <DashboardLayout><CreateUpdateUserForm mode="update" apiUrl="/api/user/"  /></DashboardLayout>;
 }
