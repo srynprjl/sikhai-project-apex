@@ -38,7 +38,8 @@ INSTALLED_APPS = [
         "corsheaders",
         "whiteboard",
         "notes",
-        "admins"
+        "admins",
+        "todo"
 ]
 
 MIDDLEWARE = [

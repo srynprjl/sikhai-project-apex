@@ -18,6 +18,7 @@ urlpatterns = [
     path('api/users/', CustomUserViewSet.as_view({'get': 'list', 'post': 'create'}), name='user-list'),
     path('api/users/<int:pk>/', CustomUserViewSet.as_view({'get': 'retrieve', 'put': 'update', 'patch': 'partial_update', 'delete': 'destroy'}), name='user-detail'),
     path("api/", include("notes.urls")),
+    path("api/", include("todo.urls")),
     path('api/user/', SelfView.as_view(), name='self_user'),
     path("api-auth/", include("rest_framework.urls")),
 
