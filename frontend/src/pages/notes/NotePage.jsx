@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import EditorJSComponent from "../../components/api/Editor";
 import api from "../../api";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
+import { jwtDecode } from "jwt-decode";
 
 export default function NoteEdit() {
   const { id } = useParams();
@@ -10,35 +11,48 @@ export default function NoteEdit() {
 
   const [title, setTitle] = useState("");
   const [data, setData] = useState(null);
+  const [user, setUser] = useState(null);
+  const [author, setAuthor] = useState(null);
+  const [isPublic, setIsPublic] = useState(false);
+  const [price, setPrice] = useState(0.0);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load note data on mount
   useEffect(() => {
     async function fetchNote() {
       try {
         const res = await api.get(`/api/notes/${id}/`);
         setTitle(res.data.title);
         setData(res.data.content);
+        setIsPublic(res.data.isPublic);
+        setPrice(res.data.price);
+        setAuthor(res.data.author);
         setIsLoaded(true);
       } catch (error) {
         console.error("Error loading note:", error);
       }
     }
     fetchNote();
+    setUser(jwtDecode(localStorage.getItem("access")).user_id);
   }, [id]);
 
-  // Auto-save on title or content change with debounce
   useEffect(() => {
     if (!isLoaded) return;
     const timeout = setTimeout(() => {
-      api.put(`/api/notes/update/${id}/`, { title, content: data }).catch((err) => {
-        console.error("Auto-save error:", err);
-      });
+      api
+        .put(`/api/notes/update/${id}/`, {
+          title,
+          content: data,
+          isPublic,
+          price,
+        })
+        .catch((err) => {
+          console.error("Auto-save error:", err);
+        });
     }, 100);
 
     return () => clearTimeout(timeout);
-  }, [title, data, id, isLoaded]);
-  
+  }, [title, data, id, isPublic, price, isLoaded]);
+
   if (!isLoaded) return <p>Loading...</p>;
 
   return (
@@ -53,14 +67,24 @@ export default function NoteEdit() {
           />   
                   <div>
           <div>
-            <input type="checkbox" /> <label>Make this note public</label>
+                        <input type="checkbox"
+            checked={isPublic}
+              onChange={(e) => {
+                setIsPublic((prev) => !prev);
+              console.log(isPublic);
+            }}
+            /> <label>Make this note public</label>
           </div>
-          <div>
-            <label>Price: </label><input type="number" step={0.01} className="w-16 decoration-0 border-b "/> 
+          {isPublic ? (<div>
+            <label>Price: </label><input type="number" step={0.01} 
+            onChange={(e) => setPrice(e.target.valueAsNumber)}className="w-16 decoration-0 border-b "/> 
           </div>
+          ) : null}
         </div>
         <div id="editor" className="prose-em prose-invert">
-          <EditorJSComponent data={data} onChange={setData} editorBlock="editorjs-container" />
+          <EditorJSComponent data={data} onChange={setData} editorBlock="editorjs-container" 
+                      isPublic={user != author ? true : false}
+                      />
         </div>
       </form>
     </div>

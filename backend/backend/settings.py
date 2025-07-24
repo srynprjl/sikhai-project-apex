@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'whiteboard',
     'notes',
     'admins',
+    'payments'
 ]
 
 MIDDLEWARE = [
