@@ -13,15 +13,22 @@ const [notes, setNotes] = useState([]);
 const [modalOpen, setModalOpen] = useState(false);
 const [deleteId, setDeleteId] = useState(null)
 const [deleteTitle, setDeleteTitle] = useState(null)
+  const [paidNotes, setPaidNotes] = useState([]);
+  const [search, setSearch] = useState("");
 const navigate = useNavigate()
 
     useEffect(() => {
         async function fetchData() {
             const {data} = await api.get("/api/notes/")
-            console.log(data)
             setNotes(data)
         }
 
+            async function fetchBoughtNotes(){
+      const {data} = await api.get("/api/get-purchased-notes/")
+      setPaidNotes(data)
+    }
+
+        fetchBoughtNotes();
         fetchData()
     }, [])
 
@@ -58,10 +65,17 @@ async function handleDelete(id){
       </NoteContainer>
   })
 
+    const boughtList = paidNotes.map((data) => {
+    return <NoteContainer key={data.id} id={data.note} name={data.note_title} onClick={() => navigatePage(data.note)}>
+      <p>Purchased</p>
+    </NoteContainer>
+  })
+
   return (
     <DashboardLayout>
-    <DashboardView searchVisible titleVisible firstContainer title="notes" count={count} btnName={"Note"} btnSrc={"/notes/create"} btnVisible={true}>
-        {notesList}
+    <DashboardView searchFunc={(e) => setSearch(e.target.value)} searchVisible titleVisible firstContainer title="notes" count={count} btnName={"Note"} btnSrc={"/notes/create"} btnVisible={true}>
+      {notesList }
+      {boughtList}
     </DashboardView>
 
     <DeleteModal modalOpen={modalOpen} deleteFunc={()=>handleDelete(deleteId)} cancelFunc={closeModal} title={deleteTitle} />

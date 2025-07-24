@@ -21,5 +21,7 @@ urlpatterns = [
     path("api/", include("todo.urls")),
     path('api/user/', SelfView.as_view(), name='self_user'),
     path("api-auth/", include("rest_framework.urls")),
-
+    path('api/', include('feedback.urls')),
+    # path('api/feedback/', include('Feedback.urls')),
 ]
+
