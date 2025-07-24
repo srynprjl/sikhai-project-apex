@@ -1,7 +1,8 @@
-import { Check, X } from "lucide-react";
-import Modal from "react-modal"
+import { X } from "lucide-react";
+import Modal from "react-modal";
+import api from "../../api";
+import { useEffect, useState } from "react";
 
-export default function PaymentModal(props){
     const customStyles = {
         content: {
             marginRight: '-50%',
@@ -9,11 +10,72 @@ export default function PaymentModal(props){
         },
     };
 
-    let price = props.price ? props.price : 100;
-    let platform = 0.01 * price;
-    let subtotal = price + platform;
-    let vat = 0.13 * subtotal;
-    let total = subtotal + vat;
+export default function PaymentModal(props){
+
+  let price = props.price ? props.price : 0.01;
+  let platform = 0.01 * price;
+  let subtotal = price + platform;
+  let vat = 0.13 * subtotal;
+  let total = subtotal + vat;
+
+  price = parseFloat(price).toFixed(2);
+  platform = parseFloat(platform).toFixed(2);
+  subtotal = parseFloat(subtotal).toFixed(2);
+  vat = parseFloat(vat).toFixed(2);
+  total = parseFloat(total).toFixed(2);
+
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    async function getUser() {
+      const res = await api.get("/api/user/");
+      setUser(res.data);
+    }
+
+    getUser();
+  }, []);
+
+  async function khaltiPaymentIntialize() {
+    const payload = {
+      return_url: "http://localhost:5173/payment",
+      website_url: "http://localhost:5173/",
+      amount: parseInt(total * 100),
+      purchase_order_id: "test12",
+      purchase_order_name: "test",
+      customer_info: {
+        name: `${user.username}`,
+        email: `${user.email}`,
+      },
+      // amount_breakdown: [
+      //   {
+      //     label: "Mark Price",
+      //     amount: parseInt(price * 100),
+      //   },
+      //   {
+      //     label: "Platform Charges",
+      //     amount: parseInt(platform * 100),
+      //   },
+      //   {
+      //     label: "VAT",
+      //     amount: parseInt(vat * 100),
+      //   },
+      // ],
+      product_details: [
+        {
+          identity: props.id,
+          name: `${props.title}`,
+          total_price: parseInt(total * 100),
+          quantity: 1,
+          unit_price: parseInt(total * 100),
+        },
+      ],
+      merchant_username: "Sikhai Inc.",
+    };
+    
+    const { data } = await api.post("/api/khalti-initiate-payment/", payload);
+    window.location.href = data.payment_url;
+
+  }
 
     return(
     <Modal isOpen={props.modalOpen} className="absolute top-1/2 left-1/2 right-auto bottom-auto bg-dark-secondary w-1/2 text-white p-16 flex flex-col gap-16" style={customStyles}> 
@@ -57,8 +119,10 @@ export default function PaymentModal(props){
             </button>
             <button
               className="bg-purple-800 px-8 py-4 w-full font-bold text-white rounded-xl"
+              onClick={khaltiPaymentIntialize}
             >
               Khalti
+              
             </button>
             <button
               className="bg-blue-500 px-8 py-4  w-full font-bold text-white rounded-xl"
