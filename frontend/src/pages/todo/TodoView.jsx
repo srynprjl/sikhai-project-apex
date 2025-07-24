@@ -1,17 +1,112 @@
-import { useState } from "react";
+import { useState, useEffect  } from "react";
 import TodoContainer from "./components/TodoContainer";
-
+import { useNavigate} from "react-router";
 import Tasks from "./components/Tasks";
 import DashboardView from "../../components/layouts/DashboardView";
 import TodoCreate from "./TodoCreate";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
+import api from "../../api";
 
 export default function TodoView() {
   const [count, setCount] = useState(0);
   const [todos, setTodos] = useState([]);
   const [todoModal, setTodoModal] = useState(false)
   const [taskModal, setTaskModal] = useState(false)
+  const [tasks, setTasks] = useState({});
+  const [search, setSearch] = useState("");
+  const [taskId, setTasksId] = useState(null)
+  
+  const navigate = useNavigate();
 
+    useEffect(() => {
+    async function fetchData() {
+      try {
+        const { data: todoData } = await api.get("/api/todos/");
+        setTodos(todoData);
+        setCount(todoData.length);
+
+        const { data: taskData } = await api.get("/api/tasks/");
+        const tasksByTodo = taskData.reduce((acc, task) => {
+          acc[task.todo] = acc[task.todo] || [];
+          acc[task.todo].push(task);
+          return acc;
+        }, {});
+        setTasks(tasksByTodo);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  async function handleDelete(id, type) {
+    try {
+      if (type == "todo") {
+        await api.delete(`/api/todos/${id}/`);
+        setTodos(todos.filter((todo) => todo.id !== id));
+        setTasks((prev) => {
+          const newTasks = { ...prev };
+          delete newTasks[id];
+          return newTasks;
+        });
+        setCount(todos.length - 1);
+      } else if (type == "task") {
+        const todoId = Object.keys(tasks).find((key) =>
+          tasks[key].some((task) => task.id === id)
+        );
+        if (todoId) {
+          await api.delete(`/api/tasks/${id}/`);
+          setTasks((prev) => ({
+            ...prev,
+            [todoId]: prev[todoId].filter((task) => task.id !== id),
+          }));
+        } else {
+          console.error("Task not found in any Todo");
+        }
+      }
+    } catch (err) {
+      console.error(`Error deleting ${type}:`, err);
+    }
+  }
+
+  function handleCreateTask(id){
+    setTasksId(id)
+    setTaskModal(true);
+  }
+
+  function navigatePage(id, type) {
+    return navigate(`/${type}/update/${id}/`);
+  }
+
+    const todosList = todos.map((data) => {
+    if (data.title.toLowerCase().includes(search.toLowerCase())) {
+      return (
+        <TodoContainer
+          key={data.id}
+          name={data.title}
+          todoId={data.id}
+          deleteFunction={() => handleDelete(data.id, "todo")}
+          updateFunction={() => navigatePage(data.id, "todos")}
+          createTask={() => handleCreateTask(data.id)}
+        >
+          {(tasks[data.id] || []).map((task) => (
+            <Tasks
+              key={task.id}
+              id={task.id}
+              name={task.title}
+              description={task.description}
+              completed={task.completed}
+              handleUpdate={() => navigatePage(task.id, "tasks")}
+              handleDelete={() => handleDelete(task.id, "task")}
+            />
+          ))}
+        </TodoContainer>
+      );
+    } else {
+      null;
+    }
+  });
   
   return (
     <DashboardLayout>
@@ -25,92 +120,11 @@ export default function TodoView() {
       title="Your Todos"
       count={count}
     >
-      <TodoContainer name="A">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dicta in
-        incidunt ex molestiae vitae, vero quod tempore dolor, iste voluptatibus
-        nulla dolores sed illo assumenda. Quos id quasi velit facere sequi
-        dolores!{" "}
-      </TodoContainer>
-      <TodoContainer name="B" createTask={() => setTaskModal(true)}>
-        <Tasks
-          name="Do Assignments"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
-          dueDate="now"
-        />
-        <Tasks
-          name="Do Assignments"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
-          dueDate="now"
-        />
-        <Tasks
-          name="Do Assignments"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
-          dueDate="now"
-        />
-                <Tasks
-          name="Do Assignments"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
-          dueDate="now"
-        />
-                <Tasks
-          name="Do Assignments"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
-          dueDate="now"
-        />
-                <Tasks
-          name="Do Assignments"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
-          dueDate="now"
-        />
-                <Tasks
-          name="Do Assignments"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
-          dueDate="now"
-        />
-                <Tasks
-          name="Do Assignments"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
-          dueDate="now"
-        />
-                <Tasks
-          name="Do Assignments"
-          description="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, nam?"
-          dueDate="now"
-        />
-        
-      </TodoContainer>
-      <TodoContainer name="C">
-        {" "}
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt sit
-        labore, cum facere corporis architecto enim voluptatem sequi libero
-        ipsa? Enim odio consectetur molestias at alias corporis? Velit quas
-        fugiat iure dolorum!
-      </TodoContainer>
-      <TodoContainer name="D">
-        {" "}
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aliquid
-        impedit architecto fugiat ea quae exercitationem sequi totam. Quam nam
-        aperiam vero tempora blanditiis accusantium magnam molestiae incidunt
-        ratione dolorum minima facere, asperiores ex, repudiandae quae. Labore,
-        voluptatibus ipsum. Laboriosam, quasi harum. Iste quod nostrum laborum
-        quis nemo! Cumque itaque architecto, animi voluptatibus adipisci quod
-        eveniet eos autem porro impedit minima voluptate aspernatur, nemo,
-        accusamus fuga corporis perferendis in reprehenderit ullam doloribus
-        qui. Ea similique error culpa quas soluta dicta ipsa perspiciatis, nulla
-        facilis fuga. Ratione cum sequi a velit eaque aut, eligendi beatae
-        voluptas. Quo neque optio ut illo veritatis?{" "}
-      </TodoContainer>
-      <TodoContainer name="E">
-        {" "}
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. In delectus
-        corporis minus voluptatibus ratione dolores possimus non ipsam hic a,
-        adipisci mollitia beatae odit molestiae, at numquam ullam totam, ea quae
-        corrupti.{" "}
-      </TodoContainer>
-      <TodoCreate modalOpen={todoModal} modalClose={() => setTodoModal(false)} />
-      <TodoCreate modalOpen={taskModal} modalClose={() => setTaskModal(false)} mode="task" />
-        <div id="modal"></div>
+      {todosList}
     </DashboardView>
+
+    <TodoCreate modalOpen={todoModal} mode="todo" type={"create"} modalClose={() => setTodoModal(false)}></TodoCreate>
+    <TodoCreate modalOpen={taskModal} mode="task" type={"create"} modalClose={() => setTaskModal(false)} taskId={taskId}></TodoCreate>
     </DashboardLayout>
   );
 }
