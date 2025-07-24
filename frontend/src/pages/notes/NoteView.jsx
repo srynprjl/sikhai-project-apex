@@ -1,93 +1,84 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import EditorJSComponent from "../../components/api/Editor";
+import { useState, useEffect } from "react";
+import NoteContainer from "../../components/layouts/NoteContainer";
+import DashboardView from "../../components/layouts/DashboardView";
+import DeleteModal from "../../components/modals/DeleteModal"
+import Output from 'editorjs-react-renderer';
+import { useNavigate } from "react-router";
 import api from "../../api";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
-import { jwtDecode } from "jwt-decode";
 
-export default function NoteEdit() {
-  const { id } = useParams();
-  const navigate = useNavigate();
+export default function NoteView() {
+const [count, setCount] = useState(0);
+const [notes, setNotes] = useState([]);
+const [modalOpen, setModalOpen] = useState(false);
+const [deleteId, setDeleteId] = useState(null)
+const [deleteTitle, setDeleteTitle] = useState(null)
+  const [paidNotes, setPaidNotes] = useState([]);
+  const [search, setSearch] = useState("");
+const navigate = useNavigate()
 
-  const [title, setTitle] = useState("");
-  const [data, setData] = useState(null);
-  const [user, setUser] = useState(null);
-  const [author, setAuthor] = useState(null);
-  const [isPublic, setIsPublic] = useState(false);
-  const [price, setPrice] = useState(0.0);
-  const [isLoaded, setIsLoaded] = useState(false);
+    useEffect(() => {
+        async function fetchData() {
+            const {data} = await api.get("/api/notes/")
+            setNotes(data)
+        }
 
-  useEffect(() => {
-    async function fetchNote() {
-      try {
-        const res = await api.get(`/api/notes/${id}/`);
-        setTitle(res.data.title);
-        setData(res.data.content);
-        setIsPublic(res.data.isPublic);
-        setPrice(res.data.price);
-        setAuthor(res.data.author);
-        setIsLoaded(true);
-      } catch (error) {
-        console.error("Error loading note:", error);
-      }
+            async function fetchBoughtNotes(){
+      const {data} = await api.get("/api/get-purchased-notes/")
+      setPaidNotes(data)
     }
-    fetchNote();
-    setUser(jwtDecode(localStorage.getItem("access")).user_id);
-  }, [id]);
 
-  useEffect(() => {
-    if (!isLoaded) return;
-    const timeout = setTimeout(() => {
-      api
-        .put(`/api/notes/update/${id}/`, {
-          title,
-          content: data,
-          isPublic,
-          price,
-        })
-        .catch((err) => {
-          console.error("Auto-save error:", err);
-        });
-    }, 100);
+        fetchBoughtNotes();
+        fetchData()
+    }, [])
 
-    return () => clearTimeout(timeout);
-  }, [title, data, id, isPublic, price, isLoaded]);
+function navigatePage(id){
+  return navigate(`/notes/${id}/`)
+}
 
-  if (!isLoaded) return <p>Loading...</p>;
+function openModal(id, title){
+  setModalOpen(true)
+  setDeleteId(id)
+  setDeleteTitle(title)
+}
+
+function closeModal(){
+  setModalOpen(false)
+  setDeleteId(null)
+  setDeleteTitle(null)
+}
+
+async function handleDelete(id){
+  await api.delete(`/api/notes/delete/${id}/`)
+  navigate(0)
+}
+
+  const notesList = notes.map((data, index)=> {
+    console.log(data.content.blocks.slice(0,2))
+    console.log(data.id)
+    data.content = {
+      ...data.content,
+    blocks: data.content.blocks.slice(0, 1) 
+    }
+      return <NoteContainer id={data.id} key={data.id} name={data.title} onClick={() => navigatePage(data.id)} delete={() => {openModal(data.id, data.title)}}>
+        <Output data={ data.content } />
+      </NoteContainer>
+  })
+
+    const boughtList = paidNotes.map((data) => {
+    return <NoteContainer key={data.id} id={data.note} name={data.note_title} onClick={() => navigatePage(data.note)}>
+      <p>Purchased</p>
+    </NoteContainer>
+  })
 
   return (
     <DashboardLayout>
-          <div className="p-10">
-      <form>
-        <input
-            placeholder="Title..."
-            className="text-4xl font-black outline-0"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />   
-                  <div>
-          <div>
-                        <input type="checkbox"
-            checked={isPublic}
-              onChange={(e) => {
-                setIsPublic((prev) => !prev);
-              console.log(isPublic);
-            }}
-            /> <label>Make this note public</label>
-          </div>
-          {isPublic ? (<div>
-            <label>Price: </label><input type="number" step={0.01} 
-            onChange={(e) => setPrice(e.target.valueAsNumber)}className="w-16 decoration-0 border-b "/> 
-          </div>
-          ) : null}
-        </div>
-        <div id="editor" className="prose-em prose-invert">
-          <EditorJSComponent data={data} onChange={setData} editorBlock="editorjs-container" 
-                      isPublic={user != author ? true : false}
-                      />
-        </div>
-      </form>
-    </div>
+    <DashboardView searchFunc={(e) => setSearch(e.target.value)} searchVisible titleVisible firstContainer title="notes" count={count} btnName={"Note"} btnSrc={"/notes/create"} btnVisible={true}>
+      {notesList }
+      {boughtList}
+    </DashboardView>
+
+    <DeleteModal modalOpen={modalOpen} deleteFunc={()=>handleDelete(deleteId)} cancelFunc={closeModal} title={deleteTitle} />
     </DashboardLayout>
   );
 }
