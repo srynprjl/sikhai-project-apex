@@ -43,7 +43,7 @@ export default function ClassroomCreateUpdateForm(){
       const res = await api.post("/api/classrooms/", payload)
     }
     alert("Classroom successfully " + (id ? "updated" : "created"))
-    navigate("/classroom")
+    navigate("/classroom/manage")
   }
 
   return (

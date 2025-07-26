@@ -9,9 +9,7 @@ export default function ClassroomContainer(props) {
               <div className="flex flex-col gap-2">
                 <h2 className="text-2xl font-bold">{props.name}</h2>
               <p className="">{props.description}</p>
-              <p className="">Subjects: {props.subjects}</p>
               </div>
-
               <div className="flex justify-between">
                 <div>
                     <p className="">Nrs {props.price}</p>  

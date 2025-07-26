@@ -11,6 +11,14 @@ const ClassroomListPage = () => {
   const [classrooms, setClassrooms] = useState([]);
   const [count, setCount] = useState(0);
 
+    useEffect(() => {
+    async function getAllClassrooms(){
+      const res = await api.get("/api/classrooms/");
+      setClassrooms(res.data)
+    }
+    getAllClassrooms();
+    console.log(classrooms)
+  }, [])
 
   const classRoomList = classrooms.map((classroom) => (
     <ClassroomContainer id={classroom.id} name={classroom.name} description={classroom.description} price={classroom.price} subjects={classroom.subjects} isPublic={true}/>

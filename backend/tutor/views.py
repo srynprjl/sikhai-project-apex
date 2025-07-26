@@ -26,7 +26,7 @@ class ClassroomViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            permission_classes = [permissions.AllowAny]
+            permission_classes = [permissions.IsAuthenticated, IsTutor]
         else:
             permission_classes = [permissions.AllowAny]
         return [permission() for permission in permission_classes]
