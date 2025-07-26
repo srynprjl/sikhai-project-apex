@@ -1,28 +1,46 @@
-export default function Classroom({ isTutor }){
-  const [isEnrolled, setIsEnrolled] = useState(false);
+import { useState, useEffect } from "react";
+import { useParams } from "react-router";
+import DashboardLayout from "../../components/layouts/DashboardLayout";
+import api from "../../api";
+export default function Classroom({  }){
+  const isTutor = true
+  const {id} = useParams();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState(0.00)
+  const [tutor, setTutor] = useState(0)
+  const [isEnrolled, setIsEnrolled] = useState(true);
   const [activeTab, setActiveTab] = useState('notes'); 
+
+  useEffect(() => {
+    async function getEnrollmentInfo(){
+      const res = await api.get(`/api/classrooms/${id}/`);
+      setTitle(res.data.name)
+      setDescription(res.data.description)
+      setPrice(res.data.price);
+      setTutor(res.data.tutor.username)
+      console.log(res.data)
+    }
+    getEnrollmentInfo()
+  }, [id])
 
   return (
     <DashboardLayout>
           <div className="p-8 ">
       <div className="p-8 rounded-lg ">
-        <h1 className="text-4xl font-extrabold text-white mb-4">Class Name</h1>
-        <p className="text-gray-400 text-lg mb-4">Class Description</p>
-        <div className="flex items-center text-gray-300 mb-2">
-          <span className="font-semibold text-lg">Subjects:</span>
-          <span className="ml-2 text-md">Class Subjects</span>
-        </div>
+        <h1 className="text-4xl font-extrabold text-white mb-4">{title}</h1>
+        <p className="text-gray-400 text-lg mb-4">{description}</p>
         <div className="flex items-center text-gray-200 font-bold text-2xl mb-6">
-          Price: Nrs. 0.00
+          Price: Nrs. {price}
         </div>
-        <p className="text-gray-100 text-md mb-6">Tutor: Tut</p>
+        <p className="text-gray-100 text-md mb-6">Tutor: {tutor}</p>
         
         {!isTutor && !isEnrolled && (
           <button
-            onClick={handleKhaltiPayment}
+            // onClick={handleKhaltiPayment}
             className="bg-purple-800 text-white px-8 py-3 text-lg font-semibold hover:bg-purple-700 transition duration-300 mb-6"
           >
-            Enroll Now with Khalti (Pay Rs. 0.00)
+            Enroll Now with Khalti (Pay Rs. {price})
           </button>
         )}
 
@@ -30,12 +48,6 @@ export default function Classroom({ isTutor }){
           <>
             <div className="border-b border-gray-200 mb-6">
               <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-                <button
-                  onClick={() => setActiveTab('notes')}
-                  className={`${activeTab === 'notes' ? 'border-accent text-accent' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-md`}
-                >
-                  Notes
-                </button>
                 <button
                   onClick={() => setActiveTab('files')}
                   className={`${activeTab === 'files' ? 'border-accent text-accent' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap py-4 px-1 border-b-2 font-medium text-md`}
@@ -66,11 +78,12 @@ export default function Classroom({ isTutor }){
             </div>
             
             <div className="tab-content mt-6">
-              {activeTab === 'notes' && <ClassNotes notes={classroom.notes} />}
-              {activeTab === 'files' && <ClassFiles classroomId={id} isTutor={isTutor} />}
+              {
+              /*{activeTab === 'files' && <ClassFiles classroomId={id} isTutor={isTutor} />}
               {activeTab === 'assignments' && <ClassAssignments classroomId={id} isTutor={isTutor} />}
               {activeTab === 'sessions' && <Sessions classroomId={id} isTutor={isTutor} />}
-              {activeTab === 'students' && isTutor && <Students classroomId={id} />}
+              {activeTab === 'students' && isTutor && <Students classroomId={id} />} */
+              }
             </div>
           </>
         )}

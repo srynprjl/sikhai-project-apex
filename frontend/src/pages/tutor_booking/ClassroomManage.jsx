@@ -24,7 +24,6 @@ export default function ClassroomManage(){
       setClassrooms(res.data)
     }
     getAllClassrooms();
-    console.log(classrooms)
   }, [])
 
   function modalDelete(id, title){

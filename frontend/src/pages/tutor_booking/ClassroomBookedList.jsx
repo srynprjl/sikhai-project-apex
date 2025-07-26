@@ -10,6 +10,13 @@ const BookedClassroomsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
+  useEffect(() => {
+    async function getAllBookedClasses(){
+      const res = await api.get("/api/enrollments/")
+      setEnrollments(res.data)
+    }
+    getAllBookedClasses();
+  })
 
   const classRoomList = enrollments.map((classroom) => (
     <ClassroomContainer id={classroom.classroom.id} name={classroom.classroom.name} description={classroom.classroom.description} price={classroom.classroom.price} subjects={classroom.classroom.subjects} isPublic={true}/>

@@ -17,7 +17,6 @@ const ClassroomListPage = () => {
       setClassrooms(res.data)
     }
     getAllClassrooms();
-    console.log(classrooms)
   }, [])
 
   const classRoomList = classrooms.map((classroom) => (
