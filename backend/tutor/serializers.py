@@ -40,7 +40,7 @@ class SessionSerializer(serializers.ModelSerializer):
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
-        fields = ['id', 'title', 'description', 'due_date']
+        fields = ['id', 'title', 'description', 'due_date', 'assignment_file']
 
 class AssignmentSubmissionSerializer(serializers.ModelSerializer):
     class Meta:

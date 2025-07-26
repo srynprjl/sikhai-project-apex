@@ -43,6 +43,8 @@ class Assignment(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     due_date = models.DateTimeField()
+    assignment_file = models.FileField(upload_to='assignment_files/', null=True, blank=True)
+
 
 class AssignmentSubmission(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='submissions')
