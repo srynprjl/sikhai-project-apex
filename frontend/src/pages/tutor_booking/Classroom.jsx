@@ -2,6 +2,13 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import api from "../../api";
+
+import ClassAssignments from "./tabs/ClassAssignments";
+import ClassFiles from "./tabs/ClassFiles";
+import Sessions from "./tabs/Sessions";
+import Students from "./tabs/Students"
+
+
 export default function Classroom({  }){
   const isTutor = true
   const {id} = useParams();
@@ -10,7 +17,7 @@ export default function Classroom({  }){
   const [price, setPrice] = useState(0.00)
   const [tutor, setTutor] = useState(0)
   const [isEnrolled, setIsEnrolled] = useState(true);
-  const [activeTab, setActiveTab] = useState('notes'); 
+  const [activeTab, setActiveTab] = useState('files'); 
 
   useEffect(() => {
     async function getEnrollmentInfo(){
@@ -78,12 +85,12 @@ export default function Classroom({  }){
             </div>
             
             <div className="tab-content mt-6">
-              {
-              /*{activeTab === 'files' && <ClassFiles classroomId={id} isTutor={isTutor} />}
+              
+              {activeTab === 'files' && <ClassFiles classroomId={id} isTutor={isTutor} />}
               {activeTab === 'assignments' && <ClassAssignments classroomId={id} isTutor={isTutor} />}
               {activeTab === 'sessions' && <Sessions classroomId={id} isTutor={isTutor} />}
-              {activeTab === 'students' && isTutor && <Students classroomId={id} />} */
-              }
+              {activeTab === 'students' && isTutor && <Students classroomId={id} />} 
+              
             </div>
           </>
         )}
