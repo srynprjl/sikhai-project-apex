@@ -1,7 +1,7 @@
 # classroom/serializers.py
 from rest_framework import serializers
 from .models import Classroom, Enrollment, Session, SessionFile, Assignment, AssignmentSubmission
-from Authentications.models import CustomUser
+from Authentication.models import CustomUser
 
 class TutorSerializer(serializers.ModelSerializer):
     class Meta:

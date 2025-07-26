@@ -7,7 +7,7 @@ from .serializers import (
     ClassroomSerializer, EnrollmentSerializer, SessionSerializer,
     SessionFileSerializer, AssignmentSerializer, AssignmentSubmissionSerializer
 )
-from Authentications.models import CustomUser
+from Authentication.models import CustomUser
 
 from django.shortcuts import get_object_or_404
 
@@ -22,10 +22,11 @@ class IsTutor(permissions.BasePermission):
 class ClassroomViewSet(viewsets.ModelViewSet):
     queryset = Classroom.objects.all()
     serializer_class = ClassroomSerializer
+    
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            permission_classes = [permissions.IsAuthenticated, IsTutor]
+            permission_classes = [permissions.AllowAny]
         else:
             permission_classes = [permissions.AllowAny]
         return [permission() for permission in permission_classes]

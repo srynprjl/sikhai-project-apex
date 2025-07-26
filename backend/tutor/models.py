@@ -1,6 +1,6 @@
 # classroom/models.py
 from django.db import models
-from Authentications.models import CustomUser
+from Authentication.models import CustomUser
 
 class Classroom(models.Model):
     tutor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='classrooms')
