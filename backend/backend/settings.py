@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'notes',
     'admins',
     'payments',
-    'tutor'
+    'tutor',
+    'todo',
+    'rest_framework_nested',
 ]
 
 MIDDLEWARE = [

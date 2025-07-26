@@ -1,5 +1,4 @@
 export default function Classroom({ isTutor }){
-  const [isTutor, setIsTutor] = useState(false);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [activeTab, setActiveTab] = useState('notes'); 
 

@@ -1,38 +1,45 @@
+# classroom/serializers.py
 from rest_framework import serializers
-from .models import Classroom, Student, Session, FileUpload, Assignment, AssignmentSubmission, Booking
-from django.contrib.auth.models import User
+from .models import Classroom, Enrollment, Session, SessionFile, Assignment, AssignmentSubmission
+from Authentications.models import CustomUser
+
+class TutorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'username', 'email']
 
 class ClassroomSerializer(serializers.ModelSerializer):
+    tutor = TutorSerializer(read_only=True)
+
     class Meta:
         model = Classroom
-        fields = '__all__'
+        fields = ['id', 'name', 'description', 'price', 'tutor']
 
-class StudentSerializer(serializers.ModelSerializer):
+class EnrollmentSerializer(serializers.ModelSerializer):
+    classroom = ClassroomSerializer(read_only=True)
+
     class Meta:
-        model = Student
-        fields = '__all__'
+        model = Enrollment
+        fields = ['id', 'classroom', 'paid', 'enrolled_at']
+
+class SessionFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SessionFile
+        fields = ['id', 'file', 'uploaded_at']
 
 class SessionSerializer(serializers.ModelSerializer):
+    files = SessionFileSerializer(many=True, read_only=True)
+
     class Meta:
         model = Session
-        fields = '__all__'
-
-class FileUploadSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FileUpload
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'scheduled_at', 'files']
 
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Assignment
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'due_date']
 
 class AssignmentSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssignmentSubmission
-        fields = '__all__'
-
-class BookingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Booking
-        fields = '__all__'
+        fields = ['id', 'assignment', 'submitted_file', 'submitted_at']

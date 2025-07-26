@@ -1,26 +1,40 @@
+# classroom/models.py
 from django.db import models
-from Authentication.models import CustomUser
+from Authentications.models import CustomUser
 
 class Classroom(models.Model):
     tutor = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='classrooms')
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)  # Price in NRs
+    
+    def __str__(self):
+        return self.name
 
-class Student(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-    classrooms = models.ManyToManyField(Classroom, related_name='students')
+class Enrollment(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='enrollments')
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name='enrollments')
+    paid = models.BooleanField(default=False)
+    enrolled_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'classroom')  # Prevent double enrollments
 
 class Session(models.Model):
     classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name='sessions')
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    scheduled_at = models.DateTimeField()
 
-class FileUpload(models.Model):
-    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name='files')
-    upload = models.FileField(upload_to='classroom_files/')
+    def __str__(self):
+        return f"{self.classroom.name} session: {self.title}"
+
+def upload_to_session_files(instance, filename):
+    return f'session_files/classroom_{instance.session.classroom.id}/session_{instance.session.id}/{filename}'
+
+class SessionFile(models.Model):
+    session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name='files')
+    file = models.FileField(upload_to=upload_to_session_files)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 class Assignment(models.Model):
@@ -28,20 +42,12 @@ class Assignment(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     due_date = models.DateTimeField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
 class AssignmentSubmission(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='submissions')
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='submissions')
     submitted_file = models.FileField(upload_to='assignment_submissions/')
     submitted_at = models.DateTimeField(auto_now_add=True)
-    graded = models.BooleanField(default=False)
-    grade = models.FloatField(null=True, blank=True)
 
-class Booking(models.Model):
-    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name='bookings')
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    booking_date = models.DateTimeField()
-    khalti_payment_id = models.CharField(max_length=255, blank=True)
-    paid = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        unique_together = ('assignment', 'user')  # Single submission per assignment per user

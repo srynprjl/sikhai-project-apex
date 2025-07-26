@@ -27,11 +27,6 @@ import NoteCreate from "./pages/notes/NoteCreate";
 import NotePage from "./pages/notes/NotePage";
 import PublicNotesView from "./pages/notes/PublicNotesView";
 
-// tutors
-import TutorHub from "./pages/tutor_booking/TutorBookingHub";
-import TutorCreateBooking from "./pages/tutor_booking/BookingCreateUpdate";
-import TutorInfo from "./pages/tutor_booking/TutorInformation";
-
 //admin
 import AdminHub from "./pages/admin/AdminHub";
 import AcceptTutor from "./pages/admin/AcceptTutor";
@@ -53,6 +48,16 @@ import Forbidden from "./pages/errors/Forbidden"
 import PaymentsStatus from "./pages/payments/PaymentsStatus";
 import ReportFeedbackForm from "./components/form/ReportFeedbackForm";
 import TutorApplicationForm from "./components/form/TutorApplicationForm";
+
+
+import ClassroomList from "./pages/tutor_booking/ClassroomList";
+import Classroom from "./pages/tutor_booking/Classroom";
+import ClassroomManage from "./pages/tutor_booking/ClassroomManage";
+import ClassroomCreateUpdateForm from "./pages/tutor_booking/ClassroomCreateUpdateForm";
+import AssignmentForm from "./pages/tutor_booking/AssignmentForm";
+import CreateUpdateSessionForm from "./pages/tutor_booking/CreateSession";
+import ClassroomBookedList from "./pages/tutor_booking/ClassroomBookedList";
+
 
 const AppRouter = () => {
   return (
@@ -76,9 +81,6 @@ const AppRouter = () => {
 
         {/* tutors */}
         <Route path="/tutors">
-          <Route index element={<TutorHub />} />
-          <Route path="create" element={<TutorCreateBooking />} />
-          <Route path=":id" element={<TutorInfo />} />
           <Route path="application" element={<TutorApplicationForm />} />
           <Route path="application/:id" element={<TutorApplicationForm mode={"view"} />} />
         </Route>
@@ -123,6 +125,21 @@ const AppRouter = () => {
         {/* errors */}
         <Route path="*" element={<NotFound />} />
         <Route path="/forbidden" element={<Forbidden />} />
+
+          <Route path="/classroom">
+          <Route index element={<ClassroomList />}></Route>
+          <Route path="booked" element={<ClassroomBookedList />}/>
+          <Route path=":id" element={<Classroom isTutor={true} />}></Route>
+          <Route path="manage" >
+                  <Route index element={<ClassroomManage />} />
+                  <Route path="new" element={<ClassroomCreateUpdateForm />} />
+                  <Route path="edit/:id" element={<ClassroomCreateUpdateForm />} />
+          </Route>
+          <Route path=":classroomId">
+            <Route path="assignments/new" element={<AssignmentForm />} />
+            <Route path="sessions/new" element={<CreateUpdateSessionForm />} />
+          </Route>
+        </Route>
       </Routes>
     </Router>
   );
