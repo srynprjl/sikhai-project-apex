@@ -25,16 +25,17 @@ class Session(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     scheduled_at = models.DateTimeField()
+    google_meet_link=models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return f"{self.classroom.name} session: {self.title}"
 
-def upload_to_session_files(instance, filename):
-    return f'session_files/classroom_{instance.session.classroom.id}/session_{instance.session.id}/{filename}'
+def upload_to_classroom_files(instance, filename):
+    return f'classroom_files/classroom_{instance.classroom.id}/{filename}'
 
-class SessionFile(models.Model):
-    session = models.ForeignKey(Session, on_delete=models.CASCADE, related_name='files')
-    file = models.FileField(upload_to=upload_to_session_files)
+class ClassroomFiles(models.Model):
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name='files')
+    file = models.FileField(upload_to=upload_to_classroom_files)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
 class Assignment(models.Model):
@@ -46,6 +47,8 @@ class Assignment(models.Model):
 class AssignmentSubmission(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='submissions')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='submissions')
+    grade = models.FloatField(default=0.00, null=True)
+    feedback = models.TextField(blank=True, null=True)
     submitted_file = models.FileField(upload_to='assignment_submissions/')
     submitted_at = models.DateTimeField(auto_now_add=True)
 

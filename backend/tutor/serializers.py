@@ -1,19 +1,25 @@
 # classroom/serializers.py
 from rest_framework import serializers
-from .models import Classroom, Enrollment, Session, SessionFile, Assignment, AssignmentSubmission
+from .models import Classroom, Enrollment, Session, ClassroomFiles, Assignment, AssignmentSubmission
 from Authentication.models import CustomUser
 
 class TutorSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'email']
+        
+class ClassroomFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClassroomFiles
+        fields = ['id', 'file', 'uploaded_at']
 
 class ClassroomSerializer(serializers.ModelSerializer):
     tutor = TutorSerializer(read_only=True)
+    files = ClassroomFileSerializer(many=True, read_only=True)
 
     class Meta:
         model = Classroom
-        fields = ['id', 'name', 'description', 'price', 'tutor']
+        fields = ['id', 'name', 'description','files' ,'price', 'tutor']
 
 class EnrollmentSerializer(serializers.ModelSerializer):
     classroom = ClassroomSerializer(read_only=True)
@@ -22,17 +28,14 @@ class EnrollmentSerializer(serializers.ModelSerializer):
         model = Enrollment
         fields = ['id', 'classroom', 'paid', 'enrolled_at']
 
-class SessionFileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SessionFile
-        fields = ['id', 'file', 'uploaded_at']
+
 
 class SessionSerializer(serializers.ModelSerializer):
-    files = SessionFileSerializer(many=True, read_only=True)
+
 
     class Meta:
         model = Session
-        fields = ['id', 'title', 'description', 'scheduled_at', 'files']
+        fields = ['id', 'title', 'description', 'scheduled_at', 'google_meet_link']
 
 class AssignmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,4 +45,4 @@ class AssignmentSerializer(serializers.ModelSerializer):
 class AssignmentSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssignmentSubmission
-        fields = ['id', 'assignment', 'submitted_file', 'submitted_at']
+        fields = ['id', 'assignment', 'grade', 'feedback', 'submitted_file', 'submitted_at']
