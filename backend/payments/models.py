@@ -1,11 +1,13 @@
 from django.db import models
 from notes.models import Note
+from tutor.models import Classroom
 from Authentication.models import CustomUser
 
 
 class Order(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    notes = models.ManyToManyField(Note, through='OrderItem')
+    notes = models.ManyToManyField(Note, through='OrderItem', null=True)
+    classroom = models.ManyToManyField(Classroom, through='OrderItem', null=True)
     order_date = models.DateTimeField(auto_now_add=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     is_completed = models.BooleanField(default=False)
@@ -17,14 +19,15 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    note = models.ForeignKey(Note, on_delete=models.CASCADE)
+    note = models.ForeignKey(Note, on_delete=models.CASCADE, null=True)
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, null=True)
     price_at_purchase = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         unique_together = ('order', 'note')
 
     def __str__(self):
-        return f"{self.note.title} in Order {self.order.id}"
+        return f"Order {self.order.id}"
 
 class Payment(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='payment_details', null=True, blank=True)

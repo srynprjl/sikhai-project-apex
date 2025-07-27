@@ -99,7 +99,6 @@ class KhaltiPaymentInitiateView(views.APIView):
             print(f"Error during payment initiation: {e}")
             return Response({'detail': f'An internal error occurred: {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 class KhaltiPaymentVerificationView(views.APIView):
 
     permission_classes = [permissions.IsAuthenticated]
@@ -134,7 +133,6 @@ class KhaltiPaymentVerificationView(views.APIView):
                 payment_object.khalti_transaction_id = khalti_transaction_id
                 
                 if khalti_status == 'Completed':
-                    # Crucial amount check
                     if int(khalti_data.get('total_amount', 0)) != int(order.total_amount * 100):
                         payment_object.status = 'AMOUNT_MISMATCH'
                         payment_object.save()
@@ -164,7 +162,6 @@ class KhaltiPaymentVerificationView(views.APIView):
         except Exception as e:
             print(f"An unexpected error occurred during payment verification: {e}")
             return Response({'detail': f'An internal error occurred: {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 
 class FreeNotePurchaseView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]

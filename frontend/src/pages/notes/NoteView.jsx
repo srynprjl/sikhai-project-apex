@@ -79,8 +79,9 @@ async function handleDelete(id){
   return (
     <DashboardLayout>
     <DashboardView searchFunc={(e) => setSearch(e.target.value)} searchVisible titleVisible firstContainer title="notes" count={count} btnName={"Note"} btnSrc={"/notes/create"} btnVisible={true}>
-      {notesList }
-      {boughtList}
+      {notesList.length == 0 && boughtList.length == 0 ? <div>No notes Available. try creating one</div>: 
+      <>{boughtList}{notesList}</>
+      }
     </DashboardView>
 
     <DeleteModal modalOpen={modalOpen} deleteFunc={()=>handleDelete(deleteId)} cancelFunc={closeModal} title={deleteTitle} />

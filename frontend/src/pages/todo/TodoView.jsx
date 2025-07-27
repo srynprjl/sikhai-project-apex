@@ -72,6 +72,7 @@ export default function TodoView() {
           console.error("Task not found in any Todo");
         }
       }
+      alert("Deleted Successfully");
       navigate(0)
     } catch (err) {
       alert(`Error deleting ${type}:`, err);
@@ -146,7 +147,7 @@ export default function TodoView() {
       title="Your Todos"
       count={count}
     >
-      {todosList}
+      {todosList.length == 0 ? "Try creating a todo list" :todosList}
     </DashboardView>
 
     <TodoCreate modalOpen={todoModal} mode="todo" type={"create"} modalClose={() => setTodoModal(false)}></TodoCreate>

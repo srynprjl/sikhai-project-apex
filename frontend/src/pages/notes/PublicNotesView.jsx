@@ -151,7 +151,9 @@ async function handleDelete(id){
         price={notePrice}
         modalClose={() => setPayModalOpen(false)}
       ></PaymentModal>
-      {notesList}
+      {notesList.length == 0 ? <div>There are no notes for sale at the moment. </div>: 
+      <>{notesList}</>
+      }
       
     </DashboardView>
         <DeleteModal modalOpen={modalOpen} deleteFunc={()=>handleDelete(deleteId)} cancelFunc={closeModal} title={deleteTitle} />

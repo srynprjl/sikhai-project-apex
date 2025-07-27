@@ -45,6 +45,10 @@ export default function Classroom({  }){
     checkIsEnrolled()
   }, [id])
 
+  function handleKhaltiPayment(){
+    
+  }
+
   return (
     <DashboardLayout>
           <div className="p-8 ">
@@ -58,7 +62,7 @@ export default function Classroom({  }){
         
         {!isTutor && !isEnrolled && (
           <button
-            // onClick={handleKhaltiPayment}
+            onClick={handleKhaltiPayment}
             className="bg-purple-800 text-white px-8 py-3 text-lg font-semibold hover:bg-purple-700 transition duration-300 mb-6"
           >
             Enroll Now with Khalti (Pay Rs. {price})
