@@ -138,9 +138,6 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
-=======
-*.env
->>>>>>> 76c8d1a (added gitignore)
-=======
-*.env
->>>>>>> 620f8248c203d3396b5dca370ec9fce7e83586fb
+
+classroom_files/
+assignment_submissions/

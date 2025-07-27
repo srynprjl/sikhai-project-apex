@@ -9,3 +9,6 @@ sqlparse
 psycopg2-binary
 python-dotenv
 mysqlclient
+requests
+django-rest-framework-nested
+drf-nested-routers
