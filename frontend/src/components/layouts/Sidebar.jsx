@@ -96,7 +96,7 @@ export default function Sidebar(props) {
             <img src={UserPhoto} alt="" className="w-8 h-8 rounded-full" onClick={() => setModalOpen(true)}/>
           </button>
         }>
-        <p className="mb-2 hover:scale-110 p-1 cursor-pointer" onClick={() => navigate('/settings/profile')}>Profile</p>
+        <p className="mb-2 hover:scale-110 p-1 cursor-pointer" onClick={() => navigate('/profiles')}>Profile</p>
         <p className="hover:scale-110 p-1 cursor-pointer" onClick={() => navigate('/logout')}>Logout</p>
       </DropdownMenu>
         </div>

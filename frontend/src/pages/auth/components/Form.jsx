@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router";
 function Form(props) {
   return (
@@ -99,7 +100,7 @@ function Button(props) {
 function Select(props) {
   return (
     <>
-      <select id={props.id} name={props.name} className={"bg-dark-input p-2.5 text-sm text-white w-full outline-0 border-0 "} disabled={props.disabled} value={props.defaultValue}>
+      <select id={props.id} name={props.name} className={"bg-dark-input p-2.5 text-sm text-white w-full outline-0 border-0 "} disabled={props.disabled} value={props.value} onChange={props.onChange} >
         {props.children}
       </select>
     </>

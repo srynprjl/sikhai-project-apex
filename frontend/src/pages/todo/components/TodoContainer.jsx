@@ -8,8 +8,8 @@ export default function TodoContainer(props) {
           <h1 className="font-semibold">{props.name}</h1>
             <div className="flex gap-2 items-center">
               <CirclePlus size={16} onClick={props.createTask} />
-              <Edit size={16} />
-              <Trash size={16} onClick={() => console.log()} />
+              {/* <Edit size={16}  onClick={props.updateFunction} /> */}
+              <Trash size={16} onClick={props.deleteFunction} />
             </div>
 
         </div>

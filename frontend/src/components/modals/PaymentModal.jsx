@@ -72,8 +72,12 @@ export default function PaymentModal(props){
       merchant_username: "Sikhai Inc.",
     };
     
-    const { data } = await api.post("/api/khalti-initiate-payment/", payload);
-    window.location.href = data.payment_url;
+    try{
+      const { data } = await api.post("/api/khalti-initiate-payment/", payload);
+      window.location.href = data.payment_url;
+    } catch(e){
+      alert("Failed to open Khalti. ")
+    }
 
   }
 

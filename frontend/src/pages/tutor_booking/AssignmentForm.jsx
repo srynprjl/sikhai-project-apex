@@ -29,7 +29,7 @@ const AssignmentFormPage = () => {
       const res = await api.post(`/api/classrooms/${classroomId}/assignments/`, formData);
       navigate(`/classroom/${classroomId}`)
     } catch (e){
-      console.log(e)
+      alert("Failed to create classroom")
     }
   }
   return (

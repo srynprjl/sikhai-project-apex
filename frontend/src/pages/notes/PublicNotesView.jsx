@@ -73,10 +73,15 @@ function closeModal(){
   setDeleteTitle(null)
 }
 
-  async function handleDelete(id) {
-    await api.delete(`/api/notes/delete/${id}/`);
-    navigate(0);
+async function handleDelete(id){
+  try{
+    await api.delete(`/api/notes/delete/${id}/`)
+    alert("Succesfully deleted note")
+  } catch (e){
+    alert("Failed to delete note")
   }
+  navigate(0)
+}
 
   async function handlePurchase(id, title, price) {
     setNoteId(id);
@@ -92,7 +97,7 @@ function closeModal(){
         console.log(res)
         alert("Purchased!")
       } catch (err){
-        console.log(err)
+        alert("Purchased failed")
       }
     }
   }

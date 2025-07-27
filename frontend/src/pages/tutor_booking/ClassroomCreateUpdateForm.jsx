@@ -32,7 +32,11 @@ export default function ClassroomCreateUpdateForm(){
         "description": description,
         "price": price
       }
-      const res = await api.put(`/api/classrooms/${id}/`, payload)
+      try{
+        const res = await api.put(`/api/classrooms/${id}/`, payload)
+      } catch (e){
+        alert("Failed to update " + payload.name);
+      }
 
     } else {
       const payload = {
@@ -40,7 +44,11 @@ export default function ClassroomCreateUpdateForm(){
         "description": description,
         "price": price
       }
-      const res = await api.post("/api/classrooms/", payload)
+      try{
+        const res = await api.post("/api/classrooms/", payload)
+      } catch(e){
+        alert("Failed to create " + payload.name)
+      }
     }
     alert("Classroom successfully " + (id ? "updated" : "created"))
     navigate("/classroom/manage")

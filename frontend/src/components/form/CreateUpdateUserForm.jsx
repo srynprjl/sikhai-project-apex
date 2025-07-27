@@ -27,6 +27,7 @@ export default function CreateUpdateUserForm(props) {
   const [isTutor, setIsTutor] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
+  const [selectedRole, setSelectedRole] = useState();
   const [editProfile, setEditProfile] = useState(
     props.mode === "create" ? true : false,
   );
@@ -42,6 +43,11 @@ export default function CreateUpdateUserForm(props) {
         setEmail(data.email);
         setIsTutor(data.is_tutor);
         setIsAdmin(data.is_superuser);
+        setSelectedRole(() => {
+    if (isAdmin) return "admin";
+    if (isTutor) return "tutor";
+    return "user";
+  })
       }
 
       fetchData();
@@ -49,6 +55,8 @@ export default function CreateUpdateUserForm(props) {
       console.log("No update " + e);
     }
   }, []);
+
+
 
   function edit(e) {
     e.preventDefault();
@@ -59,6 +67,10 @@ export default function CreateUpdateUserForm(props) {
     await api.delete(props.apiUrl);
     navigate("/logout");
   }
+
+  const handleRoleChange = (event) => {
+    setSelectedRole(event.target.value);
+  };
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -217,24 +229,24 @@ export default function CreateUpdateUserForm(props) {
             </>
           ) : null}
 
-
-
-
           
           </FormGroup>
-          <FormLabel className="font-semibold">Roles</FormLabel>
-          <Select disabled={!editProfile} defaultValue={isAdmin ? "admin" : (isTutor ? 'tutor' : 'user')}>
+          
+          {!props.self &&  <>
+          <FormLabel className="font-semibold">Roles</FormLabel>     
+          
+          <Select disabled={!editProfile} value={selectedRole} onChange={handleRoleChange}>
             <Option name="User" value="user"  />
             <Option name="Tutor" value="tutor" />
             <Option name="Admin" value="admin" />
           </Select>
+          </>}
         </FormControl>
       </Form>
       </div>
       <div className="px-8 pt-10 flex flex-col font-sans py-0 w-1/3 ">
           <h1 className="text-2xl font-bold">User Updates</h1>
-          <div className=" bg-dark-secondary h-full">\
-            {/* // yaha user ko updates */}
+          <div className=" bg-dark-secondary h-full">
           </div>
       </div>
     </div>

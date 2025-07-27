@@ -29,7 +29,7 @@ export default function Tasks(props) {
                 {props.name}
               </div>
             </div>
-            <div > <div className="flex gap-2 "><Edit size={16} className="hover:scale-110" /><Trash size={16} className="hover:scale-110"/></div></div>
+            <div > <div className="flex gap-2 "><Trash size={16} onClick={props.handleDelete} className="hover:scale-110"/></div></div>
           </div>
           {
             expanded ? <div className="text-xs">

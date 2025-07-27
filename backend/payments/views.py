@@ -145,7 +145,7 @@ class KhaltiPaymentVerificationView(views.APIView):
 
                     order.is_completed = True
                     order.khalti_idx = pidx
-                    order.khalti_txn_status= status
+                    order.khalti_txn_status= khalti_status
                     order.save()
                     payment_object.save()
                     return Response({"detail": "Payment successfully verified and order completed!", "status": khalti_status}, status=status.HTTP_200_OK)

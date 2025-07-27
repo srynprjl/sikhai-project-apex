@@ -28,10 +28,8 @@ export default function Register() {
   }, [])
 
   document.title = "Register - Sikhai";
-  const [usernameError, setUserNameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
+  const [error, setError] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [first_name, setFname] = useState("");
@@ -45,33 +43,37 @@ export default function Register() {
     e.preventDefault();
 
     if (username == "") {
-      setUserNameError("Enter a username");
+      setError("Username cannot be empty");
     } else {
-      setUserNameError("");
+      setError("");
     }
 
     if (email == "") {
-      setEmailError("Enter an email");
+      setError("Email cannot be empty");
+      return
     } else {
-      setEmailError("");
+      setError("");
     }
 
     if (password == "") {
-      setEmailError("Enter an password");
+      setError("Password cannot be empty");
+      return
     } else {
-      setEmailError("");
+      setError("");
     }
 
-    if (password.length < 4) {
-      setEmailError("Password must be greater than 8");
+    if (password.length < 8) {
+      setError("Password must be greater than 8");
+      return
     } else {
-      setEmailError("");
+      setError("");
     }
 
     if (password != confirmPassword) {
-      setConfirmPasswordError("Password doesnt match");
+      setError("Password doesnt match");
+      return
     } else {
-      setConfirmPasswordError("");
+      setError("");
     }
 
     try {
@@ -86,8 +88,7 @@ export default function Register() {
       console.log(res.data);
       navigate("/login");
     } catch (e) {
-      console.log(e);
-      setUserNameError("User already exists");
+      setError("User already exists");
     }
   }
 
@@ -100,7 +101,7 @@ export default function Register() {
             </CardHeader>
 
             <FormControl className="gap-16">
-
+              {error ? <div className='bg-red-400 text-white p-4 text-center mt-3'>{error}</div> : null }
               <FormControl className={page==0 ? "gap-8" : "hidden"}>
                 <Input
                   type="text"

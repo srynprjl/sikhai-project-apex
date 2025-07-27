@@ -6,12 +6,19 @@ import DashboardView from "../../components/layouts/DashboardView";
 import TodoCreate from "./TodoCreate";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import api from "../../api";
+import DeleteModal from "../../components/modals/DeleteModal";
 
 export default function TodoView() {
   const [count, setCount] = useState(0);
   const [todos, setTodos] = useState([]);
   const [todoModal, setTodoModal] = useState(false)
   const [taskModal, setTaskModal] = useState(false)
+  const [modalTodoOpen, setModalTodoOpen] = useState(false)
+  const [modalTaskOpen, setModalTaskOpen] = useState(false)
+  const [todoDeleteId, setTodoDeleteId] = useState(null)
+  const [taskDeleteId, setTaskDeleteId] = useState(null)
+  const [todoDeleteTitle, setTodoDeleteTitle] = useState(null)
+  const [taskDeleteTitle, setTaskDeleteTitle] = useState(null)
   const [tasks, setTasks] = useState({});
   const [search, setSearch] = useState("");
   const [taskId, setTasksId] = useState(null)
@@ -65,8 +72,9 @@ export default function TodoView() {
           console.error("Task not found in any Todo");
         }
       }
+      navigate(0)
     } catch (err) {
-      console.error(`Error deleting ${type}:`, err);
+      alert(`Error deleting ${type}:`, err);
     }
   }
 
@@ -79,6 +87,24 @@ export default function TodoView() {
     return navigate(`/${type}/update/${id}/`);
   }
 
+  function openTodoModal(id, title){
+    setTodoDeleteId(id)
+    setTodoDeleteTitle(title)
+    setModalTodoOpen(true)
+  }
+
+  function openTaskModal(id, title){
+    setTaskDeleteId(id)
+    setTaskDeleteTitle(title)
+    setModalTaskOpen(true)
+  }
+  function closeTodoModal(){
+    setModalTodoOpen(false)
+  }
+  function closeTaskModal(){
+    setModalTaskOpen(false)
+  }
+
     const todosList = todos.map((data) => {
     if (data.title.toLowerCase().includes(search.toLowerCase())) {
       return (
@@ -86,7 +112,7 @@ export default function TodoView() {
           key={data.id}
           name={data.title}
           todoId={data.id}
-          deleteFunction={() => handleDelete(data.id, "todo")}
+          deleteFunction={() => openTodoModal(data.id, data.title)}
           updateFunction={() => navigatePage(data.id, "todos")}
           createTask={() => handleCreateTask(data.id)}
         >
@@ -98,7 +124,7 @@ export default function TodoView() {
               description={task.description}
               completed={task.completed}
               handleUpdate={() => navigatePage(task.id, "tasks")}
-              handleDelete={() => handleDelete(task.id, "task")}
+              handleDelete={() => openTaskModal(task.id, task.title)}
             />
           ))}
         </TodoContainer>
@@ -125,6 +151,11 @@ export default function TodoView() {
 
     <TodoCreate modalOpen={todoModal} mode="todo" type={"create"} modalClose={() => setTodoModal(false)}></TodoCreate>
     <TodoCreate modalOpen={taskModal} mode="task" type={"create"} modalClose={() => setTaskModal(false)} taskId={taskId}></TodoCreate>
+
+
+    <DeleteModal modalOpen={modalTodoOpen} deleteFunc={()=>handleDelete(todoDeleteId, "todo")} cancelFunc={closeTodoModal} title={todoDeleteTitle} />
+
+    <DeleteModal modalOpen={modalTaskOpen} deleteFunc={()=>handleDelete(taskDeleteId, "task")} cancelFunc={closeTaskModal} title={taskDeleteTitle} />
     </DashboardLayout>
   );
 }

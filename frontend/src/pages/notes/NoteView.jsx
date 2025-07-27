@@ -49,7 +49,12 @@ function closeModal(){
 }
 
 async function handleDelete(id){
-  await api.delete(`/api/notes/delete/${id}/`)
+  try{
+    await api.delete(`/api/notes/delete/${id}/`)
+    alert("Succesfully deleted note")
+  } catch (e){
+    alert("Failed to delete note")
+  }
   navigate(0)
 }
 

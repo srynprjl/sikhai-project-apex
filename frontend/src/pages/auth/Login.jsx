@@ -11,8 +11,7 @@ export default function Login() {
     document.title = "Login - Sikhai"
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [ usernameError, setUsernameError ] = useState("");
-    const [ passwordError, setPasswordError ] = useState("");
+    const [ error, setError ] = useState("");
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -25,28 +24,26 @@ export default function Login() {
         event.preventDefault();
         
         if(username == ""){
-            setUsernameError("Enter your username")
+            setError("Username cannot be empty")
             return
         } else {
-            setUsernameError("")
+            setError("")
         }
 
         if(password == ""){
-            setPasswordError("Enter your password")
+            setError("Password cannot be empty")
             return
         } else {
-            setPasswordError("")
+            setError("")
         }
 
         try{
             const res = await api.post("/api/token/", { username, password })
-
             localStorage.setItem(ACCESS_TOKEN, res.data.access);
             localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
             navigate("/dashboard")
         }catch(e){
-            console.log(e)
-            setUsernameError("Incorrect details")
+            setError("Incorrect details")
         } 
     }
 
@@ -57,13 +54,16 @@ export default function Login() {
     return (
         <div className="flex">
             <Container id="login-left" className="bg-dark-tertiary">
-                    <Form className="gap-24" onSubmit={formSubmit}>
+                
+                    <Form className="gap-12" onSubmit={formSubmit}>
                         <CardHeader id="login-title">
                             <CardTitle id="login">SIKHAI</CardTitle>
                         </CardHeader>
+                        
                         <FormControl className=" gap-7 ">
+                            {error ? <div className='bg-red-400 text-white p-4 text-center mt-3'>{error}</div> : null }
                             <Input type="text" id="username" text="Enter your Username" onChange={(e) => setUsername(e.target.value)}>
-                                <FormLabel className="font-semibold">Username / Email</FormLabel>
+                                <FormLabel className="font-semibold">Username</FormLabel>
                             </Input>
                             <Input type="password" id="password" text="Enter your password" onChange={(e) => setPassword(e.target.value)}>
                                 <FormGroup>
@@ -73,7 +73,7 @@ export default function Login() {
 
                             <Button name="Login" id="login" />
                             <FormGroup>
-                                <FormLink>Forget your password</FormLink>
+                                {/* <FormLink>Forget your password</FormLink> */}
                                 <FormLink link="/register">Dont have an account?</FormLink>
                             </FormGroup>
                         </FormControl>
