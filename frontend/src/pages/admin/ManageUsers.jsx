@@ -12,6 +12,13 @@ export default function ManageUsers() {
 
   const navigate = useNavigate();
   useEffect(() => {
+      async function getUserInfo() {
+        const res = await api.get("/api/user/");
+            if(!res.data.is_superuser){
+            navigate("/forbidden")
+         }
+        }
+    getUserInfo();
     try {
       async function fetchData() {
         const { data } = await api.get("/api/users/");

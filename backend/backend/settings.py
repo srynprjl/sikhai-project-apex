@@ -90,7 +90,7 @@ DATABASES = {
         },
     }
 }
-
+KHALTI_SECRET_KEY=os.getenv("KHALTI_SECRET_KEY")
 AUTH_USER_MODEL = 'Authentication.CustomUser'
 
 AUTH_PASSWORD_VALIDATORS = [

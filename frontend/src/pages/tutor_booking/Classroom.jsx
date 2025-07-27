@@ -7,28 +7,42 @@ import ClassAssignments from "./tabs/ClassAssignments";
 import ClassFiles from "./tabs/ClassFiles";
 import Sessions from "./tabs/Sessions";
 import Students from "./tabs/Students"
+import { jwtDecode } from "jwt-decode";
+import { ACCESS_TOKEN } from "../../constants";
 
 
 export default function Classroom({  }){
-  const isTutor = true
+  
   const {id} = useParams();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0.00)
   const [tutor, setTutor] = useState(0)
-  const [isEnrolled, setIsEnrolled] = useState(true);
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [isTutor, setIsTutor] = useState(false)
   const [activeTab, setActiveTab] = useState('files'); 
+  const user = jwtDecode(localStorage.getItem(ACCESS_TOKEN))
 
   useEffect(() => {
-    async function getEnrollmentInfo(){
+    async function  checkIsEnrolled(){
+      const res = await api.get(`/api/classrooms/${id}/check-enrollment/`)
+      setIsEnrolled(res.data.enrolled)
+    }
+    async function getClassroomInfo(){
       const res = await api.get(`/api/classrooms/${id}/`);
       setTitle(res.data.name)
       setDescription(res.data.description)
       setPrice(res.data.price);
       setTutor(res.data.tutor.username)
+
+      if(res.data.tutor.id == user.user_id){
+        setIsTutor(true)
+      }
       console.log(res.data)
     }
-    getEnrollmentInfo()
+    
+    getClassroomInfo()
+    checkIsEnrolled()
   }, [id])
 
   return (

@@ -7,4 +7,3 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all().order_by('id')
     serializer_class = CustomUserSerializer
     permission_classes = [IsAdminUser]
-    pass

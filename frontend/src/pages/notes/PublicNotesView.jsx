@@ -100,7 +100,6 @@ function closeModal(){
   const notesList = notes.map((data, index) => {
     let bought = false;
     if (data.title.toLowerCase().includes(search.toLowerCase())) {
-      // console.log(data);
       data.content = {
         ...data.content,
         blocks: data.content.blocks.slice(0, 1),
@@ -110,7 +109,6 @@ function closeModal(){
         console.log(data2) 
         if(data2.note == data.id){
           bought = true;
-          console.log("Bought")
           return;
         }
       })

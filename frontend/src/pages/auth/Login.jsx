@@ -2,7 +2,7 @@ import { Card, CardHeader, CardSubtitle, CardTitle } from './components/Card'
 import { Form, Button, Input, FormLink, FormGroup, FormLabel, FormError, FormControl, Checkbox } from './components/Form'
 import Container from './components/Container'
 import LoginArt from '../../assets/login-art.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import api from "../../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
@@ -15,9 +15,11 @@ export default function Login() {
     const [ passwordError, setPasswordError ] = useState("");
     const navigate = useNavigate()
 
-    if(localStorage.getItem(ACCESS_TOKEN)){
-        navigate("/dashboard")
-    }
+    useEffect(() => {
+        if(localStorage.getItem(ACCESS_TOKEN)){
+            navigate("/dashboard")
+        }
+    }, [])
 
     async function formSubmit(event){
         event.preventDefault();

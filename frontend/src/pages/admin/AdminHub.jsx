@@ -1,10 +1,22 @@
 import { useNavigate } from "react-router"
+import { useEffect } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import AdminBox from "../../components/layouts/AdminBox"
-
+import api from "../../api";
 export default function AdminHub(){
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        async function getUserInfo() {
+            const res = await api.get("/api/user/");
+                if(!res.data.is_superuser){
+                navigate("/forbidden")
+             }
+            }
+    
+        getUserInfo();
+      }, [])
 
     const classes = "h-48 bg-dark-primary rounded-md flex justify-center items-center font-black text-2xl text-black hover:border-2 hover:border-black"
     return(<>

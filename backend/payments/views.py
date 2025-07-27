@@ -40,8 +40,6 @@ class KhaltiPaymentInitiateView(views.APIView):
         website_url = request.data.get('website_url')
         payload = request.data
 
-        print(first_product, note_id, return_url, website_url, payload)
-
         if not note_id: # Check for single note_id
             return Response({"detail": "Missing 'note_id'."}, status=status.HTTP_400_BAD_REQUEST)
         if not return_url or not website_url:
@@ -119,7 +117,7 @@ class KhaltiPaymentVerificationView(views.APIView):
                 return Response({"detail": "Order already completed."}, status=status.HTTP_200_OK)
             khalti_lookup_api_url = "https://dev.khalti.com/api/v2/epayment/lookup/" # 
             headers = {
-                "Authorization": f"Key {settings.KHALTI_SECRET_KEY}",
+                "Authorization": f"Key 49f02c7f2bf84e6fa6aedb5328dc2e63",
                 "Content-Type": "application/json",
             }
             lookup_payload = {
@@ -169,7 +167,7 @@ class KhaltiPaymentVerificationView(views.APIView):
 
 
 class FreeNotePurchaseView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated] # Only logged-in users can claim free notes
+    permission_classes = [permissions.IsAuthenticated]
     def post(self, request, *args, **kwargs):
         note_id = request.data.get('note_id')
         if not note_id:

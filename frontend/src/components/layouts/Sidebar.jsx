@@ -3,7 +3,7 @@ import {
   MessageCircle
 } from "lucide-react";
 import { useNavigate } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import api from "../../api";
 import UserPhoto from "../../assets/test.png";
 import DropdownMenu from "../modals/Dropdown";
@@ -45,7 +45,7 @@ export default function Sidebar(props) {
       time = "night";
     }
 
-    return <span>{time}</span>;
+    return <span>{useMemo(()=> time, [time])}</span>;
   }
 
   function NavBarItem(props){
@@ -58,15 +58,26 @@ export default function Sidebar(props) {
         <div className="flex gap-6 items-center">
           <div className="text-2xl font-logo cursor-pointer" onClick={() => navigate("/dashboard")}>SIKHAI</div>
           <div className="navElements flex gap-4 ">
-            <NavBarItem onClick={() => navigate('/todos')}>Tasks</NavBarItem>
-            <NavBarItem onClick={() => navigate('/notes')}>Notes</NavBarItem>
-            <NavBarItem onClick={() => navigate('/notes/browse')}>Buy Notes</NavBarItem>
-            <NavBarItem onClick={() => navigate('/whiteboard')}>Boards</NavBarItem>
-            <NavBarItem onClick={() => navigate('/whiteboard')}>Book Tutor</NavBarItem>
-            <NavBarItem onClick={() => navigate('/whiteboard')}>Examination Center</NavBarItem>
-            <NavBarItem onClick={() => navigate('/whiteboard')}>Results</NavBarItem>
-            {isTutor ? <NavBarItem onClick={() => navigate('/whiteboard')}>Tutor</NavBarItem>: null}
-            {isAdmin ? <NavBarItem onClick={() => navigate('/admin')}>Admin</NavBarItem>: null}
+            {!isAdmin && <NavBarItem onClick={() => navigate('/todos')}>Tasks</NavBarItem>}
+            {!isAdmin && <NavBarItem onClick={() => navigate('/notes')}>Notes</NavBarItem>}
+            {!isAdmin && <NavBarItem onClick={() => navigate('/notes/browse')}>Buy Notes</NavBarItem>}
+            {!isAdmin && <NavBarItem onClick={() => navigate('/whiteboard')}>Boards</NavBarItem>}
+            {!isAdmin &&  <NavBarItem onClick={() => navigate('/classroom')}>All Classrooms</NavBarItem>}
+            {!isAdmin && !isTutor && <NavBarItem onClick={() => navigate('/classroom/booked')}>My Classrooms</NavBarItem>}
+            
+            {isTutor && <NavBarItem onClick={() => navigate("/classroom/manage")}>My Classrooms</NavBarItem>}
+
+            {isAdmin &&
+            <>
+            <NavBarItem onClick={() => navigate('/admin/users')}>Manage Users</NavBarItem>
+            <NavBarItem onClick={() => navigate('/admin/notes')}>Manage Notes</NavBarItem>
+            <NavBarItem onClick={() => navigate('/admin/reports')}>Manage Reports</NavBarItem>
+            <NavBarItem onClick={() => navigate('/admin/feedbacks')}>Manage Feedbacks</NavBarItem>
+            <NavBarItem onClick={() => navigate('/admin/tutors')}>View Applications</NavBarItem>
+            </>
+            }
+
+
           </div>
         </div>
         <div className="flex gap-5 items-center">
@@ -78,8 +89,6 @@ export default function Sidebar(props) {
               : username}
           </p>
         </div>
-        <MessageCircle size={20} />
-        <Bell size={20}/>
         <div className="relative">
 
         <DropdownMenu trigger={
