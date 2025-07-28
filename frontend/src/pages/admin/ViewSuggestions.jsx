@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 
 export default function ViewSuggestions() {
     const [count, setCount] = useState(0)
+    const [feedbacks, setFeedbacks] = useState([]);
     const navigate = useNavigate()
     useEffect(() => {
     async function getUserInfo() {
@@ -16,19 +17,31 @@ export default function ViewSuggestions() {
          }
         }
     getUserInfo();
+
+    async function getFeedbacks() {
+      const res = await api.get("/api/feedback/");
+      setFeedbacks(res.data)
+    }
+    getFeedbacks()
   }, [])
+
+  function updateFeedbacks(id){
+
+  }
+
+  function deleteFeedbacks(id){
+
+  }
+
+  const feedbackLists = feedbacks.map((data) => {
+    return <AdminContainer key={data.id} id={data.id} title={data.name} updateSrc={() => updateFeedbacks(data.id)} deleteSrc={() => deleteFeedbacks(data.id)}></AdminContainer>
+  })
+
   return (
     <>
       <DashboardLayout>
         <AdminView firstContainer searchVisible titleVisible title="feedbacks" count={0}>
-          <AdminContainer></AdminContainer>
-          <AdminContainer></AdminContainer>
-          <AdminContainer></AdminContainer>
-          <AdminContainer></AdminContainer>
-          <AdminContainer></AdminContainer>
-          <AdminContainer></AdminContainer>
-          <AdminContainer></AdminContainer>
-          <AdminContainer></AdminContainer>
+          {feedbackLists}
         </AdminView>
       </DashboardLayout>
     </>

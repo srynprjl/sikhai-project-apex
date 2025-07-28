@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 
 export default function ViewReports() {
     const [count, setCount] = useState(0)
+    const [reports, setReports] = useState([]);
     const navigate = useNavigate()
     useEffect(() => {
     async function getUserInfo() {
@@ -16,18 +17,32 @@ export default function ViewReports() {
          }
         }
     getUserInfo();
+    async function getFeedbacks() {
+      const res = await api.get("/api/report/");
+      setReports(res.data)
+    }
+    getFeedbacks()
   }, [])
-    return(<>      
-        <DashboardLayout>
-                <AdminView firstContainer searchVisible titleVisible title="reports" count={0}>
-                  <AdminContainer></AdminContainer>
-                  <AdminContainer></AdminContainer>
-                  <AdminContainer></AdminContainer>
-                  <AdminContainer></AdminContainer>
-                  <AdminContainer></AdminContainer>
-                  <AdminContainer></AdminContainer>
-                  <AdminContainer ></AdminContainer>
-                </AdminView>
-              </DashboardLayout>
-        </>)
+
+  function viewReports(id){
+
+  }
+
+  function deleteReport(id){
+
+  }
+
+  const feedbackLists = reports.map((data) => {
+    return <AdminContainer key={data.id} id={data.id} title={data.target_type} updateSrc={() => viewReports(data.id)} deleteSrc={() => deleteReport(data.id)}></AdminContainer>
+  })
+
+  return (
+    <>
+      <DashboardLayout>
+        <AdminView firstContainer searchVisible titleVisible title="reports" count={0}>
+          {feedbackLists}
+        </AdminView>
+      </DashboardLayout>
+    </>
+  );
 }
