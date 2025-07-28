@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router"
 import { useEffect , useState} from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
-import AdminBox from "../../components/layouts/AdminBox"
+import DashboardBox from "../../components/layouts/DashboardBox"
 import api from "../../api";
 import { Bar } from 'react-chartjs-2';
 import {
@@ -143,11 +143,12 @@ export default function AdminHub(){
                     <div className="flex flex-col gap-5">
                     <div className="text-2xl">Actions</div>
                     <div className="grid grid-cols-3 gap-4">
-                        <AdminBox count={applicationCount} link="/admin/tutors">Tutor Applications</AdminBox>
-                        <AdminBox count={userCount} link="/admin/users">Users</AdminBox>
-                        <AdminBox count={noteCount} link="/admin/notes"> Notes</AdminBox>
-                        <AdminBox count={feedbackCount} link="/admin/feedbacks">Feedbacks</AdminBox>
-                        <AdminBox count={"Rs. " + transcationsCount} >Transactions</AdminBox>
+                        <DashboardBox count={0} link="/admin/tutors">Tutor Applications</DashboardBox>
+                        <DashboardBox count={0} link="/admin/users">Users</DashboardBox>
+                        <DashboardBox count={0} link="/admin/notes"> Notes</DashboardBox>
+                        <DashboardBox count={0} link="/admin/reports">Reports</DashboardBox>
+                        <DashboardBox count={0} link="/admin/feedbacks">Feedbacks</DashboardBox>
+                        <DashboardBox count={0} >Transactions</DashboardBox>
                     </div>
 
                     <div className="flex justify-between">

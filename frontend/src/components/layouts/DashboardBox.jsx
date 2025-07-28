@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 
 
-export default function AdminBox(props) {
+export default function DashboardBox(props) {
 const navigate = useNavigate()
     return (
     <>

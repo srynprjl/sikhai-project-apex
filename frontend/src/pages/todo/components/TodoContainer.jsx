@@ -13,7 +13,7 @@ export default function TodoContainer(props) {
             </div>
 
         </div>
-        <div className="tasks text-justify font-sans text-xs flex flex-col gap-2 overflow-scroll">{props.children}</div>
+        <div className="tasks text-justify font-sans text-xs flex flex-col gap-2 overflow-hidden">{props.children}</div>
       </div>
     </>
   );
