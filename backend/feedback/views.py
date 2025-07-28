@@ -7,7 +7,7 @@ from .serializers import FeedbackSerializer
 from .models import Report, Review
 from .models import TutorApplication
 from .serializers import TutorApplicationSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from .serializers import ReportSerializer, ReviewSerializer
 
 class FeedbackListCreateView(generics.ListCreateAPIView):
@@ -18,6 +18,11 @@ class FeedbackDetailView(generics.RetrieveAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer
 
+class FeedbackDeleteView(generics.DestroyAPIView):
+
+    queryset = Feedback.objects.all()
+    serializer_class = FeedbackSerializer
+    permission_classes = [IsAdminUser]
 
 class ReportCreateView(generics.CreateAPIView):
     serializer_class = ReportSerializer
@@ -26,8 +31,6 @@ class ReportCreateView(generics.CreateAPIView):
 class ReviewCreateView(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_class = [IsAuthenticated]
-
-
 
 
 class TutorApplicationRetrieveCreateUpdateView(generics.RetrieveUpdateDestroyAPIView):
