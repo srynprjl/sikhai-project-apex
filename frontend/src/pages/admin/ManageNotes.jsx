@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 
 export default function ManageNotes() {
     const [count, setCount] = useState(0)
+    const [notes, setNotes] = useState([]);
     const navigate = useNavigate()
     useEffect(() => {
     async function getUserInfo() {
@@ -16,19 +17,32 @@ export default function ManageNotes() {
          }
         }
     getUserInfo();
+
+    async function getNotes() {
+      const res = await api.get("/api/notes/all/");
+      setNotes(res.data)
+    }
+    getNotes()
   }, [])
+
+
+    function viewnotes(id){
+
+  }
+
+  function deleteReport(id){
+
+  }
+
+  const notesList = notes.map((data) => {
+    return <AdminContainer key={data.id} id={data.id} title={data.title} updateSrc={() => viewnotes(data.id)} deleteSrc={() => deleteReport(data.id)}></AdminContainer>
+  })
+
   return (
     <>
       <DashboardLayout>
-        <AdminView firstContainer searchVisible titleVisible title="notes" count={count}>
-          <AdminContainer approve></AdminContainer>
-          <AdminContainer approve></AdminContainer>
-          <AdminContainer approve></AdminContainer>
-          <AdminContainer approve></AdminContainer>
-          <AdminContainer approve></AdminContainer>
-          <AdminContainer approve></AdminContainer>
-          <AdminContainer approve></AdminContainer>
-          <AdminContainer approve></AdminContainer>
+        <AdminView firstContainer searchVisible titleVisible title="notes" count={0}>
+          {notesList}
         </AdminView>
       </DashboardLayout>
     </>
