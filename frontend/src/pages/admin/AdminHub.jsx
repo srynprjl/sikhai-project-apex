@@ -33,10 +33,10 @@ export default function AdminHub(){
     const navigate = useNavigate()
     const [userCount, setUserCount] = useState(0);
     const [noteCount, setNoteCount] = useState(0);
-    const [reportCount, setReportCount] = useState(0);
     const [feedbackCount, setFeedbackCount] = useState(0);
     const [applicationCount, setApplicationCount] = useState(0);
     const [transcationsCount, setTranscationsCount] = useState(0.00);
+    
     const [chartData, setChartData] = useState({
         labels: [],
         datasets: []
@@ -57,9 +57,15 @@ export default function AdminHub(){
             const res = await api.get("/api/users/");
             setUserCount(res.data.length)
         }
+        
         async function getAllNoteCount(){
             const res = await api.get("/api/notes/all/");
             setNoteCount(res.data.length)
+        }
+
+        async function getAllApplications(){
+            const res = await api.get("/api/all-applications/");
+            setApplicationCount(res.data.length)
         }
 
         async function getAllFeedbackCount(){
@@ -92,7 +98,7 @@ export default function AdminHub(){
                 })
         }
 
-        // getAllApplications()
+        getAllApplications()
         getAllUserCount()
         getAllNoteCount()
         // getAllReportCount()
@@ -140,7 +146,6 @@ export default function AdminHub(){
                         <AdminBox count={applicationCount} link="/admin/tutors">Tutor Applications</AdminBox>
                         <AdminBox count={userCount} link="/admin/users">Users</AdminBox>
                         <AdminBox count={noteCount} link="/admin/notes"> Notes</AdminBox>
-                        <AdminBox count={reportCount} link="/admin/reports">Reports</AdminBox>
                         <AdminBox count={feedbackCount} link="/admin/feedbacks">Feedbacks</AdminBox>
                         <AdminBox count={"Rs. " + transcationsCount} >Transactions</AdminBox>
                     </div>
