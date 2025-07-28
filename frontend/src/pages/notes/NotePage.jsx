@@ -13,6 +13,7 @@ export default function NoteEdit() {
   const [data, setData] = useState(null);
   const [user, setUser] = useState(null);
   const [author, setAuthor] = useState(null);
+  const [bought, setBought] = useState(false)
   const [isPublic, setIsPublic] = useState(false);
   const [price, setPrice] = useState(0.0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -31,7 +32,17 @@ export default function NoteEdit() {
         console.error("Error loading note:", error);
       }
     }
+
+    async function userBoughtNotes() {
+      const {data} = await api.get("/api/get-purchased-notes/")
+      const isBought = data.some(item => {
+        return id == item.note;
+    });
+      setBought(isBought)
+    }
+
     fetchNote();
+    userBoughtNotes();
     setUser(jwtDecode(localStorage.getItem("access")).user_id);
   }, [id]);
 
@@ -82,9 +93,8 @@ export default function NoteEdit() {
           ) : null}
         </div>
         <div id="editor" className="prose-em prose-invert">
-          <EditorJSComponent data={data} onChange={setData} editorBlock="editorjs-container" 
-                      isPublic={user != author ? true : false}
-                      />
+          <EditorJSComponent data={data} onChange={setData} editorBlock="editorjs-container" isPublic={user != author ? true : false}initialBlockLimit={5} hasPaid={user != author ? bought : true}
+          />
         </div>
       </form>
     </div>
