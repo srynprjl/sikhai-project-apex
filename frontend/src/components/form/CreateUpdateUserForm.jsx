@@ -15,9 +15,6 @@ import api from "../../api";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateUpdateUserForm(props) {
-  const [usernameError, setUserNameError] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const navigate = useNavigate();
   const [username, setUsername] = useState(null);
   const [email, setEmail] = useState(null);
@@ -27,7 +24,6 @@ export default function CreateUpdateUserForm(props) {
   const [isTutor, setIsTutor] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
   const [confirmPassword, setConfirmPassword] = useState(null);
-  const [selectedRole, setSelectedRole] = useState();
   const [editProfile, setEditProfile] = useState(
     props.mode === "create" ? true : false,
   );
@@ -43,11 +39,6 @@ export default function CreateUpdateUserForm(props) {
         setEmail(data.email);
         setIsTutor(data.is_tutor);
         setIsAdmin(data.is_superuser);
-        setSelectedRole(() => {
-    if (isAdmin) return "admin";
-    if (isTutor) return "tutor";
-    return "user";
-  })
       }
 
       fetchData();
@@ -55,8 +46,6 @@ export default function CreateUpdateUserForm(props) {
       console.log("No update " + e);
     }
   }, []);
-
-
 
   function edit(e) {
     e.preventDefault();
@@ -68,17 +57,9 @@ export default function CreateUpdateUserForm(props) {
     navigate("/logout");
   }
 
-  const handleRoleChange = (event) => {
-    setSelectedRole(event.target.value);
-  };
-
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      if (password & (password != confirmPassword)) {
-        setConfirmPasswordError("Password doesnt match");
-        return;
-      }
       setConfirmPassword("");
       let updatedData = {
         email: email,
@@ -99,10 +80,7 @@ export default function CreateUpdateUserForm(props) {
           ? await api.post(props.apiUrl, updatedData)
           : await api.patch(props.apiUrl, updatedData);
 
-      setPassword("");
-      setConfirmPassword("");
-      console.log(response);
-      navigate(0);
+      navigate("/admin/users");
     } catch (e) {
       console.log(e);
     }
@@ -110,7 +88,7 @@ export default function CreateUpdateUserForm(props) {
 
   return (
     <>
-    <div className="flex justify-between items-center px-24 py-4">
+      <div className="flex justify-between items-center px-24 py-4">
         <h1 className="text-3xl font-black">
           {props.mode == "update"
             ? `User Profile of ${username}`
@@ -129,127 +107,111 @@ export default function CreateUpdateUserForm(props) {
               id="edit"
               onClick={edit}
             />
-
-            {editProfile ? <Button
-                name={props.mode === "create" ? "Create" : "Update"}
-                id="update" onClick={handleSubmit}
-            /> : null}
           </div>
         ) : null}
+        {editProfile ? (
+          <Button
+            name={props.mode === "create" ? "Create" : "Update"}
+            id="update"
+            onClick={handleSubmit}
+          />
+        ) : null}
       </div>
-    <div className="flex w-full">
-      <div className="w-full">     
-      <Form className="gap-10 px-24 py-0 max-w-full">
-        <div className="flex justify-between"></div>
-        <FormControl className="gap-3">
-          <FormGroup className="gap-3 justify-start ">
-            <Input
-              className="w-full"
-              type="text"
-              id="fname"
-              text="Enter your first name"
-              onChange={(e) => setFname(e.target.value)}
-              value={first_name}
-              disabled={!editProfile}
-            >
-              <FormLabel className="font-semibold">First Name</FormLabel>
-            </Input>
+      <div className="flex w-full">
+        <div className="w-full">
+          <Form className="gap-10 px-24 py-0 max-w-full">
+            <div className="flex justify-between"></div>
+            <FormControl className="gap-3">
+              <FormGroup className="gap-3 justify-start ">
+                <Input
+                  className="w-full"
+                  type="text"
+                  id="fname"
+                  text="Enter your first name"
+                  onChange={(e) => setFname(e.target.value)}
+                  value={first_name}
+                  disabled={!editProfile}
+                >
+                  <FormLabel className="font-semibold">First Name</FormLabel>
+                </Input>
 
-            <Input
-              className="w-full"
-              type="text"
-              id="lname"
-              text="Enter your last name"
-              onChange={(e) => setLname(e.target.value)}
-              value={last_name}
-              disabled={!editProfile}
-            >
-              <FormLabel className="font-semibold">Last Name</FormLabel>
-            </Input>
-          </FormGroup>
+                <Input
+                  className="w-full"
+                  type="text"
+                  id="lname"
+                  text="Enter your last name"
+                  onChange={(e) => setLname(e.target.value)}
+                  value={last_name}
+                  disabled={!editProfile}
+                >
+                  <FormLabel className="font-semibold">Last Name</FormLabel>
+                </Input>
+              </FormGroup>
 
-          <Input
-            type="text"
-            id="username"
-            text="Enter your username"
-            onChange={(e) => setUsername(e.target.value)}
-            value={username}
-            disabled={!editProfile}
-          >
-            {usernameError == "" ? (
-              <FormLabel className="font-semibold">Username</FormLabel>
-            ) : (
-              <FormError>{usernameError}</FormError>
-            )}
-          </Input>
-          <Input
-            type="email"
-            id="email"
-            text="Enter your email"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            disabled={!editProfile}
-          >
-            {emailError == "" ? (
-              <FormLabel className="font-semibold">Email</FormLabel>
-            ) : (
-              <FormError>{emailError}</FormError>
-            )}
-          </Input>
-
-          <FormGroup className="gap-2">
-                      <Input
-            type="password"
-            id="password"
-            text="Enter your password"
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={!editProfile}
-            className={"w-full"}
-          >
-            <FormLabel className="font-semibold">Password</FormLabel>
-          </Input>
-
-          {editProfile ? (
-            <>
               <Input
-                type="password"
-                id="confirm_password"
-                text="Enter your password again"
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className={"w-full"}
+                type="text"
+                id="username"
+                text="Enter your username"
+                onChange={(e) => setUsername(e.target.value)}
+                value={username}
+                disabled={!editProfile}
               >
-                {confirmPasswordError == "" ? (
-                  <FormLabel className="font-semibold">
-                    Confirm Password
-                  </FormLabel>
-                ) : (
-                  <FormError>{confirmPasswordError}</FormError>
-                )}
+              <FormLabel className="font-semibold">Username</FormLabel>
+                
               </Input>
-            </>
-          ) : null}
+              <Input
+                type="email"
+                id="email"
+                text="Enter your email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                disabled={!editProfile}
+              >
 
-          
-          </FormGroup>
-          
-          {!props.self &&  <>
-          <FormLabel className="font-semibold">Roles</FormLabel>     
-          
-          <Select disabled={!editProfile} value={selectedRole} onChange={handleRoleChange}>
-            <Option name="User" value="user"  />
-            <Option name="Tutor" value="tutor" />
-            <Option name="Admin" value="admin" />
-          </Select>
-          </>}
-        </FormControl>
-      </Form>
+                  <FormLabel className="font-semibold">Email</FormLabel>
+              </Input>
+
+              <FormGroup className="gap-2">
+                <Input
+                  type="password"
+                  id="password"
+                  text="Enter your password"
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={!editProfile}
+                  className={"w-full"}
+                >
+                  <FormLabel className="font-semibold">Password</FormLabel>
+                </Input>
+
+                {editProfile ? (
+                  <>
+                    <Input
+                      type="password"
+                      id="confirm_password"
+                      text="Enter your password again"
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className={"w-full"}
+                    >
+                        <FormLabel className="font-semibold">
+                          Confirm Password
+                        </FormLabel>
+                    </Input>
+                  </>
+                ) : null}
+              </FormGroup>
+              <FormLabel className="font-semibold">Roles</FormLabel>
+              <Select
+                disabled={!editProfile}
+                defaultValue={isAdmin ? "admin" : isTutor ? "tutor" : "user"}
+              >
+                <Option name="User" value="user" />
+                <Option name="Tutor" value="tutor" />
+                <Option name="Admin" value="admin" />
+              </Select>
+            </FormControl>
+          </Form>
+        </div>
       </div>
-      <div className="px-8 pt-10 flex flex-col font-sans py-0 w-1/3 ">
-          <h1 className="text-2xl font-bold">User Updates</h1>
-          <div className=" bg-dark-secondary h-full">
-          </div>
-      </div>
-    </div>
     </>
   );
 }
