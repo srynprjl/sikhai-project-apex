@@ -6,7 +6,7 @@ export default function NavBar() {
   const loggedIn = localStorage.getItem(ACCESS_TOKEN)
 
   return (
-    <nav className="flex justify-between items-center font-sans">
+    <nav className="flex justify-between items-center font-sans text-white">
       <div className="font-bold text-4xl">SIKHAI</div>
       <div className="flex space-x-24 items-center">
         <ul className="flex list-none space-x-8 text-sm font-semibold">
@@ -18,12 +18,12 @@ export default function NavBar() {
         </ul>
         <div className="flex gap-1.5 font-bold">
           {
-            loggedIn ? <><button className="py-2 px-8.5 bg-btn rounded-full text-white" onClick={() => navigate('/dashboard')}>
+            loggedIn ? <><button className="py-2 px-8.5 bg-accent rounded-full text-black" onClick={() => navigate('/dashboard')}>
             Dashboard
-          </button></> : <><button className="py-2 px-8.5 bg-btn rounded-full text-white" onClick={() => navigate('/login')}>
+          </button></> : <><button className="py-2 px-8.5 bg-accent rounded-full text-black" onClick={() => navigate('/login')}>
             Sign In
           </button>
-          <button className="py-2 px-7.5 bg-btn rounded-full text-white " onClick={() => navigate('/register')}>
+          <button className="py-2 px-7.5 bg-accent rounded-full text-black" onClick={() => navigate('/register')}>
             Register
           </button></>
           }

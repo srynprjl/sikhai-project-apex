@@ -45,7 +45,7 @@ export default function ClassAssignmentSubmit({ classroomId, assignmentId }){
     }
   };
 
-  if (loading) return <p className="text-gray-500">Loading submissions...</p>;
+  if (loading) return <p className="text-gray-300">Loading submissions...</p>;
 
   return (
     <div className="mt-4 p-4 rounded-md bg-dark-tertiary">

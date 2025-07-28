@@ -71,7 +71,6 @@ export default function Sidebar(props) {
             <>
             <NavBarItem onClick={() => navigate('/admin/users')}>Manage Users</NavBarItem>
             <NavBarItem onClick={() => navigate('/admin/notes')}>Manage Notes</NavBarItem>
-            <NavBarItem onClick={() => navigate('/admin/reports')}>Manage Reports</NavBarItem>
             <NavBarItem onClick={() => navigate('/admin/feedbacks')}>Manage Feedbacks</NavBarItem>
             <NavBarItem onClick={() => navigate('/admin/tutors')}>View Applications</NavBarItem>
             </>

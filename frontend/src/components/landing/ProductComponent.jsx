@@ -1,6 +1,6 @@
 export default function ProductComponent(props){
 return(
-    <div className="flex items-center gap-4 text-white">
+    <div className="flex items-center gap-4 ">
     <div className="bg-productivity-bg p-4 rounded-xl">
         <img src={props.img} alt="" className="w-24"/>
     </div>
