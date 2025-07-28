@@ -82,11 +82,10 @@ export default function ClassAssignments({ classroomId, isTutor }){
                   <button
                     onClick={() => handleSubmitAssignment(assignment.id)}
                     disabled={submitting[assignment.id]}
-                    className="mt-3 bg-accent text-white px-4 py-2 rounded-md hover:opacity-65 disabled:opacity-50 transition duration-300"
+                    className="mt-3 bg-accent text-black px-4 py-2 rounded-md hover:opacity-65 disabled:opacity-50 transition duration-300"
                   >
                     {submitting[assignment.id] ? 'Submitting...' : 'Submit Assignment'}
                   </button>
-                  {/* You might want to fetch and display student's own submission status/grade here */}
                 </div>
               )}
 
@@ -105,7 +104,7 @@ export default function ClassAssignments({ classroomId, isTutor }){
       {isTutor && (
         <Link
           to={`/classroom/${classroomId}/assignments/new`}
-          className="inline-block bg-accent text-white px-5 py-2 rounded-md transition duration-300 mb-6"
+          className="inline-block bg-accent text-black px-5 py-2 rounded-md transition duration-300 mb-6"
         >
           Create New Assignment
         </Link>

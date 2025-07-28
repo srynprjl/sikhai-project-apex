@@ -54,20 +54,20 @@ export default function ClassFiles({ classroomId, isTutor }){
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-2xl font-bold text-gray-800 mb-4">Class Files</h3>
+    <div className="p-6 shadow-md">
+      <h3 className="text-2xl font-bold text-white mb-4">Class Files</h3>
       {isTutor && (
-        <form onSubmit={handleFileUpload} className="mb-6 p-4 border border-indigo-200 rounded-md bg-indigo-50">
-          <h4 className="font-semibold text-lg mb-3 text-indigo-700">Upload New File</h4>
+        <form onSubmit={handleFileUpload} className="mb-6 p-4  bg-dark-tertiary">
+          <h4 className="font-semibold text-lg mb-3 text-white">Upload New File</h4>
           <input
             type="file"
             onChange={handleFileChange}
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+            className="block w-full text-sm text-gray-900 cursor-pointer bg-gray-50 focus:outline-none file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-dark-secondary file:text-white hover:file:opacity-75"
           />
           <button
             type="submit"
             disabled={uploading}
-            className="mt-4 bg-indigo-600 text-white px-5 py-2 rounded-md hover:bg-indigo-700 disabled:opacity-50 transition duration-300"
+            className="mt-4 bg-accent  px-5 py-2 hover:opacity-75 text-black disabled:opacity-50 transition duration-300"
           >
             {uploading ? 'Uploading...' : 'Upload File'}
           </button>

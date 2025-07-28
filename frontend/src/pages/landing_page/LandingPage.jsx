@@ -25,17 +25,17 @@ export default function LandingPage() {
 
         <section id="home" className="flex justify-center items-center ">
           <div id="home-text" className="flex-col flex gap-5 w-2/3">
-            <div className="font-bold text-5xl">
+            <div className="font-bold text-white text-5xl">
               The best choice for productivity
             </div>
-            <div className="text-sm text-gray-600 ">
+            <div className="text-sm text-gray-300 ">
               SIKHAI is a comprehensive EdTech platform designed for Nepali
               students, offering integrated features like notes, exams, and
               tutoring
             </div>
             <div>
               <button
-                className="py-2 px-7.5 bg-btn rounded-full text-white"
+                className="py-2 px-7.5 bg-accent rounded-full"
                 onClick={() => navigate("/register")}
               >
                 Get Started
@@ -49,7 +49,7 @@ export default function LandingPage() {
         </section>
 
         <div className="flex items-center justify-center">
-          <div className="bg-btn rounded-2xl py-6 px-12  h-48 items-center flex justify-between gap-4">
+          <div className="bg-accent rounded-2xl py-6 px-12  h-48 items-center flex justify-between gap-4">
             <ProductComponent
               img={ProductivitySVG}
               title="Manage for Productivity"
@@ -77,7 +77,7 @@ export default function LandingPage() {
         <hr className="my-12" />
 
         <section id="our-sessions">
-          <h1 className="font-black text-center text-4xl mb-8">Our Sessions</h1>
+          <h1 className="font-black text-white text-center text-4xl mb-8">Our Sessions</h1>
           <div className="grid grid-cols-3 gap-16">
             <SessionBox
               img={Test}
@@ -113,7 +113,7 @@ export default function LandingPage() {
               className="w-64 h-auto relative bottom-24"
             />
           </div>
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col text-white  gap-6">
             <h1 className="font-black text-5xl w-10/12">
               Premium <span className="text-orange-400">Learning</span>{" "}
               Experience
@@ -128,7 +128,7 @@ export default function LandingPage() {
                 <div className="font-medium text-xl">
                   Fun learning experience
                 </div>
-                <div className="text-gray-600 text-sm">
+                <div className="text-gray-300 text-sm">
                   Benefit from the professional support for effective and
                   enjoyable learning.
                 </div>
@@ -142,7 +142,7 @@ export default function LandingPage() {
               />
               <div>
                 <div className="font-medium text-xl">Easily Accessible</div>
-                <div className="text-gray-600 text-sm">
+                <div className="text-gray-300 text-sm">
                   Access quality education from any device, anytime, anywhere in
                   Nepal.
                 </div>
@@ -153,8 +153,8 @@ export default function LandingPage() {
 
         <hr className="my-12" />
 
-        <section id="testimony">
-          <h1 className="text-4xl font-bold text-center mb-5">
+        <section id="testimony ">
+          <h1 className="text-4xl font-bold text-center mb-5 text-white">
             What students say?{" "}
           </h1>
           <div className="grid grid-cols-3 gap-5">
@@ -178,7 +178,7 @@ export default function LandingPage() {
 
         <hr className="my-12" />
 
-        <section id="contact">
+        <section id="contact" className="text-white">
           <div className="flex gap-8">
             <div className="w-1/2 border-r-2 border-dotted ">
               <h1 className="text-4xl font-black text-center">Contact Us</h1>
@@ -236,7 +236,7 @@ export default function LandingPage() {
 
                 <button
                   type="submit"
-                  className="bg-btn text-white font-medium p-4 rounded-3xl"
+                  className="bg-accent text-black font-medium p-4 rounded-3xl"
                 >
                   Send Message
                 </button>
@@ -245,7 +245,7 @@ export default function LandingPage() {
           </div>
         </section>
       </div>
-      <footer className="bg-btn px-[5rem] py-[2rem] text-white">
+      <footer className="bg-accent px-[5rem] py-[2rem] ">
         <div className="flex justify-between">
           <div className="w-64">
             SIKHAI is a comprehensive EdTech platform designed for Nepali

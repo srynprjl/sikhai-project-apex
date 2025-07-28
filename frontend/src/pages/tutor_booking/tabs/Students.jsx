@@ -25,14 +25,14 @@ export default function Students({ classroomId }){
   }, [classroomId]);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
-      <h3 className="text-2xl font-bold text-gray-800 mb-4">Enrolled Students</h3>
+    <div className="p-6 rounded-lg shadow-lg">
+      <h3 className="text-2xl font-bold text-white mb-4">Enrolled Students</h3>
       {students.length === 0 ? (
-        <p className="text-gray-600">No students have enrolled in this classroom yet.</p>
+        <p className="text-gray-300">No students have enrolled in this classroom yet.</p>
       ) : (
         <ul className="list-disc list-inside space-y-2">
           {students.map((data, index) => (
-            <li key={index} className="text-gray-700">
+            <li key={index} className="text-gray-200">
               {data.username}
             </li>
           ))}
