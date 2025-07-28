@@ -17,7 +17,8 @@ export default function AcceptTutor(){
             }
         }
         async function getTutors() {
-            const res = await api.get("/api/tutor/");
+            const res = await api.get("/api/all-applications/");
+            console.log(res)
             setTutors(res.data)
         }
         getUserInfo();
@@ -25,7 +26,7 @@ export default function AcceptTutor(){
   }, [])
 
   const tutorsList = tutors.map((data) => {
-    return <AdminContainer approve title={data.title}></AdminContainer>
+    return <AdminContainer approve title={"Tutor application of " + data.user.username}></AdminContainer>
 
   })
 

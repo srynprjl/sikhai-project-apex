@@ -45,3 +45,24 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review by {self.reviewer.username} ({self.target_type})"
+
+
+class TutorApplication(models.Model):
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='tutor_application'
+    )
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    about_you = models.TextField(blank=True, null=True)
+    qualifications = models.TextField(blank=True, null=True)
+    why_this_role = models.TextField(blank=True, null=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    is_approved = models.BooleanField(default=False) # For admin to approve/reject
+
+    def __str__(self):
+        return f"Application by {self.user.username}"
+
+    class Meta:
+        verbose_name_plural = "Tutor Applications"
+        ordering = ['-submitted_at'] # Order by most recent applications
