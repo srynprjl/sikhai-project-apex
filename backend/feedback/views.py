@@ -54,3 +54,22 @@ class TutorApplicationRetrieveCreateUpdateView(generics.RetrieveUpdateDestroyAPI
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class MyTutorApplicationStatusView(generics.RetrieveAPIView):
+    serializer_class = TutorApplicationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return get_object_or_404(TutorApplication, user=self.request.user)
+
+    def retrieve(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            serializer = self.get_serializer(instance)
+            return Response(serializer.data)
+        except TutorApplication.DoesNotExist:
+            return Response(
+                {"detail": "Tutor application not found for this user."},
+                status=status.HTTP_404_NOT_FOUND
+            )

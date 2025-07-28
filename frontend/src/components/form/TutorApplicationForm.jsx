@@ -3,8 +3,8 @@ import { CardHeader } from "../../pages/auth/components/Card"
 import { Button, FormLabel, Input, TextArea } from "../../pages/auth/components/Form"
 import DashboardLayout from "../layouts/DashboardLayout"
 import api from "../../api"
-import { useState } from "react"
-import { useNavigate } from "react-router"
+import { useEffect, useState } from "react"
+import { useNavigate, useParams } from "react-router"
 
 export default function TutorApplicationForm(props){
     const [userData, setUserData] = useState({
@@ -13,14 +13,31 @@ export default function TutorApplicationForm(props){
     });
 
     const navigate = useNavigate();
-
+    const {id} = useParams();
     const mode = props.mode || 'edit';
     const isViewMode = mode === 'view';
-
     const [phoneNumber, setPhoneNumber] = useState('');
     const [aboutYou, setAboutYou] = useState('');
     const [qualifications, setQualifications] = useState('');
     const [whyThisRole, setWhyThisRole] = useState('');
+
+
+    useEffect(() => {
+        async function getTutorData(id){
+            const {data} = await api.get(`/api/admin/tutor-applications/${id}/`);
+            setAboutYou(data.about_you)
+            setPhoneNumber(data.phone_number)
+            setQualifications(data.qualifications)
+            setWhyThisRole(data.why_this_role)
+            setUserData({
+                username: data.user.username,
+                email: data.user.email
+            })
+        }
+        getTutorData(id)
+    }, [])
+
+
 
     async function handleSubmit(){
         const payload = {
@@ -46,6 +63,7 @@ export default function TutorApplicationForm(props){
             </div>
 
             <div className="flex flex-col gap-3 justify-center h-auto">
+                    {isViewMode && <>
                     <Input type="text" disabled value={userData.username}>
                         <FormLabel className="text-xl">User</FormLabel>
                     </Input>
@@ -53,6 +71,7 @@ export default function TutorApplicationForm(props){
                     <Input type="text" disabled value={userData.email}>
                         <FormLabel className="text-xl">Email</FormLabel>
                     </Input>
+                    </>}
 
                     <Input
                         type="text"

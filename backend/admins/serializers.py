@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from Authentication.models import CustomUser # Assuming CustomUser model is in the same app's models.py
-
+from Authentication.models import CustomUser
+from feedback.models import TutorApplication
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -23,3 +23,9 @@ class CustomUserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+class TutorApplicationApprovalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TutorApplication
+        fields = ['is_approved']

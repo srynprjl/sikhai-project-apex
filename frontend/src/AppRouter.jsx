@@ -98,7 +98,7 @@ const AppRouter = () => {
         {/* tutors */}
         <Route path="/tutors">
           <Route path="application" element={<TutorApplicationForm />} />
-          <Route path="application/:id" element={<TutorApplicationForm mode={"view"} />} />
+          <Route path="application/:id/" element={<TutorApplicationForm mode={"view"} />} />
         </Route>
 
 
