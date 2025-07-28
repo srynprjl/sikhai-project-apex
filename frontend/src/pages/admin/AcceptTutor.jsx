@@ -6,26 +6,36 @@ import { useNavigate } from "react-router";
 import api from "../../api";
 
 export default function AcceptTutor(){
+    const [tutors, setTutors] = useState([]);
     const [count, setCount] = useState(0)
     const navigate = useNavigate()
     useEffect(() => {
-    async function getUserInfo() {
-        const res = await api.get("/api/user/");
-            if(!res.data.is_superuser){
-            navigate("/forbidden")
-         }
+        async function getUserInfo() {
+            const res = await api.get("/api/user/");
+                if(!res.data.is_superuser){
+                navigate("/forbidden")
+            }
         }
-
-    getUserInfo();
+        async function getTutors() {
+            const res = await api.get("/api/tutor/");
+            setTutors(res.data)
+        }
+        getUserInfo();
+        getTutors()
   }, [])
-    return(<><DashboardLayout>
-        <AdminView firstContainer searchVisible titleVisible title="All Tutor Application" count={count}>
-            <AdminContainer approve title={"User"}>A</AdminContainer>
-            <AdminContainer approve>B</AdminContainer>
-            <AdminContainer approve>C</AdminContainer>
-            <AdminContainer approve>D</AdminContainer>
-            <AdminContainer approve>E</AdminContainer>
-            <AdminContainer approve>F</AdminContainer>
+
+  const tutorsList = tutors.map((data) => {
+    return <AdminContainer approve title={data.title}></AdminContainer>
+
+  })
+
+  return (
+    <>
+      <DashboardLayout>
+        <AdminView firstContainer searchVisible titleVisible title="tutors" count={0}>
+          {tutorsList}
         </AdminView>
-        </DashboardLayout></>)
+      </DashboardLayout>
+    </>
+  );
 }
