@@ -30,3 +30,7 @@ class TotalPaymentsSerializer(serializers.Serializer):
     total_amount_paid = serializers.DecimalField(max_digits=10, decimal_places=2)
 
 
+class DailyPaymentSerializer(serializers.Serializer):
+
+    date = serializers.DateField()
+    total_amount = serializers.DecimalField(max_digits=10, decimal_places=2)

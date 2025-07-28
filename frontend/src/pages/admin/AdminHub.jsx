@@ -3,6 +3,31 @@ import { useEffect , useState} from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import AdminBox from "../../components/layouts/AdminBox"
 import api from "../../api";
+import { Bar } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    TimeScale 
+} from 'chart.js';
+import 'chartjs-adapter-date-fns'; 
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    TimeScale
+);
+
 export default function AdminHub(){
 
     const navigate = useNavigate()
@@ -12,6 +37,10 @@ export default function AdminHub(){
     const [feedbackCount, setFeedbackCount] = useState(0);
     const [applicationCount, setApplicationCount] = useState(0);
     const [transcationsCount, setTranscationsCount] = useState(0.00);
+    const [chartData, setChartData] = useState({
+        labels: [],
+        datasets: []
+    });
 
     useEffect(() => {
         async function getUserInfo() {
@@ -40,7 +69,27 @@ export default function AdminHub(){
         async function getAllTransactionsCount(){
             const res = await api.get("/api/payments/total/"); 
             setTranscationsCount(res.data.total_amount_paid) 
-            console.log(res)           
+            // console.log(res)           
+        }
+
+        async function getDailyPayments(){
+            const {data} = await api.get("/api/payments/daily/"); 
+            // console.log(data)
+            const labels = data.map(item => item.date); // Dates for X-axis
+            const amounts = data.map(item => parseFloat(item.total_amount)); 
+            setChartData({
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Total Amount Paid', 
+                            data: amounts,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)', 
+                            tension: 1,
+                            fill: true 
+                        }
+                    ]
+                })
         }
 
         // getAllApplications()
@@ -49,7 +98,37 @@ export default function AdminHub(){
         // getAllReportCount()
         getAllFeedbackCount()
         getAllTransactionsCount()
+        getDailyPayments()
       }, [])
+
+          const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Daily Payments',
+            },
+        },
+        scales: {
+            x: {
+                type: 'time',
+                time: {
+                    unit: 'day', 
+                    tooltipFormat: 'yyyy-MM-dd', 
+                    displayFormats: {
+                        day: 'MMM d, yyyy'
+                    }
+                }
+            },
+            y: {
+                beginAtZero: true,
+            }
+        }
+    };
 
     const classes = "h-48 bg-dark-primary rounded-md flex justify-center items-center font-black text-2xl text-black hover:border-2 hover:border-black"
     return(<>
@@ -70,7 +149,7 @@ export default function AdminHub(){
                         <div className="text-2xl">Graph</div>
                     </div>
                     <div className="w-full h-full bg-dark-secondary ">
-                        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda, quia. Pariatur delectus vitae aliquam harum cumque in totam ea est accusantium? Iure, quos similique suscipit perferendis dolorem recusandae dignissimos explicabo molestias labore?</div>
+                        <Bar data={chartData} options={options} />
                     </div>
                 </div>
                 

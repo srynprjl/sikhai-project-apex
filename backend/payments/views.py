@@ -12,7 +12,8 @@ from notes.models import Note
 from .models import Order, OrderItem, Payment
 from .serializers import NoteSerializer, OrderItemSerializer, OrderSerializer
 from django.db.models import Sum
-from .serializers import TotalPaymentsSerializer
+from django.db.models.functions import TruncDate #
+from .serializers import TotalPaymentsSerializer, DailyPaymentSerializer
 
 class NoteListView(generics.ListAPIView):
     queryset = Note.objects.all()
@@ -209,4 +210,16 @@ class TotalPaymentsView(views.APIView):
             total_payments = 0.00
 
         serializer = TotalPaymentsSerializer({"total_amount_paid": total_payments})
+        return Response(serializer.data)
+
+class DailyPaymentsView(views.APIView):
+
+    def get(self, request, *args, **kwargs):
+        daily_payments = Payment.objects.annotate(
+            date=TruncDate('created_at') 
+        ).values('date').annotate(
+            total_amount=Sum('amount') 
+        ).order_by('date') 
+
+        serializer = DailyPaymentSerializer(daily_payments, many=True)
         return Response(serializer.data)
