@@ -48,7 +48,6 @@ export default function TodoCreate(props) {
     e.preventDefault();
     
     if(props.mode == "task"){
-      console.log("hi")
       try {
         if (props.type == "create") {
           const res = await api.post("/api/tasks/", {
@@ -105,7 +104,6 @@ export default function TodoCreate(props) {
 
   return (
     <Modal isOpen={props.modalOpen} className="absolute top-1/2 left-1/2 right-auto bottom-auto bg-dark-primary w-1/2 "  style={customStyles}> 
-    {console.log("A " + props.mode)}
     <div className="flex justify-between items-center p-4">
       <h1 className=" text-2xl font-bold  text-white">Create {props.mode === "task" ? "Task" : "Todo"}</h1>
       <X color="white" onClick={props.modalClose}/>

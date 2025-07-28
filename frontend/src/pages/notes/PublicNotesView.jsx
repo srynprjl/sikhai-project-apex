@@ -35,14 +35,12 @@ export default function PublicNoteView() {
 
     async function userBoughtNotes() {
       const {data} = await api.get("/api/get-purchased-notes/")
-      console.log(data);
       setPaidNotes(data)
     }
 
     fetchData();
     setUser(jwtDecode(localStorage.getItem("access")).user_id);
     userBoughtNotes()
-    // fetchUsers();
   }, [])
 
   function navigatePage(id) {

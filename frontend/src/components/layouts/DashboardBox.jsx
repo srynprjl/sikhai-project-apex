@@ -7,10 +7,12 @@ const navigate = useNavigate()
     <>
       <div className="admin-box-container h-full w-full bg-dark-secondary p-8 flex flex-col items-center justify-center gap-2" onClick={() => navigate(props.link)}>
         <div>
-          <h1 className="font-semibold text-5xl text-center">{props.count}</h1>
+          {props.count && <h1 className="font-semibold text-5xl text-center">{props.count}</h1>}
+          
         </div>
         <div className="text-2xl text-center">
             {props.children}
+            {props.text && <h3 className="font-semibold text-2xl text-center">{props.text}</h3>}
         </div>
         
         </div>

@@ -138,28 +138,24 @@ export default function AdminHub(){
 
     const classes = "h-48 bg-dark-primary rounded-md flex justify-center items-center font-black text-2xl text-black hover:border-2 hover:border-black"
     return(<>
-        <DashboardLayout>
-                <div className="p-8 flex gap-4">
+                <div className="p-8">
                     <div className="flex flex-col gap-5">
-                    <div className="text-2xl">Actions</div>
-                    <div className="grid grid-cols-3 gap-4">
-                        <DashboardBox count={0} link="/admin/tutors">Tutor Applications</DashboardBox>
-                        <DashboardBox count={0} link="/admin/users">Users</DashboardBox>
-                        <DashboardBox count={0} link="/admin/notes"> Notes</DashboardBox>
-                        <DashboardBox count={0} link="/admin/reports">Reports</DashboardBox>
-                        <DashboardBox count={0} link="/admin/feedbacks">Feedbacks</DashboardBox>
-                        <DashboardBox count={0} >Transactions</DashboardBox>
-                    </div>
+                        <div className="text-2xl">Actions</div>
+                        <div className="grid grid-cols-3 gap-4">
+                            <DashboardBox count={applicationCount} link="/admin/tutors">Tutor Applications</DashboardBox>
+                            <DashboardBox count={userCount} link="/admin/users">Users</DashboardBox>
+                            <DashboardBox count={noteCount} link="/admin/notes"> Notes</DashboardBox>
+                            <DashboardBox count={feedbackCount} link="/admin/feedbacks">Feedbacks</DashboardBox>
+                            <DashboardBox count={"Rs. " + transcationsCount} >Transactions</DashboardBox>
+                        </div>
 
-                    <div className="flex justify-between">
-                        <div className="text-2xl">Graph</div>
-                    </div>
-                    <div className="w-full h-full bg-dark-secondary ">
-                        <Bar data={chartData} options={options} />
+                        <div className="flex justify-between">
+                            <div className="text-2xl">Graph</div>
+                        </div>
+                        <div className="w-full h-full bg-dark-secondary ">
+                            <Bar data={chartData} options={options} />
+                        </div>
                     </div>
                 </div>
-                
-                </div>
-        </DashboardLayout>
     </>)
 }
