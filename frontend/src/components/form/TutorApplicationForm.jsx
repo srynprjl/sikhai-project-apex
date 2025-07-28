@@ -4,12 +4,15 @@ import { Button, FormLabel, Input, TextArea } from "../../pages/auth/components/
 import DashboardLayout from "../layouts/DashboardLayout"
 import api from "../../api"
 import { useState } from "react"
+import { useNavigate } from "react-router"
 
 export default function TutorApplicationForm(props){
     const [userData, setUserData] = useState({
         username: props.user?.username || '', // Use optional chaining
         email: props.user?.email || ''
     });
+
+    const navigate = useNavigate();
 
     const mode = props.mode || 'edit';
     const isViewMode = mode === 'view';
@@ -20,7 +23,19 @@ export default function TutorApplicationForm(props){
     const [whyThisRole, setWhyThisRole] = useState('');
 
     async function handleSubmit(){
-        const res = await api.post("/api/tutor-application/")
+        const payload = {
+            phone_number: phoneNumber,
+            about_you: aboutYou,
+            qualifications: qualifications,
+            why_this_role: whyThisRole
+        }
+        try{
+            const res = await api.post("/api/tutor-application/", payload);
+            alert("Application submitted succesfully. Please wait");
+            navigate("/dashboard")
+        } catch (e){
+            alert("Failed to submit application")
+        }
     }
     return (
         <DashboardLayout>

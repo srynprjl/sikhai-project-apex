@@ -26,11 +26,11 @@ export default function ManageNotes() {
   }, [])
 
 
-    function viewnotes(id){
+  function viewnotes(id){
 
   }
 
-  function deleteReport(id){
+  function deleteNotes(id){
 
   }
 
