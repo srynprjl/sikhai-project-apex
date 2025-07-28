@@ -25,7 +25,6 @@ export default function ViewReports() {
   }, [])
 
   function viewReports(id){
-
   }
 
   function deleteReport(id){

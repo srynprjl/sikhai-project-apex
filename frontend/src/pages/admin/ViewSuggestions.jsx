@@ -17,7 +17,6 @@ export default function ViewSuggestions() {
          }
         }
     getUserInfo();
-
     async function getFeedbacks() {
       const res = await api.get("/api/feedback/");
       setFeedbacks(res.data)
@@ -26,7 +25,7 @@ export default function ViewSuggestions() {
   }, [])
 
   function updateFeedbacks(id){
-
+    navigate(`/feedback/${id}`)
   }
 
   function deleteFeedbacks(id){

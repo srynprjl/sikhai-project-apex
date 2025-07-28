@@ -46,7 +46,8 @@ import UserProfile from "./pages/settings/UserProfile";
 import NotFound from "./pages/errors/NotFoundError";
 import Forbidden from "./pages/errors/Forbidden"
 import PaymentsStatus from "./pages/payments/PaymentsStatus";
-import ReportFeedbackForm from "./components/form/ReportFeedbackForm";
+// import ReportFeedbackForm from "./components/form/ReportFeedbackForm";
+import Feedback from "./pages/reports/Feedback";
 import TutorApplicationForm from "./components/form/TutorApplicationForm";
 
 
@@ -127,14 +128,14 @@ const AppRouter = () => {
           <Route path="payment" element={<PaymentsStatus />} />
         </Route>
 
-        <Route path="/report">
-          <Route path="create" element={<ReportFeedbackForm mode={"create"} item={"report"} />} />
+        {/* <Route path="/report">
+          <Route path="create" element={< />} />
           <Route path=":id" element={<ReportFeedbackForm mode={"view"} item={"report"} />} />
-        </Route>
+        </Route> */}
 
         <Route path="/feedback">
-          <Route path="create" element={<ReportFeedbackForm mode={"create"} item={"feedback"} />} />
-          <Route path=":id" element={<ReportFeedbackForm mode={"view"} item={"feedback"} />} />
+          <Route path="create" element={<Feedback mode={"create"}/>} />
+          <Route path=":id" element={<Feedback mode={"view"}/>} />
         </Route>
 
         {/* errors */}
