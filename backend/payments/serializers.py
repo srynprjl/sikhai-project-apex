@@ -17,7 +17,6 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = ['id', 'note', 'note_title', 'note_description', 'note_price', 'price_at_purchase']
         read_only_fields = ['id', 'note', 'note_title', 'note_description', 'note_price', 'price_at_purchase']
 
-
 class OrderSerializer(serializers.ModelSerializer):
     order_items = OrderItemSerializer(many=True, read_only=True, source='order_items')
 
@@ -25,3 +24,13 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ['id', 'user', 'order_date', 'total_amount', 'is_completed','khalti_idx', 'khalti_txn_status', 'order_items']
         read_only_fields = ['id', 'user', 'order_date', 'total_amount', 'is_completed','khalti_idx', 'khalti_txn_status']
+
+
+class TotalPaymentsSerializer(serializers.Serializer):
+    total_amount_paid = serializers.DecimalField(max_digits=10, decimal_places=2)
+
+
+class DailyPaymentSerializer(serializers.Serializer):
+
+    date = serializers.DateField()
+    total_amount = serializers.DecimalField(max_digits=10, decimal_places=2)

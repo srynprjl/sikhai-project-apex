@@ -11,6 +11,9 @@ from rest_framework.response import Response
 from notes.models import Note
 from .models import Order, OrderItem, Payment
 from .serializers import NoteSerializer, OrderItemSerializer, OrderSerializer
+from django.db.models import Sum
+from django.db.models.functions import TruncDate #
+from .serializers import TotalPaymentsSerializer, DailyPaymentSerializer
 
 class NoteListView(generics.ListAPIView):
     queryset = Note.objects.all()
@@ -39,8 +42,6 @@ class KhaltiPaymentInitiateView(views.APIView):
         return_url = request.data.get('return_url')
         website_url = request.data.get('website_url')
         payload = request.data
-
-        print(first_product, note_id, return_url, website_url, payload)
 
         if not note_id: # Check for single note_id
             return Response({"detail": "Missing 'note_id'."}, status=status.HTTP_400_BAD_REQUEST)
@@ -101,7 +102,6 @@ class KhaltiPaymentInitiateView(views.APIView):
             print(f"Error during payment initiation: {e}")
             return Response({'detail': f'An internal error occurred: {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 class KhaltiPaymentVerificationView(views.APIView):
 
     permission_classes = [permissions.IsAuthenticated]
@@ -119,7 +119,7 @@ class KhaltiPaymentVerificationView(views.APIView):
                 return Response({"detail": "Order already completed."}, status=status.HTTP_200_OK)
             khalti_lookup_api_url = "https://dev.khalti.com/api/v2/epayment/lookup/" # 
             headers = {
-                "Authorization": f"Key {settings.KHALTI_SECRET_KEY}",
+                "Authorization": f"Key 49f02c7f2bf84e6fa6aedb5328dc2e63",
                 "Content-Type": "application/json",
             }
             lookup_payload = {
@@ -136,7 +136,6 @@ class KhaltiPaymentVerificationView(views.APIView):
                 payment_object.khalti_transaction_id = khalti_transaction_id
                 
                 if khalti_status == 'Completed':
-                    # Crucial amount check
                     if int(khalti_data.get('total_amount', 0)) != int(order.total_amount * 100):
                         payment_object.status = 'AMOUNT_MISMATCH'
                         payment_object.save()
@@ -147,7 +146,7 @@ class KhaltiPaymentVerificationView(views.APIView):
 
                     order.is_completed = True
                     order.khalti_idx = pidx
-                    order.khalti_txn_status= status
+                    order.khalti_txn_status= khalti_status
                     order.save()
                     payment_object.save()
                     return Response({"detail": "Payment successfully verified and order completed!", "status": khalti_status}, status=status.HTTP_200_OK)
@@ -167,9 +166,8 @@ class KhaltiPaymentVerificationView(views.APIView):
             print(f"An unexpected error occurred during payment verification: {e}")
             return Response({'detail': f'An internal error occurred: {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
 class FreeNotePurchaseView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated] # Only logged-in users can claim free notes
+    permission_classes = [permissions.IsAuthenticated]
     def post(self, request, *args, **kwargs):
         note_id = request.data.get('note_id')
         if not note_id:
@@ -203,3 +201,25 @@ class FreeNotePurchaseView(views.APIView):
         except Exception as e:
             print(f"Error claiming free note: {e}")
             return Response({"detail": f"An internal error occurred: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class TotalPaymentsView(views.APIView):
+    def get(self, request, *args, **kwargs):
+        total_payments = Payment.objects.aggregate(total_amount=Sum('amount'))['total_amount']
+
+        if total_payments is None:
+            total_payments = 0.00
+
+        serializer = TotalPaymentsSerializer({"total_amount_paid": total_payments})
+        return Response(serializer.data)
+
+class DailyPaymentsView(views.APIView):
+
+    def get(self, request, *args, **kwargs):
+        daily_payments = Payment.objects.annotate(
+            date=TruncDate('created_at') 
+        ).values('date').annotate(
+            total_amount=Sum('amount') 
+        ).order_by('date') 
+
+        serializer = DailyPaymentSerializer(daily_payments, many=True)
+        return Response(serializer.data)

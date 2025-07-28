@@ -3,7 +3,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     ClassroomViewSet, EnrollmentViewSet, SessionViewSet,
-    ClassroomFileViewSet, AssignmentViewSet, AssignmentSubmissionViewSet
+    ClassroomFileViewSet, AssignmentViewSet, AssignmentSubmissionViewSet, CheckEnrollmentView
 )
 
 router = DefaultRouter()
@@ -30,4 +30,5 @@ urlpatterns = [
     path('', include(classroom_files_router.urls)),
     path('', include(assignments_router.urls)),
     path('', include(router.urls)),
+    path('classrooms/<int:classroom_id>/check-enrollment/', CheckEnrollmentView.as_view(), name='check-enrollment'),
 ]

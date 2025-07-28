@@ -1,10 +1,140 @@
 import { useNavigate } from "react-router"
+import { useEffect , useState} from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import AdminBox from "../../components/layouts/AdminBox"
+import api from "../../api";
+import { Bar } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    TimeScale 
+} from 'chart.js';
+import 'chartjs-adapter-date-fns'; 
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    TimeScale
+);
 
 export default function AdminHub(){
 
     const navigate = useNavigate()
+    const [userCount, setUserCount] = useState(0);
+    const [noteCount, setNoteCount] = useState(0);
+    const [feedbackCount, setFeedbackCount] = useState(0);
+    const [applicationCount, setApplicationCount] = useState(0);
+    const [transcationsCount, setTranscationsCount] = useState(0.00);
+    
+    const [chartData, setChartData] = useState({
+        labels: [],
+        datasets: []
+    });
+
+    useEffect(() => {
+        async function getUserInfo() {
+            const res = await api.get("/api/user/");
+                if(!res.data.is_superuser){
+                navigate("/forbidden")
+             }
+            }
+    
+        getUserInfo();
+
+
+        async function getAllUserCount(){
+            const res = await api.get("/api/users/");
+            setUserCount(res.data.length)
+        }
+        
+        async function getAllNoteCount(){
+            const res = await api.get("/api/notes/all/");
+            setNoteCount(res.data.length)
+        }
+
+        async function getAllApplications(){
+            const res = await api.get("/api/all-applications/");
+            setApplicationCount(res.data.length)
+        }
+
+        async function getAllFeedbackCount(){
+            const res = await api.get("/api/feedback/");          
+            setFeedbackCount(res.data.length)         
+        }
+        async function getAllTransactionsCount(){
+            const res = await api.get("/api/payments/total/"); 
+            setTranscationsCount(res.data.total_amount_paid) 
+            // console.log(res)           
+        }
+
+        async function getDailyPayments(){
+            const {data} = await api.get("/api/payments/daily/"); 
+            // console.log(data)
+            const labels = data.map(item => item.date); // Dates for X-axis
+            const amounts = data.map(item => parseFloat(item.total_amount)); 
+            setChartData({
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Total Amount Paid', 
+                            data: amounts,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)', 
+                            tension: 1,
+                            fill: true 
+                        }
+                    ]
+                })
+        }
+
+        getAllApplications()
+        getAllUserCount()
+        getAllNoteCount()
+        // getAllReportCount()
+        getAllFeedbackCount()
+        getAllTransactionsCount()
+        getDailyPayments()
+      }, [])
+
+          const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Daily Payments',
+            },
+        },
+        scales: {
+            x: {
+                type: 'time',
+                time: {
+                    unit: 'day', 
+                    tooltipFormat: 'yyyy-MM-dd', 
+                    displayFormats: {
+                        day: 'MMM d, yyyy'
+                    }
+                }
+            },
+            y: {
+                beginAtZero: true,
+            }
+        }
+    };
 
     const classes = "h-48 bg-dark-primary rounded-md flex justify-center items-center font-black text-2xl text-black hover:border-2 hover:border-black"
     return(<>
@@ -13,31 +143,21 @@ export default function AdminHub(){
                     <div className="flex flex-col gap-5">
                     <div className="text-2xl">Actions</div>
                     <div className="grid grid-cols-3 gap-4">
-                        <AdminBox count={0} link="/admin/tutors">Tutor Applications</AdminBox>
-                        <AdminBox count={0} link="/admin/users">Users</AdminBox>
-                        <AdminBox count={0} link="/admin/notes"> Notes</AdminBox>
-                        <AdminBox count={0} link="/admin/reports">Reports</AdminBox>
-                        <AdminBox count={0} link="/admin/feedbacks">Feedbacks</AdminBox>
-                        <AdminBox count={0} >Transactions</AdminBox>
+                        <AdminBox count={applicationCount} link="/admin/tutors">Tutor Applications</AdminBox>
+                        <AdminBox count={userCount} link="/admin/users">Users</AdminBox>
+                        <AdminBox count={noteCount} link="/admin/notes"> Notes</AdminBox>
+                        <AdminBox count={feedbackCount} link="/admin/feedbacks">Feedbacks</AdminBox>
+                        <AdminBox count={"Rs. " + transcationsCount} >Transactions</AdminBox>
                     </div>
 
                     <div className="flex justify-between">
                         <div className="text-2xl">Graph</div>
-                        <div>
-                            <button className="px-6 py-2 bg-dark-secondary">A</button>
-                            <button className="px-6 py-2 bg-dark-tertiary">B</button>
-                        </div>
                     </div>
                     <div className="w-full h-full bg-dark-secondary ">
-                        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda, quia. Pariatur delectus vitae aliquam harum cumque in totam ea est accusantium? Iure, quos similique suscipit perferendis dolorem recusandae dignissimos explicabo molestias labore?</div>
+                        <Bar data={chartData} options={options} />
                     </div>
                 </div>
-                <div className="flex flex-col gap-5">
-                    <div className="text-2xl">Activities</div>
-                    <div className="bg-dark-secondary h-full w-xs p-6">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis vitae labore ad. Ea minus, distinctio quia aliquam consectetur nobis cupiditate eos, totam, atque omnis rerum qui corporis recusandae nihil possimus.
-                    </div>
-                </div>
+                
                 </div>
         </DashboardLayout>
     </>)

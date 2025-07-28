@@ -73,10 +73,15 @@ function closeModal(){
   setDeleteTitle(null)
 }
 
-  async function handleDelete(id) {
-    await api.delete(`/api/notes/delete/${id}/`);
-    navigate(0);
+async function handleDelete(id){
+  try{
+    await api.delete(`/api/notes/delete/${id}/`)
+    alert("Succesfully deleted note")
+  } catch (e){
+    alert("Failed to delete note")
   }
+  navigate(0)
+}
 
   async function handlePurchase(id, title, price) {
     setNoteId(id);
@@ -92,7 +97,7 @@ function closeModal(){
         console.log(res)
         alert("Purchased!")
       } catch (err){
-        console.log(err)
+        alert("Purchased failed")
       }
     }
   }
@@ -100,7 +105,6 @@ function closeModal(){
   const notesList = notes.map((data, index) => {
     let bought = false;
     if (data.title.toLowerCase().includes(search.toLowerCase())) {
-      // console.log(data);
       data.content = {
         ...data.content,
         blocks: data.content.blocks.slice(0, 1),
@@ -110,7 +114,6 @@ function closeModal(){
         console.log(data2) 
         if(data2.note == data.id){
           bought = true;
-          console.log("Bought")
           return;
         }
       })
@@ -148,7 +151,9 @@ function closeModal(){
         price={notePrice}
         modalClose={() => setPayModalOpen(false)}
       ></PaymentModal>
-      {notesList}
+      {notesList.length == 0 ? <div>There are no notes for sale at the moment. </div>: 
+      <>{notesList}</>
+      }
       
     </DashboardView>
         <DeleteModal modalOpen={modalOpen} deleteFunc={()=>handleDelete(deleteId)} cancelFunc={closeModal} title={deleteTitle} />

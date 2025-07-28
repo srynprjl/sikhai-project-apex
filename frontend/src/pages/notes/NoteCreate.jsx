@@ -34,7 +34,6 @@ export default function NoteCreate() {
       alert("Note created successfully!");
       navigate(`/notes/`);
     } catch (error) {
-      console.error("Error creating note:", error);
       alert("Failed to create note.");
     }
   };

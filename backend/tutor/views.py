@@ -1,5 +1,6 @@
 # classroom/views.py
 from rest_framework import viewsets, permissions, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -10,14 +11,8 @@ from .serializers import (
     ClassroomFileSerializer, AssignmentSerializer, AssignmentSubmissionSerializer
 )
 from Authentication.models import CustomUser
-
+from Authentication.permissions import IsTutor
 from django.shortcuts import get_object_or_404
-
-
-# Permission to check tutor
-class IsTutor(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.is_tutor
 
 class IsTutorOfClassroom(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -28,7 +23,6 @@ class IsTutorOfClassroom(permissions.BasePermission):
 class ClassroomViewSet(viewsets.ModelViewSet):
     queryset = Classroom.objects.all()
     serializer_class = ClassroomSerializer
-    
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
@@ -49,7 +43,6 @@ class ClassroomViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'], permission_classes=[permissions.IsAuthenticated, IsTutor])
     def enrolled_students(self, request, pk=None):
         classroom = self.get_object()
-        # Only tutor of this classroom can access
         if request.user != classroom.tutor:
             return Response({"detail": "Not allowed"}, status=403)
 
@@ -116,27 +109,44 @@ class SessionViewSet(viewsets.ModelViewSet):
         serializer.save(classroom=classroom)
 
 
-
-
-
 class ClassroomFileViewSet(viewsets.ModelViewSet):
     serializer_class = ClassroomFileSerializer
     parser_classes = [MultiPartParser, FormParser]
-    permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            self.permission_classes = [permissions.IsAuthenticated]
+        elif self.action in ['create', 'update', 'partial_update', 'destroy']:
+            self.permission_classes = [IsTutor]
+        else:
+            self.permission_classes = [IsTutor]
+        return [permission() for permission in self.permission_classes]
 
     def get_queryset(self):
         classroom_id = self.kwargs.get('classroom_pk')
         classroom = get_object_or_404(Classroom, id=classroom_id)
-        if self.request.user != classroom.tutor:
-            raise PermissionDenied("Only tutor can view or upload files for this classroom")
         return ClassroomFiles.objects.filter(classroom=classroom)
 
     def perform_create(self, serializer):
         classroom_id = self.kwargs.get('classroom_pk')
         classroom = get_object_or_404(Classroom, id=classroom_id)
         if self.request.user != classroom.tutor:
-            raise PermissionDenied("Only tutor can upload files for this classroom")
+            raise PermissionDenied("Only the tutor of this classroom can upload files.")
         serializer.save(classroom=classroom)
+
+    def perform_update(self, serializer):
+        classroom_id = self.kwargs.get('classroom_pk')
+        classroom = get_object_or_404(Classroom, id=classroom_id)
+        if self.request.user != classroom.tutor:
+            raise PermissionDenied("Only the tutor of this classroom can update files.")
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        classroom_id = self.kwargs.get('classroom_pk')
+        classroom = get_object_or_404(Classroom, id=classroom_id)
+        if self.request.user != classroom.tutor:
+            raise PermissionDenied("Only the tutor of this classroom can delete files.")
+        instance.delete()
 
 
 class AssignmentViewSet(viewsets.ModelViewSet):
@@ -151,7 +161,6 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         if self.request.user == classroom.tutor:
             return classroom.assignments.all()
         else:
-            # Only enrolled users can view assignments
             is_enrolled = Enrollment.objects.filter(user=self.request.user, classroom=classroom, paid=True).exists()
             if is_enrolled:
                 return classroom.assignments.all()
@@ -263,3 +272,16 @@ class AssignmentSubmissionViewSet(viewsets.ModelViewSet):
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]
+
+class CheckEnrollmentView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, classroom_id):
+        classroom = get_object_or_404(Classroom, id=classroom_id)
+        # Check if the user is enrolled and has paid
+        is_enrolled = Enrollment.objects.filter(
+            user=request.user, 
+            classroom=classroom, 
+            paid=True
+        ).exists()
+        return Response({"enrolled": is_enrolled})

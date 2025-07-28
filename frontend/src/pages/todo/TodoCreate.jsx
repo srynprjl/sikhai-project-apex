@@ -37,7 +37,6 @@ export default function TodoCreate(props) {
         const res = await api.get(`/api/todos/${id}/`);
         setTitle(res.data.title);
         setDescription(res.data.description);
-        console.log(res.data);
       }
       if (props.type != "create") {
         getTodoDetails(props.id);

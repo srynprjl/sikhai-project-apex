@@ -46,7 +46,8 @@ import UserProfile from "./pages/settings/UserProfile";
 import NotFound from "./pages/errors/NotFoundError";
 import Forbidden from "./pages/errors/Forbidden"
 import PaymentsStatus from "./pages/payments/PaymentsStatus";
-import ReportFeedbackForm from "./components/form/ReportFeedbackForm";
+// import ReportFeedbackForm from "./components/form/ReportFeedbackForm";
+import Feedback from "./pages/reports/Feedback";
 import TutorApplicationForm from "./components/form/TutorApplicationForm";
 
 
@@ -57,9 +58,24 @@ import ClassroomCreateUpdateForm from "./pages/tutor_booking/ClassroomCreateUpda
 import AssignmentForm from "./pages/tutor_booking/AssignmentForm";
 import CreateUpdateSessionForm from "./pages/tutor_booking/CreateSession";
 import ClassroomBookedList from "./pages/tutor_booking/ClassroomBookedList";
+import { useEffect, useState } from "react";
+import api from "./api";
 
 
 const AppRouter = () => {
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [isTutor, setIsTutor] = useState(false)
+
+  useEffect(() => {
+    async function getUserInfo() {
+      const res = await api.get("/api/user/");
+      setIsAdmin(res.data.is_superuser)
+      setIsTutor(res.data.is_tutor)
+    }
+
+    getUserInfo();
+  }, [isAdmin, isTutor])
+
   return (
     <Router>
       <Routes>
@@ -82,21 +98,21 @@ const AppRouter = () => {
         {/* tutors */}
         <Route path="/tutors">
           <Route path="application" element={<TutorApplicationForm />} />
-          <Route path="application/:id" element={<TutorApplicationForm mode={"view"} />} />
+          <Route path="application/:id/" element={<TutorApplicationForm mode={"view"} />} />
         </Route>
 
 
         { /* admin */}
         <Route path="/admin">
-          <Route index element={<AdminHub />} />
-          <Route path="tutors" element={<AcceptTutor />} />
-          <Route path="users" element={<ManageUsers />} />
-          <Route path="notes" element={<ManageNotes />} />
-          <Route path="reports" element={<ViewReports />} />
-          <Route path="feedbacks" element={<ViewSuggestions />} />
+          <Route index element={<AdminHub isAdmin={isAdmin}/>} />
+          <Route path="tutors" element={<AcceptTutor isAdmin={isTutor}/>} />
+          <Route path="users" element={<ManageUsers isAdmin={isAdmin}/>} />
+          <Route path="notes" element={<ManageNotes isAdmin={isAdmin}/>} />
+          <Route path="reports" element={<ViewReports isAdmin={isAdmin}/>} />
+          <Route path="feedbacks" element={<ViewSuggestions isAdmin={isAdmin}/>} />
           <Route path="transcations" element={<LandingPage />} />
-          <Route path="users/create" element={<CreateUser />} />
-          <Route path="users/update/:userID" element={<UpdateUser />} />
+          <Route path="users/create" element={<CreateUser isAdmin={isAdmin}/>} />
+          <Route path="users/update/:userID" element={<UpdateUser isAdmin={isAdmin}/>} />
         </Route>
 
 
@@ -109,17 +125,17 @@ const AppRouter = () => {
           <Route path="logout" element={<LogOut />} />
           <Route path="dashboard" element={<DashboardLayout />} />
           <Route path="profiles" element={<UserProfile />} />
-          <Route path="payments" element={<PaymentsStatus />} />
+          <Route path="payment" element={<PaymentsStatus />} />
         </Route>
 
-        <Route path="/report">
-          <Route path="create" element={<ReportFeedbackForm mode={"create"} item={"report"} />} />
+        {/* <Route path="/report">
+          <Route path="create" element={< />} />
           <Route path=":id" element={<ReportFeedbackForm mode={"view"} item={"report"} />} />
-        </Route>
+        </Route> */}
 
         <Route path="/feedback">
-          <Route path="create" element={<ReportFeedbackForm mode={"create"} item={"feedback"} />} />
-          <Route path=":id" element={<ReportFeedbackForm mode={"view"} item={"feedback"} />} />
+          <Route path="create" element={<Feedback mode={"create"}/>} />
+          <Route path=":id" element={<Feedback mode={"view"}/>} />
         </Route>
 
         {/* errors */}
@@ -131,13 +147,13 @@ const AppRouter = () => {
           <Route path="booked" element={<ClassroomBookedList />}/>
           <Route path=":id" element={<Classroom isTutor={true} />}></Route>
           <Route path="manage" >
-                  <Route index element={<ClassroomManage />} />
-                  <Route path="new" element={<ClassroomCreateUpdateForm />} />
-                  <Route path="edit/:id" element={<ClassroomCreateUpdateForm />} />
+                  <Route index element={<ClassroomManage isTutor={true}/>} />
+                  <Route path="new" element={<ClassroomCreateUpdateForm isTutor={true}/>} />
+                  <Route path="edit/:id" element={<ClassroomCreateUpdateForm isTutor={true}/>} />
           </Route>
           <Route path=":classroomId">
-            <Route path="assignments/new" element={<AssignmentForm />} />
-            <Route path="sessions/new" element={<CreateUpdateSessionForm />} />
+            <Route path="assignments/new" element={<AssignmentForm isTutor={true}/>} />
+            <Route path="sessions/new" element={<CreateUpdateSessionForm isTutor={true}/>} />
           </Route>
         </Route>
       </Routes>
