@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router"
-import { useEffect } from "react";
+import { useEffect , useState} from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import AdminBox from "../../components/layouts/AdminBox"
 import api from "../../api";
 export default function AdminHub(){
 
     const navigate = useNavigate()
-    const [userCount, setUserCount] = useState();
-    const [noteCount, setNoteCount] = useState();
-    const [reportCount, setReportCount] = useState();
-    const [feedbackCount, setFeedbackCount] = useState();
-    const [applicationCount, setApplicationCount] = useState();
-    const [transcationsCount, setTranscationsCount] = useState();
+    const [userCount, setUserCount] = useState(0);
+    const [noteCount, setNoteCount] = useState(0);
+    const [reportCount, setReportCount] = useState(0);
+    const [feedbackCount, setFeedbackCount] = useState(0);
+    const [applicationCount, setApplicationCount] = useState(0);
+    const [transcationsCount, setTranscationsCount] = useState(0.00);
 
     useEffect(() => {
         async function getUserInfo() {
@@ -23,9 +23,7 @@ export default function AdminHub(){
     
         getUserInfo();
 
-        // async function getAllApplications(){
-        //     const res = await api.get();
-        // }
+
         async function getAllUserCount(){
             const res = await api.get("/api/users/");
             setUserCount(res.data.length)
@@ -34,24 +32,23 @@ export default function AdminHub(){
             const res = await api.get("/api/notes/all/");
             setNoteCount(res.data.length)
         }
-        async function getAllReportCount(){
-            const res = await api.get("/api/report/");          
-            setReportCount(res.data.length)  
-        }
+
         async function getAllFeedbackCount(){
             const res = await api.get("/api/feedback/");          
             setFeedbackCount(res.data.length)         
         }
         async function getAllTransactionsCount(){
-            const res = await api.get();             
+            const res = await api.get("/api/payments/total/"); 
+            setTranscationsCount(res.data.total_amount_paid) 
+            console.log(res)           
         }
 
         // getAllApplications()
         getAllUserCount()
         getAllNoteCount()
-        getAllReportCount()
+        // getAllReportCount()
         getAllFeedbackCount()
-        // getAllTransactionsCount()
+        getAllTransactionsCount()
       }, [])
 
     const classes = "h-48 bg-dark-primary rounded-md flex justify-center items-center font-black text-2xl text-black hover:border-2 hover:border-black"
@@ -66,7 +63,7 @@ export default function AdminHub(){
                         <AdminBox count={noteCount} link="/admin/notes"> Notes</AdminBox>
                         <AdminBox count={reportCount} link="/admin/reports">Reports</AdminBox>
                         <AdminBox count={feedbackCount} link="/admin/feedbacks">Feedbacks</AdminBox>
-                        <AdminBox count={0} >Transactions</AdminBox>
+                        <AdminBox count={"Rs. " + transcationsCount} >Transactions</AdminBox>
                     </div>
 
                     <div className="flex justify-between">
@@ -76,12 +73,7 @@ export default function AdminHub(){
                         <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda, quia. Pariatur delectus vitae aliquam harum cumque in totam ea est accusantium? Iure, quos similique suscipit perferendis dolorem recusandae dignissimos explicabo molestias labore?</div>
                     </div>
                 </div>
-                <div className="flex flex-col gap-5">
-                    <div className="text-2xl">Activities</div>
-                    <div className="bg-dark-secondary h-full w-xs p-6">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis vitae labore ad. Ea minus, distinctio quia aliquam consectetur nobis cupiditate eos, totam, atque omnis rerum qui corporis recusandae nihil possimus.
-                    </div>
-                </div>
+                
                 </div>
         </DashboardLayout>
     </>)

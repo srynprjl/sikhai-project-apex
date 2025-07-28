@@ -11,6 +11,8 @@ from rest_framework.response import Response
 from notes.models import Note
 from .models import Order, OrderItem, Payment
 from .serializers import NoteSerializer, OrderItemSerializer, OrderSerializer
+from django.db.models import Sum
+from .serializers import TotalPaymentsSerializer
 
 class NoteListView(generics.ListAPIView):
     queryset = Note.objects.all()
@@ -198,3 +200,13 @@ class FreeNotePurchaseView(views.APIView):
         except Exception as e:
             print(f"Error claiming free note: {e}")
             return Response({"detail": f"An internal error occurred: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class TotalPaymentsView(views.APIView):
+    def get(self, request, *args, **kwargs):
+        total_payments = Payment.objects.aggregate(total_amount=Sum('amount'))['total_amount']
+
+        if total_payments is None:
+            total_payments = 0.00
+
+        serializer = TotalPaymentsSerializer({"total_amount_paid": total_payments})
+        return Response(serializer.data)
