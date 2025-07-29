@@ -19,11 +19,18 @@ export default function ClassroomManage(){
   const [search, setSearch] = useState("")
   
   useEffect(() => {
+    async function getUser(){
+      const {data} = await api.get("/api/user/");
+      if(!data.is_tutor){
+        navigate("/forbidden");
+      }
+    }
     async function getAllClassrooms(){
       const res = await api.get("/api/classrooms/");
       setClassrooms(res.data)
     }
     getAllClassrooms();
+    getUser()
   }, [])
 
   function modalDelete(id, title){

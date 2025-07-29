@@ -80,7 +80,7 @@ async function handleDelete(id){
 
   useEffect(()=> {
     setCount(concatList.filter((d) => d.props.name.includes(search)).length)
-  }, [search])
+  }, [search, concatList])
 
   return (
     <DashboardLayout>

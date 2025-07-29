@@ -22,7 +22,7 @@ export default function PaymentsStatus(props){
 
     getData(payload)
     
-  });
+  }, []);
 
     const navigate = useNavigate()
     return <ProtectedRoute>

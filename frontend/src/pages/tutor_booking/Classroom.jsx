@@ -34,6 +34,7 @@ export default function Classroom({  }){
       const res = await api.get(`/api/classrooms/${id}/check-enrollment/`)
       setIsEnrolled(res.data.enrolled)
     }
+    
     async function getClassroomInfo(){
       const res = await api.get(`/api/classrooms/${id}/`);
       setTitle(res.data.name)

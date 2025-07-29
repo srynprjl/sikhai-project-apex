@@ -10,12 +10,13 @@ import UserHub from "./UserHub";
 export default function Dashboard() {
     const [isAdmin, setIsAdmin] = useState(false);
     const [isTutor, setIsTutor] = useState(false);
+    const [earnings, setEarnings] = useState(0.0);
 
     useEffect(() => {
         async function getUserData() {
             try {
                 const {data} = await api.get("/api/user/");
-                console.log(data)
+                setEarnings(data.earnings);
                 setIsAdmin(data.is_superuser);
                 setIsTutor(data.is_tutor)
             } catch (e){
@@ -29,7 +30,7 @@ export default function Dashboard() {
     return <DashboardLayout>
         {
             isAdmin ? <AdminHub /> : (
-                isTutor ? <TutorHub /> : <UserHub />
+                isTutor ? <TutorHub earnings={earnings}/> : <UserHub earnings={earnings}/>
             )
         }
     </DashboardLayout>

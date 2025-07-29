@@ -31,7 +31,7 @@ ChartJS.register(
     TimeScale
 );
 
-export default function TutorHub(){
+export default function TutorHub({earnings}){
 
     const navigate = useNavigate()
     const {user_id} = jwtDecode(localStorage.getItem(ACCESS_TOKEN))
@@ -71,17 +71,13 @@ export default function TutorHub(){
             setMyClasses(myClassroom)     
         }
 
-        // async function getAllTransactionsCount(){
-        //     const res = await api.get("/api/payments/total/"); 
-        //     setTranscationsCount(res.data.total_amount_paid)          
-        // }
+
 
 
         getTodoCount()
         getNoteCount()
         getBoughtNotesCount()
         getClassesCount()
-        // getAllTransactionsCount()
       }, [])
 
 
@@ -102,6 +98,7 @@ export default function TutorHub(){
                             <DashboardBox count={boughtNoteCount} link="/notes">Bought Notes</DashboardBox>
                             <DashboardBox count={classesCount} link="/classroom/manage">My Classes</DashboardBox>
                             <DashboardBox link="/feedback/create">Send Feedback</DashboardBox>
+                            <DashboardBox count={`Rs. ${earnings.toFixed(2)}`} >Earnings</DashboardBox>
                         </div>
 
                         <div className="flex justify-between">

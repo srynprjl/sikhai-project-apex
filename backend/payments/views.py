@@ -1,5 +1,6 @@
 import requests
 import os
+from decimal import Decimal
 from django.conf import settings
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
@@ -177,8 +178,31 @@ class KhaltiPaymentVerificationView(views.APIView):
                     order.khalti_txn_status= khalti_status
                     order.save()
 
-                    classroom_items = order.classroom_items.all()
+                    if order.note_items.first():
+                        item = order.note_items.first()
+                        # print("Note: " + item)
+                        if item.note.author: 
+                            creator = item.note.author
+                            # print("Note: " + creator)
+                            earnings = float(item.price_at_purchase) * float(0.95)
+                            # print("Note: " + earnings)
+                            creator.earnings += earnings
+                            # print("Note: " + creator.earnings)
+                            creator.save()
 
+                    if order.classroom_items.first():
+                        item = order.classroom_items.first()
+                        if item.classroom.tutor:
+                            creator = item.classroom.tutor
+                            # print("Class: " + creator)
+                            earnings = float(item.price_at_purchase) * float(0.80)
+                            # print("Class: " + earnings)
+                            creator.earnings += earnings
+                            # print("Class: " + creator.earnings)
+                            creator.save()
+
+
+                    classroom_items = order.classroom_items.all()
                     for classroom_item in classroom_items:
                         Enrollment.objects.get_or_create(
                             user=order.user,
