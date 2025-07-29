@@ -21,6 +21,7 @@ export default function UpdateUser() {
         <CreateUpdateUserForm
           mode="update"
           apiUrl={`/api/users/${params.userID}/`}
+          admin={true}
         />
       </DashboardLayout>
     </>

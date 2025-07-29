@@ -40,7 +40,6 @@ export default function CreateUpdateUserForm(props) {
         setEmail(data.email);
         setIsTutor(data.is_tutor);
         setIsAdmin(data.is_superuser);
-
         setSelect(data.is_superuser ? "admin" : (data.is_tutor ? "tutor" : "user")) 
       }
 
@@ -206,7 +205,7 @@ export default function CreateUpdateUserForm(props) {
                 ) : null}
               </FormGroup>
               
-             {isAdmin && <>
+             {props.admin && <>
              <FormLabel className="font-semibold">Roles</FormLabel><select className="bg-dark-input p-2.5 text-sm text-white w-full outline-0 border-0" value={select} onChange={handleRoleChange} disabled={!editProfile}>
               <option value={"user"}>User</option>
               <option value={"tutor"}>Tutor</option>
