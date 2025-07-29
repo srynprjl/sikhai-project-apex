@@ -20,9 +20,8 @@ export default function Feedback(props){
 
         async function getDataFromId(){
             const {data} = await api.get(`/api/feedback/${id}/`)
-            setViewUsername(data.user)
+            setViewUsername(data.name.split(" ")[2])
             setComment(data.message)
-            console.log(data, viewUsername, comment)
         }
 
         getUserInfo();
@@ -40,6 +39,7 @@ export default function Feedback(props){
         try{
             console.log(payload)
             const res = api.post("/api/feedback/", payload)
+            alert("Submitted feedback")
             navigate("/dashboard")
         } catch (e){
             alert("Failed to submit feedback.")

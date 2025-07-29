@@ -9,6 +9,8 @@ const BookedClassroomsPage = () => {
   const [enrollments, setEnrollments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [count, setCount] = useState(0);
+  const [search, setSearch] = useState("")
   
   useEffect(() => {
     async function getAllBookedClasses(){
@@ -19,11 +21,16 @@ const BookedClassroomsPage = () => {
   })
 
   const classRoomList = enrollments.map((classroom) => (
-    <ClassroomContainer id={classroom.classroom.id} name={classroom.classroom.name} description={classroom.classroom.description} price={classroom.classroom.price} subjects={classroom.classroom.subjects} isPublic={true}/>
+    classroom.classroom.name.toLowerCase().includes(search.toLowerCase()) && <ClassroomContainer id={classroom.classroom.id} name={classroom.classroom.name} description={classroom.classroom.description} price={classroom.classroom.price} subjects={classroom.classroom.subjects} isPublic={true}/>
 ))
+
+    useEffect(() => {
+      setCount(classRoomList.filter((k) => k).length);
+    }, [classRoomList]);
+
   return (
       <DashboardLayout>
-      <DashboardView searchFunc={(e) => setSearch(e.target.value)} searchVisible titleVisible firstContainer title="classrooms" count={0}  btnVisible={false}>
+      <DashboardView searchFunc={(e) => setSearch(e.target.value)} searchVisible titleVisible firstContainer title="classrooms" count={count}  btnVisible={false}>
             {classRoomList}
       </DashboardView>
       </DashboardLayout>

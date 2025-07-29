@@ -104,29 +104,11 @@ export default function PaymentModal(props){
           Choose your payment method:
           <div className="flex gap-4 w-full">
             <button
-              className="bg-green-500 px-8 py-4 w-full font-bold text-white rounded-xl"
-              disabled
-            >
-              eSewa
-            </button>
-            <button
               className="bg-purple-800 px-8 py-4 w-full font-bold text-white rounded-xl"
               onClick={khaltiPaymentIntialize}
             >
               Khalti
               
-            </button>
-            <button
-              className="bg-blue-500 px-8 py-4  w-full font-bold text-white rounded-xl"
-              disabled
-            >
-              Paypal
-            </button>
-            <button
-              className="bg-purple-500 px-8 py-4 w-full font-bold text-white rounded-xl"
-              disabled
-            >
-              Stripe
             </button>
           </div>
         </div>

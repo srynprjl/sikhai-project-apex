@@ -26,7 +26,7 @@ export default function PaymentsStatus(props){
 
     const navigate = useNavigate()
     return <ProtectedRoute>
-        <div className="flex flex-col justify-center items-center p-8 gap-10">
+        <div className="flex flex-col text-white justify-center items-center p-8 gap-10">
             <div className="font-logo text-7xl">SIKHAI</div>
             <div className="flex flex-col ">
                 {loading && <h1 className="text-3xl font-bold">Payment completed.</h1>}
@@ -40,8 +40,8 @@ export default function PaymentsStatus(props){
                 </ul>
             </div>
             <div className="flex items-center gap-4 w-5/12 ">
-                <button className="w-full bg-accent px-4 py-2" onClick={() => navigate('/dashboard')}>Dashboard</button>
-                <button className="w-full bg-accent px-4 py-2" onClick={() => navigate('/notes/browse')}>Continue Shopping</button>
+                <button className="w-full bg-accent px-4 text-black py-2" onClick={() => navigate('/dashboard')}>Dashboard</button>
+                <button className="w-full bg-accent px-4 text-black py-2" onClick={() => navigate('/notes/browse')}>Continue Shopping</button>
             </div>
         </div>
     </ProtectedRoute>

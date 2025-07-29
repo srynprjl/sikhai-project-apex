@@ -8,6 +8,7 @@ import DeleteModal from "../../components/modals/DeleteModal";
 
 export default function ManageNotes() {
     const [count, setCount] = useState(0)
+    const [search, setSearch] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null)
     const [deleteTitle, setDeleteTitle] = useState(null)
@@ -57,13 +58,21 @@ async function handleDelete(id){
 }
 
   const notesList = notes.map((data) => {
-    return <AdminContainer key={data.id} id={data.id} title={data.title} updateSrc={() => viewnotes(data.id)} deleteSrc={() => openModal(data.id, data.title)}></AdminContainer>
+    return data.title.toLowerCase().includes(search.toLowerCase()) && <AdminContainer key={data.id} id={data.id} title={data.title} updateSrc={() => viewnotes(data.id)} deleteSrc={() => openModal(data.id, data.title)}></AdminContainer>
   })
+
+
+      useEffect(() => {
+    setCount(notesList.filter((k) => k).length);
+  }, [notesList]);
 
   return (
     <>
       <DashboardLayout>
-        <AdminView firstContainer searchVisible titleVisible title="notes" count={count}>
+        <AdminView firstContainer searchVisible titleVisible title="notes" count={count}     onChange={(e) => {
+            setSearch(e.target.value);
+            // setCount(usersList.length);
+          }}>
           {notesList}
         </AdminView>
           <DeleteModal modalOpen={modalOpen} deleteFunc={()=>handleDelete(deleteId)} cancelFunc={closeModal} title={deleteTitle} />

@@ -3,18 +3,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 export default function DashboardView(props) {
-  const [count, setCount] = useState(props.count);
   const [title, setTitle ] = useState(props.title)
   const navigate = useNavigate()
 
   return (
 
     <div className={(props.firstContainer ? "p-8 " : "") + "flex flex-col gap-3"}>
-        {props.searchVisible ? <input type="search"  placeholder="Search..."  className="text-lg font-sans outline-0 bg-dark-secondary p-2"/>
+        {props.searchVisible ? <input type="search"  placeholder="Search..."  className="text-lg font-sans outline-0 bg-dark-secondary p-2" onChange={props.searchFunc}/>
         : null}
       <div className="flex justify-between items-center">
         {props.titleVisible ? <div className="flex gap-2 items-center">
-          <span className="text-white text-4xl font-sans">{count}</span>
+          <span className="text-white text-4xl font-sans">{props.count}</span>
           <h1 className="font-sans text-lg">matching {title} found</h1>
           
         </div> : null}

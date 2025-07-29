@@ -92,7 +92,8 @@ export default function TutorHub(){
 
 
       let classesList = myClasses.slice(0,3).map((classroom) => {
-            return <ClassroomContainer id={classroom.id} name={classroom.name} description={classroom.description} price={classroom.price} />
+            console.log()
+            return <ClassroomContainer id={classroom.classroom.id} name={classroom.classroom.name} description={classroom.classroom.description} price={classroom.classroom.price} />
         }
     )
 
@@ -115,7 +116,7 @@ export default function TutorHub(){
                             <div className="text-2xl">My Enrolled Classes</div>
                             
                         </div>
-                        <div className="grid grid-cols-3">
+                        <div className="grid grid-cols-3 gap-4">
                             {classesList}
                         </div>
                     </div>

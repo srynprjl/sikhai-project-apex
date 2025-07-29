@@ -125,6 +125,10 @@ async function handleDelete(id){
   });
 
 
+    useEffect(() => {
+    setCount(notesList.filter((k) => k).length);
+  }, [notesList]);
+
   return (
     <DashboardLayout>
       <DashboardView searchVisible 

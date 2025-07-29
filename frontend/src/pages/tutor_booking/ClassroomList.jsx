@@ -10,6 +10,8 @@ import { useNavigate } from 'react-router';
 const ClassroomListPage = () => {
   const [classrooms, setClassrooms] = useState([]);
   const [count, setCount] = useState(0);
+  const [search, setSearch] = useState("")
+
 
     useEffect(() => {
     async function getAllClassrooms(){
@@ -20,8 +22,12 @@ const ClassroomListPage = () => {
   }, [])
 
   const classRoomList = classrooms.map((classroom) => (
-    <ClassroomContainer id={classroom.id} name={classroom.name} description={classroom.description} price={classroom.price} subjects={classroom.subjects} isPublic={true}/>
+    classroom.name.toLowerCase().includes(search.toLowerCase()) && (<ClassroomContainer id={classroom.id} name={classroom.name} description={classroom.description} price={classroom.price} subjects={classroom.subjects} isPublic={true}/>)
 ))
+
+  useEffect(() => {
+    setCount(classRoomList.filter((k) => k).length);
+  }, [classRoomList]);
   return (
     <DashboardLayout>
     <DashboardView searchFunc={(e) => setSearch(e.target.value)} searchVisible titleVisible firstContainer title="classrooms" count={count}  btnVisible={false}>

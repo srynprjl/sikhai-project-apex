@@ -108,7 +108,7 @@ export default function TutorHub(){
                             <div className="text-2xl">My Classes</div>
                             
                         </div>
-                        <div className="grid grid-cols-3">
+                        <div className="grid grid-cols-3 gap-4">
                             {classesList}
                         </div>
                     </div>

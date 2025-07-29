@@ -16,7 +16,7 @@ export default function ClassroomManage(){
   const [deleteTitle, setDeleteTitle] = useState(null)
   const {user_id} = jwtDecode(localStorage.getItem(ACCESS_TOKEN))
   const navigate = useNavigate()
-
+  const [search, setSearch] = useState("")
   
   useEffect(() => {
     async function getAllClassrooms(){
@@ -52,8 +52,13 @@ export default function ClassroomManage(){
 
 
   const classRoomList = classrooms.map((classroom) => (
-    (classroom.tutor.id == user_id ? <ClassroomContainer id={classroom.id} name={classroom.name} description={classroom.description} price={classroom.price} subjects={classroom. subjects} handleDelete={() => modalDelete(classroom.id, classroom.name)}/> : null)
-    ))
+    classroom.name.toLowerCase().includes(search.toLowerCase()) && (classroom.tutor.id == user_id ) && <ClassroomContainer id={classroom.id} name={classroom.name} description={classroom.description} price={classroom.price} subjects={classroom. subjects} handleDelete={() => modalDelete(classroom.id, classroom.name)}/>)
+  )
+
+    useEffect(() => {
+      setCount(classRoomList.filter((k) => k).length);
+    }, [classRoomList]);
+
   return (
     <DashboardLayout>
     <DashboardView searchFunc={(e) => setSearch(e.target.value)} searchVisible titleVisible firstContainer title="classrooms" count={count} btnName={"Classrooms"} btnSrc={"/classroom/manage/new"} btnVisible={true}>

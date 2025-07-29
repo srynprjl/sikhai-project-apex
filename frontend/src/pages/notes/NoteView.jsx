@@ -10,11 +10,12 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 export default function NoteView() {
 const [count, setCount] = useState(0);
 const [notes, setNotes] = useState([]);
+const [concat, setConcat] = useState([]);
 const [modalOpen, setModalOpen] = useState(false);
 const [deleteId, setDeleteId] = useState(null)
 const [deleteTitle, setDeleteTitle] = useState(null)
-  const [paidNotes, setPaidNotes] = useState([]);
-  const [search, setSearch] = useState("");
+const [paidNotes, setPaidNotes] = useState([]);
+const [search, setSearch] = useState("");
 const navigate = useNavigate()
 
     useEffect(() => {
@@ -75,13 +76,17 @@ async function handleDelete(id){
     </NoteContainer>
   })
 
-  const concatList = notesList.concat(boughtList);
+  let concatList = notesList.concat(boughtList)
+
+  useEffect(()=> {
+    setCount(concatList.filter((d) => d.props.name.includes(search)).length)
+  }, [search])
 
   return (
     <DashboardLayout>
     <DashboardView searchFunc={(e) => setSearch(e.target.value)} searchVisible titleVisible firstContainer title="notes" count={count} btnName={"Note"} btnSrc={"/notes/create"} btnVisible={true}>
-      {notesList.length == 0 && boughtList.length == 0 ? <div>No notes Available. try creating one</div>: 
-      <>{concatList}</>
+      {count == 0 ? <div>No notes Available. try creating one</div>: 
+      <>{concatList.filter((d) => d.props.name.includes(search))}</>
       }
     </DashboardView>
 

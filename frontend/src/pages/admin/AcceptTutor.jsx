@@ -8,6 +8,7 @@ import api from "../../api";
 export default function AcceptTutor(){
     const [tutors, setTutors] = useState([]);
     const [count, setCount] = useState(0)
+    const [search, setSearch] = useState("");
     const navigate = useNavigate()
     useEffect(() => {
         async function getUserInfo() {
@@ -53,13 +54,19 @@ export default function AcceptTutor(){
   }
 
   const tutorsList = tutors.map((data) => {
-    return <AdminContainer tutor approve title={"Tutor application of " + data.user.username} viewSrc={() => viewSrc(data.id)} updateSrc={() => approve(data.id)} deleteSrc={() => deny(data.id)}></AdminContainer>
+    return ("Tutor application of " + data.user.username).toLowerCase().includes(search.toLowerCase()) &&  <AdminContainer tutor approve title={"Tutor application of " + data.user.username} viewSrc={() => viewSrc(data.id)} updateSrc={() => approve(data.id)} deleteSrc={() => deny(data.id)}></AdminContainer>
   })
+  
+  useEffect(() => {
+    setCount(tutorsList.filter((k) => k).length);
+  }, [tutorsList]);
 
   return (
     <>
       <DashboardLayout>
-        <AdminView firstContainer searchVisible titleVisible title="tutors"  count={0}>
+        <AdminView firstContainer searchVisible titleVisible title="tutors" count={count}    onChange={(e) => {
+            setSearch(e.target.value);
+          }}>
           {tutorsList}
         </AdminView>
       </DashboardLayout>
