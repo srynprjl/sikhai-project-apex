@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import api from "../../api";
-
+import PaymentModal from "../../components/modals/PaymentModal";
 import ClassAssignments from "./tabs/ClassAssignments";
 import ClassFiles from "./tabs/ClassFiles";
 import Sessions from "./tabs/Sessions";
@@ -21,6 +21,12 @@ export default function Classroom({  }){
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [isTutor, setIsTutor] = useState(false)
   const [activeTab, setActiveTab] = useState('files'); 
+
+  const [classTitle, setClassTitle] = useState("");
+  const [classPrice, setClassPrice] = useState(0.0);
+  const [classId, setClassId] = useState();
+  const [payModalOpen, setPayModalOpen] = useState(false);
+  const navigate = useNavigate()
   const user = jwtDecode(localStorage.getItem(ACCESS_TOKEN))
 
   useEffect(() => {
@@ -45,11 +51,30 @@ export default function Classroom({  }){
     checkIsEnrolled()
   }, [id])
 
-  function handleKhaltiPayment(){
-    
+  async function handlePurchase(id, title, price) {
+    setClassId(id);
+    setClassTitle(title);
+    setClassPrice(parseFloat(price));
+
+    if(price > 1){
+      setPayModalOpen(true);
+
+    } else if(price==0.00){
+      try{
+        const res = await api.post('/api/buy-free-classrooms/', {'classroom_id': id})
+        console.log(res)
+        alert("Enrolled into classroom!")
+        navigate(0)
+      } catch (err){
+        alert("Enrollment failed")
+      }
+    } else {
+      alert("Invalid price. Can't process");
+    }
   }
 
   return (
+    
     <DashboardLayout>
           <div className="p-8 ">
       <div className="p-8 rounded-lg ">
@@ -62,7 +87,7 @@ export default function Classroom({  }){
         
         {!isTutor && !isEnrolled && (
           <button
-            onClick={handleKhaltiPayment}
+            onClick={() => handlePurchase(id, title, price)}
             className="bg-purple-800 text-white px-8 py-3 text-lg font-semibold hover:bg-purple-700 transition duration-300 mb-6"
           >
             Enroll Now with Khalti (Pay Rs. {price})
@@ -114,6 +139,15 @@ export default function Classroom({  }){
         )}
       </div>
     </div>
+
+           <PaymentModal
+            modalOpen={payModalOpen}
+            id={classId}
+            title={classTitle}
+            price={classPrice}
+            type="classroom"
+            modalClose={() => setPayModalOpen(false)}
+          ></PaymentModal>
     </DashboardLayout>
   );
 };

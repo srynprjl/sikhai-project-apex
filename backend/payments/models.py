@@ -3,40 +3,56 @@ from notes.models import Note
 from tutor.models import Classroom
 from Authentication.models import CustomUser
 
-
 class Order(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    notes = models.ManyToManyField(Note, through='OrderItem', null=True)
-    classroom = models.ManyToManyField(Classroom, through='OrderItem', null=True)
     order_date = models.DateTimeField(auto_now_add=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     is_completed = models.BooleanField(default=False)
     khalti_idx = models.CharField(max_length=255, blank=True, null=True, unique=True)
     khalti_txn_status = models.CharField(max_length=255, blank=True, null=True)
 
+    # Relations via separate through models
+    notes = models.ManyToManyField(Note, through='OrderNoteItem', related_name='orders')
+    classrooms = models.ManyToManyField(Classroom, through='OrderClassroomItem', related_name='orders')
+
     def __str__(self):
         return f"Order {self.id} by {self.user.username}"
 
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    note = models.ForeignKey(Note, on_delete=models.CASCADE, null=True)
-    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, null=True)
+class OrderNoteItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='note_items')
+    note = models.ForeignKey(Note, on_delete=models.CASCADE)
     price_at_purchase = models.DecimalField(max_digits=10, decimal_places=2)
 
     class Meta:
         unique_together = ('order', 'note')
 
+
     def __str__(self):
-        return f"Order {self.order.id}"
+        return f"OrderNoteItem: Order {self.order.id}, Note {self.note.title}"
+
+class OrderClassroomItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='classroom_items')
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    price_at_purchase = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        unique_together = ('order', 'classroom')
+
+    @property
+    def seller_earning(self):
+        return self.price_at_purchase * 0.95
+
+    def __str__(self):
+        return f"OrderClassroomItem: Order {self.order.id}, Classroom {self.classroom.name}"
 
 class Payment(models.Model):
     order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='payment_details', null=True, blank=True)
     pidx = models.CharField(max_length=255, unique=True, null=True, blank=True)
     khalti_transaction_id = models.CharField(max_length=255, null=True, blank=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2) # Amount in NPR
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # Amount in NPR
     product_identity = models.CharField(max_length=255, blank=True, null=True)
     product_name = models.CharField(max_length=255, blank=True, null=True)
-    status = models.CharField(max_length=50, default='INITIATED') 
+    status = models.CharField(max_length=50, default='INITIATED')
     initiate_response = models.JSONField(blank=True, null=True)
     lookup_response = models.JSONField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)

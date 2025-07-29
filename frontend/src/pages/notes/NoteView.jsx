@@ -23,10 +23,11 @@ const navigate = useNavigate()
             setNotes(data)
         }
 
-            async function fetchBoughtNotes(){
-      const {data} = await api.get("/api/get-purchased-notes/")
-      setPaidNotes(data)
-    }
+        async function fetchBoughtNotes(){
+          const res = await api.get("/api/get-purchased-notes/")
+          console.log(res.data)
+          setPaidNotes(res.data)
+        }
 
         fetchBoughtNotes();
         fetchData()
@@ -59,8 +60,6 @@ async function handleDelete(id){
 }
 
   const notesList = notes.map((data, index)=> {
-    console.log(data.content.blocks.slice(0,2))
-    console.log(data.id)
     data.content = {
       ...data.content,
     blocks: data.content.blocks.slice(0, 1) 
@@ -71,16 +70,18 @@ async function handleDelete(id){
   })
 
     const boughtList = paidNotes.map((data) => {
-    return <NoteContainer key={data.id} id={data.note} name={data.note_title} onClick={() => navigatePage(data.note)}>
+    return <NoteContainer key={data.id} id={data.note.id} name={data.note.title} onClick={() => navigatePage(data.note)}>
       <p>Purchased</p>
     </NoteContainer>
   })
+
+  const concatList = notesList.concat(boughtList);
 
   return (
     <DashboardLayout>
     <DashboardView searchFunc={(e) => setSearch(e.target.value)} searchVisible titleVisible firstContainer title="notes" count={count} btnName={"Note"} btnSrc={"/notes/create"} btnVisible={true}>
       {notesList.length == 0 && boughtList.length == 0 ? <div>No notes Available. try creating one</div>: 
-      <>{boughtList}{notesList}</>
+      <>{concatList}</>
       }
     </DashboardView>
 

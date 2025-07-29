@@ -46,7 +46,7 @@ export default function ClassAssignments({ classroomId, isTutor }){
       alert('Assignment submitted successfully!');
     } catch (err) {
       console.error('Assignment submission failed:', err.response ? err.response.data : err.message);
-      alert('Failed to submit assignment.');
+      alert('Failed to submit assignment. ' +  err.response.data.detail);
     } finally {
       setSubmitting({ ...submitting, [assignmentId]: false });
     }
@@ -57,7 +57,7 @@ export default function ClassAssignments({ classroomId, isTutor }){
               <h4 className="font-semibold text-xl text-white mb-2">{assignment.title}</h4>
               <p className="text-white text-sm mb-3">{assignment.description}</p>
               <p className="text-white text-xs mb-2">
-                Deadline: {new Date(assignment.deadline).toLocaleString()}
+                Deadline: {new Date(assignment.due_date).toLocaleString()}
               </p>
               {assignment.assignment_file && (
                 <a

@@ -73,9 +73,8 @@ export default function AdminHub(){
             setFeedbackCount(res.data.length)         
         }
         async function getAllTransactionsCount(){
-            const res = await api.get("/api/payments/total/"); 
-            setTranscationsCount(res.data.total_amount_paid) 
-            // console.log(res)           
+            const {data} = await api.get("/api/payments/total/"); 
+            setTranscationsCount(data.total_amount_paid)         
         }
 
         async function getDailyPayments(){
@@ -146,7 +145,7 @@ export default function AdminHub(){
                             <DashboardBox count={userCount} link="/admin/users">Users</DashboardBox>
                             <DashboardBox count={noteCount} link="/admin/notes"> Notes</DashboardBox>
                             <DashboardBox count={feedbackCount} link="/admin/feedbacks">Feedbacks</DashboardBox>
-                            <DashboardBox count={"Rs. " + transcationsCount} >Transactions</DashboardBox>
+                            <DashboardBox count={transcationsCount} >Transactions</DashboardBox>
                         </div>
 
                         <div className="flex justify-between">

@@ -3,6 +3,8 @@ from django.contrib import admin
 from django.urls import path , include
 from Authentication.views import CreateUserView,  SelfView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from django.conf import settings
+from django.conf.urls.static import static
 
 from whiteboard.views import board_view
 from admins.views import CustomUserViewSet
@@ -27,4 +29,7 @@ urlpatterns = [
     path('api/', include('admins.urls')),
     # path('api/feedback/', include('Feedback.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

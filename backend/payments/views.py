@@ -6,11 +6,11 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from rest_framework import generics, permissions, views, status
-
+from tutor.models import Classroom, Enrollment
 from rest_framework.response import Response
 from notes.models import Note
-from .models import Order, OrderItem, Payment
-from .serializers import NoteSerializer, OrderItemSerializer, OrderSerializer
+from .models import Order, OrderNoteItem, OrderClassroomItem, Payment
+from .serializers import NoteSerializer, OrderNoteItemSerializer,OrderClassroomItemSerializer, OrderSerializer
 from django.db.models import Sum
 from django.db.models.functions import TruncDate #
 from .serializers import TotalPaymentsSerializer, DailyPaymentSerializer
@@ -21,55 +21,84 @@ class NoteListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
 
 class PurchasedNotesView(generics.ListAPIView):
-    serializer_class = OrderItemSerializer
+    serializer_class = OrderNoteItemSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return OrderItem.objects.filter(
+        return OrderNoteItem.objects.filter(
             order__user=self.request.user,
             order__is_completed=True
         ).select_related('note', 'order')
+
+class PurchasedClassroomsView(generics.ListAPIView):
+    serializer_class = OrderClassroomItemSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return OrderClassroomItem.objects.filter(
+            order__user=self.request.user,
+            order__is_completed=True
+        ).select_related('classroom', 'order')
 
 # --- Khalti ePayment Specific Views ---
 
 class KhaltiPaymentInitiateView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         product_details_list = request.data.get('product_details')
-        if product_details_list and isinstance(product_details_list, list) and len(product_details_list) > 0:
-            first_product = product_details_list[0]
-            note_id = first_product.get('identity', '')
         return_url = request.data.get('return_url')
         website_url = request.data.get('website_url')
         payload = request.data
 
-        if not note_id: # Check for single note_id
-            return Response({"detail": "Missing 'note_id'."}, status=status.HTTP_400_BAD_REQUEST)
+        if not product_details_list or not isinstance(product_details_list, list) or len(product_details_list) == 0:
+            return Response({"detail": "Missing product_details list."}, status=status.HTTP_400_BAD_REQUEST)
         if not return_url or not website_url:
             return Response({"detail": "Missing 'return_url' or 'website_url'."}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             with transaction.atomic():
-                note = get_object_or_404(Note, id=note_id)
-                total_amount_npr = request.data.get('amount')/100
-                amount_paisa = int(total_amount_npr * 100) 
-
+                total_amount_npr = 0
                 order = Order.objects.create(
                     user=request.user,
-                    total_amount=total_amount_npr,
+                    total_amount=0,
                     is_completed=False
                 )
-
-                OrderItem.objects.create(order=order, note=note, price_at_purchase=(total_amount_npr))
                 
-                khalti_api_url = "https://dev.khalti.com/api/v2/epayment/initiate/" # Use 
+
+                for product in product_details_list:
+                    product_type = product.get('type')  # Expect 'note' or 'classroom'
+                    identity = product.get('identity')
+                    amount_paisa = product.get('total_price')
+
+                    if not product_type or not identity or not amount_paisa:
+                        transaction.set_rollback(True)
+                        return Response({"detail": "Missing product type, identity or amount in product details."}, status=status.HTTP_400_BAD_REQUEST)
+
+                    amount_npr = amount_paisa / 100
+                    total_amount_npr += amount_npr
+
+                    if product_type == 'note':
+                        note = get_object_or_404(Note, id=identity)
+                        OrderNoteItem.objects.create(order=order, note=note, price_at_purchase=amount_npr)
+                    elif product_type == 'classroom':
+                        classroom = get_object_or_404(Classroom, id=identity)
+                        OrderClassroomItem.objects.create(order=order, classroom=classroom, price_at_purchase=amount_npr)
+                    else:
+                        transaction.set_rollback(True)
+                        return Response({"detail": f"Invalid product type: {product_type}"}, status=status.HTTP_400_BAD_REQUEST)
+
+                # Update total amount in order
+                order.total_amount = total_amount_npr
+                order.save()
+
+                khalti_api_url = "https://dev.khalti.com/api/v2/epayment/initiate/"
                 headers = {
                     "Authorization": "Key 49f02c7f2bf84e6fa6aedb5328dc2e63",
                     "Content-Type": "application/json",
                 }
-
                 khalti_response = requests.post(khalti_api_url, json=payload, headers=headers)
-                khalti_response.raise_for_status() 
+                khalti_response.raise_for_status()
                 khalti_data = khalti_response.json()
 
                 pidx = khalti_data.get('pidx')
@@ -81,17 +110,17 @@ class KhaltiPaymentInitiateView(views.APIView):
                 Payment.objects.create(
                     order=order,
                     pidx=pidx,
-                    amount=total_amount_npr, 
-                    product_identity=str(note.id),
-                    product_name=note.title,
-                    initiate_response=khalti_data, 
+                    amount=total_amount_npr,
+                    product_identity=",".join([str(p.get("identity")) for p in product_details_list]),
+                    product_name="Multiple Products" if len(product_details_list) > 1 else product_details_list[0].get('name', ''),
+                    initiate_response=khalti_data,
                     status='INITIATED'
                 )
-                
+
                 return Response({'payment_url': payment_url}, status=status.HTTP_200_OK)
 
-        except Note.DoesNotExist:
-            return Response({"detail": "Note not found."}, status=status.HTTP_404_NOT_FOUND)
+        except (Note.DoesNotExist, Classroom.DoesNotExist):
+            return Response({"detail": "Product not found."}, status=status.HTTP_404_NOT_FOUND)
         except requests.exceptions.RequestException as e:
             print(f"Khalti API initiate error: {e.response.text if e.response else e}")
             return Response(
@@ -102,10 +131,9 @@ class KhaltiPaymentInitiateView(views.APIView):
             print(f"Error during payment initiation: {e}")
             return Response({'detail': f'An internal error occurred: {e}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 class KhaltiPaymentVerificationView(views.APIView):
-
     permission_classes = [permissions.IsAuthenticated]
-
     def post(self, request, *args, **kwargs):
         pidx = request.data.get("pidx")
         if not pidx:
@@ -148,7 +176,18 @@ class KhaltiPaymentVerificationView(views.APIView):
                     order.khalti_idx = pidx
                     order.khalti_txn_status= khalti_status
                     order.save()
+
+                    classroom_items = order.classroom_items.all()
+
+                    for classroom_item in classroom_items:
+                        Enrollment.objects.get_or_create(
+                            user=order.user,
+                            classroom=classroom_item.classroom,
+                            defaults={'paid': True}
+                    )
+
                     payment_object.save()
+
                     return Response({"detail": "Payment successfully verified and order completed!", "status": khalti_status}, status=status.HTTP_200_OK)
                 else:
                     payment_object.save()
@@ -168,6 +207,7 @@ class KhaltiPaymentVerificationView(views.APIView):
 
 class FreeNotePurchaseView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
         note_id = request.data.get('note_id')
         if not note_id:
@@ -179,19 +219,18 @@ class FreeNotePurchaseView(views.APIView):
                 if note.price > 0:
                     return Response({"detail": "This note is not free."}, status=status.HTTP_400_BAD_REQUEST)
 
-                if Order.objects.filter(user=request.user, is_completed=True, orderitem__note=note).exists():
+                if OrderNoteItem.objects.filter(order__user=request.user, order__is_completed=True, note=note).exists():
                     return Response({"detail": "You have already claimed this note."}, status=status.HTTP_200_OK)
-                    
+
                 order = Order.objects.create(
                     user=request.user,
-                    total_amount=0.00, 
-                    is_completed=True 
+                    total_amount=0.00,
+                    is_completed=True
                 )
-
-                OrderItem.objects.create(
+                OrderNoteItem.objects.create(
                     order=order,
                     note=note,
-                    price_at_purchase=0.00 # Record price at purchase as 0.00
+                    price_at_purchase=0.00
                 )
 
                 return Response({"detail": "Note successfully claimed!", "status": "claimed"}, status=status.HTTP_200_OK)
@@ -202,9 +241,54 @@ class FreeNotePurchaseView(views.APIView):
             print(f"Error claiming free note: {e}")
             return Response({"detail": f"An internal error occurred: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class FreeClassroomPurchaseView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        classroom_id = request.data.get('classroom_id')
+        if not classroom_id:
+            return Response({"detail": "Classroom ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            with transaction.atomic():
+                classroom = get_object_or_404(Classroom, id=classroom_id)
+
+                if classroom.price > 0:
+                    return Response({"detail": "This classroom is not free."}, status=status.HTTP_400_BAD_REQUEST)
+
+                if OrderClassroomItem.objects.filter(order__user=request.user, order__is_completed=True, classroom=classroom).exists():
+                    return Response({"detail": "You have already claimed this classroom."}, status=status.HTTP_200_OK)
+
+                order = Order.objects.create(
+                    user=request.user,
+                    total_amount=0.00,
+                    is_completed=True
+                )
+
+                OrderClassroomItem.objects.create(
+                    order=order,
+                    classroom=classroom,
+                    price_at_purchase=0.00
+                )
+
+                classroom_items = order.classroom_items.all()
+                for classroom_item in classroom_items:
+                    Enrollment.objects.get_or_create(
+                        user=order.user,
+                        classroom=classroom_item.classroom,
+                        defaults={'paid': True}
+                    )
+
+                return Response({"detail": "Classroom successfully claimed!", "status": "claimed"}, status=status.HTTP_200_OK)
+
+        except Classroom.DoesNotExist:
+            return Response({"detail": "Classroom not found."}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            print(f"Error claiming free classroom: {e}")
+            return Response({"detail": f"An internal error occurred: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class TotalPaymentsView(views.APIView):
     def get(self, request, *args, **kwargs):
-        total_payments = Payment.objects.aggregate(total_amount=Sum('amount'))['total_amount']
+        total_payments = Payment.objects.filter(status="Completed").aggregate(total_amount=Sum('amount'))['total_amount']
 
         if total_payments is None:
             total_payments = 0.00
@@ -215,7 +299,7 @@ class TotalPaymentsView(views.APIView):
 class DailyPaymentsView(views.APIView):
 
     def get(self, request, *args, **kwargs):
-        daily_payments = Payment.objects.annotate(
+        daily_payments = Payment.objects.filter(status="Completed").annotate(
             date=TruncDate('created_at') 
         ).values('date').annotate(
             total_amount=Sum('amount') 

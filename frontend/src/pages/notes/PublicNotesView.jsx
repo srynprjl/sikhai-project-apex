@@ -18,10 +18,10 @@ export default function PublicNoteView() {
   const [noteTitle, setNoteTitle] = useState("");
   const [notePrice, setPrice] = useState(0.0);
   const [noteId, setNoteId] = useState();
+  const [payModalOpen, setPayModalOpen] = useState(false);
   const [paidNotes, setPaidNotes] = useState([])
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [payModalOpen, setPayModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [deleteTitle, setDeleteTitle] = useState(null);
   const navigate = useNavigate();
@@ -35,6 +35,7 @@ export default function PublicNoteView() {
 
     async function userBoughtNotes() {
       const {data} = await api.get("/api/get-purchased-notes/")
+      console.log(data)
       setPaidNotes(data)
     }
 
@@ -46,18 +47,6 @@ export default function PublicNoteView() {
   function navigatePage(id) {
     return navigate(`/notes/${id}/`);
   }
-
-  function openModal(id, title){
-  setModalOpen(true)
-  setDeleteId(id)
-  setDeleteTitle(title)
-}
-
-function closeModal(){
-  setModalOpen(false)
-  setDeleteId(null)
-  setDeleteTitle(null)
-}
 
 function openModal(id, title){
   setModalOpen(true)
@@ -109,8 +98,7 @@ async function handleDelete(id){
       };
 
       paidNotes.forEach((data2) => {   
-        console.log(data2) 
-        if(data2.note == data.id){
+        if(data2.note.id == data.id){
           bought = true;
           return;
         }
@@ -147,6 +135,7 @@ async function handleDelete(id){
         id={noteId}
         title={noteTitle}
         price={notePrice}
+        type="note"
         modalClose={() => setPayModalOpen(false)}
       ></PaymentModal>
       {notesList.length == 0 ? <div>There are no notes for sale at the moment. </div>: 

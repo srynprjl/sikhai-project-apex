@@ -36,8 +36,9 @@ export default function NoteEdit() {
     async function userBoughtNotes() {
       const {data} = await api.get("/api/get-purchased-notes/")
       const isBought = data.some(item => {
-        return id == item.note;
+        return id == item.note.id;
     });
+    console.log(isBought)
       setBought(isBought)
     }
 
