@@ -32,7 +32,6 @@ ChartJS.register(
 );
 
 export default function TutorHub(){
-
     const navigate = useNavigate()
     const {user_id} = jwtDecode(localStorage.getItem(ACCESS_TOKEN))
     const [todoCount, setTodoCount] = useState(0);
@@ -113,7 +112,7 @@ export default function TutorHub(){
                         </div>
 
                         <div className="flex justify-between">
-                            <div className="text-2xl">My Classes</div>
+                            <div className="text-2xl">My Enrolled Classes</div>
                             
                         </div>
                         <div className="grid grid-cols-3">
