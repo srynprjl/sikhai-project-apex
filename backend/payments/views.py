@@ -15,6 +15,7 @@ from .serializers import NoteSerializer, OrderNoteItemSerializer,OrderClassroomI
 from django.db.models import Sum
 from django.db.models.functions import TruncDate #
 from .serializers import TotalPaymentsSerializer, DailyPaymentSerializer
+from django.conf import settings
 
 class NoteListView(generics.ListAPIView):
     queryset = Note.objects.all()
@@ -47,6 +48,7 @@ class KhaltiPaymentInitiateView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        print(f"Key {settings.KHALTI_SECRET_KEY}")
         product_details_list = request.data.get('product_details')
         return_url = request.data.get('return_url')
         website_url = request.data.get('website_url')
@@ -95,7 +97,7 @@ class KhaltiPaymentInitiateView(views.APIView):
 
                 khalti_api_url = "https://dev.khalti.com/api/v2/epayment/initiate/"
                 headers = {
-                    "Authorization": "Key 49f02c7f2bf84e6fa6aedb5328dc2e63",
+                    "Authorization": f"Key {settings.KHALTI_SECRET_KEY}",
                     "Content-Type": "application/json",
                 }
                 khalti_response = requests.post(khalti_api_url, json=payload, headers=headers)
@@ -136,6 +138,7 @@ class KhaltiPaymentInitiateView(views.APIView):
 class KhaltiPaymentVerificationView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request, *args, **kwargs):
+
         pidx = request.data.get("pidx")
         if not pidx:
             return Response({"detail": "Missing pidx from Khalti callback."}, status=status.HTTP_400_BAD_REQUEST)
@@ -148,7 +151,7 @@ class KhaltiPaymentVerificationView(views.APIView):
                 return Response({"detail": "Order already completed."}, status=status.HTTP_200_OK)
             khalti_lookup_api_url = "https://dev.khalti.com/api/v2/epayment/lookup/" # 
             headers = {
-                "Authorization": f"Key 49f02c7f2bf84e6fa6aedb5328dc2e63",
+                "Authorization": f"Key ${settings.KHALTI_SECRET_KEY}",
                 "Content-Type": "application/json",
             }
             lookup_payload = {

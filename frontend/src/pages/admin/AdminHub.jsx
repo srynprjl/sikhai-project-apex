@@ -143,7 +143,7 @@ export default function AdminHub(){
                             <DashboardBox count={userCount} link="/admin/users">Users</DashboardBox>
                             <DashboardBox count={noteCount} link="/admin/notes"> Notes</DashboardBox>
                             <DashboardBox count={feedbackCount} link="/admin/feedbacks">Feedbacks</DashboardBox>
-                            <DashboardBox count={transcationsCount} >Transactions</DashboardBox>
+                            <DashboardBox count={"Rs." + transcationsCount} >Transactions</DashboardBox>
                         </div>
 
                         <div className="flex justify-between">
