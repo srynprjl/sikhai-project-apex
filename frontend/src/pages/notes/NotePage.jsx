@@ -15,10 +15,21 @@ export default function NoteEdit() {
   const [author, setAuthor] = useState(null);
   const [bought, setBought] = useState(false)
   const [isPublic, setIsPublic] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false)
   const [price, setPrice] = useState(0.0);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    async function getUser(){
+      try{
+        const {data}= await api.get("/api/user/")
+        setIsAdmin(data.is_superuser)
+      } catch(e) {
+        console.log(e)
+      }
+
+    }
+
     async function fetchNote() {
       try {
         const res = await api.get(`/api/notes/${id}/`);
@@ -38,13 +49,14 @@ export default function NoteEdit() {
       const isBought = data.some(item => {
         return id == item.note.id;
     });
-    console.log(isBought)
       setBought(isBought)
     }
 
+    getUser()
     fetchNote();
     userBoughtNotes();
     setUser(jwtDecode(localStorage.getItem("access")).user_id);
+
   }, [id]);
 
   useEffect(() => {
@@ -71,12 +83,13 @@ export default function NoteEdit() {
     <DashboardLayout>
           <div className="p-10">
       <form>
-        <input
+
+          <input
             placeholder="Title..."
-            className="text-4xl font-black outline-0"
+            className="text-4xl font-black outline-0 w-full "
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-          />   
+          />       
                   <div>
           <div>
                         <input type="checkbox"
@@ -89,12 +102,12 @@ export default function NoteEdit() {
           </div>
           {isPublic ? (<div>
             <label>Price: </label><input type="number" step={0.01} 
-            onChange={(e) => setPrice(e.target.valueAsNumber)}className="w-16 decoration-0 border-b "/> 
+            onChange={(e) => setPrice(e.target.valueAsNumber)} value={price} className="w-16 decoration-0 border-b "/> 
           </div>
           ) : null}
         </div>
         <div id="editor" className="prose-em prose-invert">
-          <EditorJSComponent data={data} onChange={setData} editorBlock="editorjs-container" isPublic={user != author ? true : false}initialBlockLimit={5} hasPaid={user != author ? bought : true}
+          <EditorJSComponent data={data} onChange={setData} editorBlock="editorjs-container" isPublic={user != author ? true : false}initialBlockLimit={5} hasPaid={((user != author)) ? (isAdmin ? true : bought) : true}
           />
         </div>
       </form>

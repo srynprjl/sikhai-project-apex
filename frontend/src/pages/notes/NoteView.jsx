@@ -60,7 +60,7 @@ async function handleDelete(id){
   navigate(0)
 }
 
-  const notesList = notes.map((data, index)=> {
+  const notesList = notes.map((data)=> {
     data.content = {
       ...data.content,
     blocks: data.content.blocks.slice(0, 1) 
@@ -71,7 +71,8 @@ async function handleDelete(id){
   })
 
     const boughtList = paidNotes.map((data) => {
-    return <NoteContainer key={data.id} id={data.note.id} name={data.note.title} onClick={() => navigatePage(data.note)}>
+      console.log(data)
+    return <NoteContainer key={data.id} id={data.note.id} name={data.note.title} onClick={() => navigatePage(data.note.id)} delete={() => alert("Cannot delete purchased notes")}>
       <p>Purchased</p>
     </NoteContainer>
   })

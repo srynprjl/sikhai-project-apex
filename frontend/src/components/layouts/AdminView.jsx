@@ -34,7 +34,7 @@ export default function AdminView(props) {
           </button> : null}
         </div>
       </div>
-      <div className="grid grid-cols-1 w-full gap-6">{props.children}</div>
+      <div className="grid grid-cols-1 w-full gap-6 ">{props.children}</div>
     </div>
   );
 }

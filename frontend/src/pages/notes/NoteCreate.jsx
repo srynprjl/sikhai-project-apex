@@ -7,10 +7,7 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 const INITIAL_DATA = {
   time: new Date().getTime(),
   blocks: [
-    {
-      type: "header",
-      data: { text: "Write your notes here", level: 1 },
-    },
+
   ],
   version: "2.31.0-rc.7",
 };
@@ -42,17 +39,17 @@ export default function NoteCreate() {
     <DashboardLayout>
           <div className="p-8">
       <form onSubmit={handleSubmit}>
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center max-lg:flex-col max-lg:justify-center max-lg:items-start">
           <input
             placeholder="Title..."
-            className="text-4xl font-black outline-0"
+            className="text-4xl font-black outline-0 w-full "
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />     
 
         <button
           type="submit"
-          className="bg-accent px-4 py-2 text-white font-bold mt-4"
+          className="bg-accent px-4 py-2 text-black font-bold mt-4 w-48 mb-4"
         >
           Create Note
         </button>
@@ -76,7 +73,7 @@ export default function NoteCreate() {
         
 
         <div className="flex justify-start">
-          <div id="editor" className="prose-em text-white w-full">
+          <div id="editor" className="prose-lg  text-white w-full">
           <Editor data={data} onChange={setData} editorBlock="editorjs-container" />
         </div>
         </div>

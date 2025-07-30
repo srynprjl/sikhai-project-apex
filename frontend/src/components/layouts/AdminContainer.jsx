@@ -6,9 +6,9 @@ export default function AdminContainer(props) {
         <div className=" rounded-md w-full flex justify-between text-white">
       <div className="flex gap-8 items-center">
         <div className="text-2xl">{props.id}</div>
-        <div className="text-white font-black text-2xl">{props.title}</div>
+        <div className="text-white font-black text-[min(24vw, 32vw)] ">{props.title}</div>
       </div>
-      <div className="rounded-md flex gap-2">
+      <div className="flex gap-2">
 
         { props.tutor && <button
           className="hover:bg-accent font-black p-2 text-white w-20 flex gap-1 items-center justify-center"

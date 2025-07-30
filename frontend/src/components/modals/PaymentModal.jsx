@@ -70,7 +70,7 @@ export default function PaymentModal(props){
   }
 
     return(
-    <Modal isOpen={props.modalOpen} className="absolute top-1/2 left-1/2 right-auto bottom-auto bg-dark-secondary w-1/2 text-white p-16 flex flex-col gap-16" style={customStyles}> 
+    <Modal isOpen={props.modalOpen} className="absolute top-1/2 left-1/2 right-auto bottom-auto bg-dark-secondary md:w-1/2 text-white p-16 flex flex-col gap-16" style={customStyles}> 
   <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center">

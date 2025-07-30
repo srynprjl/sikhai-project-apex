@@ -3,15 +3,12 @@ import EditorJS from '@editorjs/editorjs'
 import { EDITOR_JS_TOOLS } from './Tools'
 
 const Editor = ({data, onChange, editorBlock, isPublic, initialBlockLimit, hasPaid}) => {
-    const ref = useRef()
-
+        const ref = useRef()
     useEffect(() => {
         if (!ref.current) {
             let initialData = data;
             if(!hasPaid){
                 if (initialBlockLimit && data && Array.isArray(data.blocks)) {
-                // If initialBlockLimit is provided and valid,
-                // create new data object with a sliced blocks array
                 initialData = {
                     ...data,
                     blocks: data.blocks.slice(0, initialBlockLimit)

@@ -105,7 +105,7 @@ export default function UserHub({earnings}){
                     
                     <div className="flex flex-col gap-5">
                         <div className="text-2xl">Actions</div>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-3 gap-4 max-md:grid-cols-2 max-sm:grid-cols-1">
                             <DashboardBox count={todoCount} link="/todos">My Todo</DashboardBox>
                             <DashboardBox count={noteCount} link="/notes">My Notes</DashboardBox>
                             <DashboardBox count={boughtNoteCount} link="/notes">Bought Notes</DashboardBox>
@@ -119,7 +119,7 @@ export default function UserHub({earnings}){
                             <div className="text-2xl">My Enrolled Classes</div>
                             
                         </div>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-3 gap-4 max-md:grid-cols-2 max-sm:grid-cols-1">
                             {classesList}
                         </div>
                     </div>

@@ -94,7 +94,7 @@ export default function Register() {
 
   return (
     <div className="flex">
-      <Container id="login-left" className="bg-dark-tertiary">
+            <Container id="login-left" className="bg-dark-tertiary  w-full">
           <Form className="gap-10" onSubmit={page == 2 ? handleSubmit : ""}>
             <CardHeader id="login-title">
               <CardTitle id="login">SIKHAI</CardTitle>
@@ -186,7 +186,7 @@ export default function Register() {
       </Container>
             <Container
         id="login-right"
-        className="bg-dark-primary flex-col justify-between items-center"
+        className="bg-dark-primary flex-col justify-between items-center max-md:hidden"
       >
         <div className="text-4xl font-black font-logo text-white">SIKHAI</div>
           <img src={RegisterArt} alt="" className="w-4/5" />

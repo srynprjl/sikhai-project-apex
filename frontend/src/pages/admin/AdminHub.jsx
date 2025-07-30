@@ -79,7 +79,6 @@ export default function AdminHub(){
 
         async function getDailyPayments(){
             const {data} = await api.get("/api/payments/daily/"); 
-            // console.log(data)
             const labels = data.map(item => item.date); // Dates for X-axis
             const amounts = data.map(item => parseFloat(item.total_amount)); 
             setChartData({
@@ -100,7 +99,6 @@ export default function AdminHub(){
         getAllApplications()
         getAllUserCount()
         getAllNoteCount()
-        // getAllReportCount()
         getAllFeedbackCount()
         getAllTransactionsCount()
         getDailyPayments()
@@ -140,7 +138,7 @@ export default function AdminHub(){
                 <div className="p-8">
                     <div className="flex flex-col gap-5">
                         <div className="text-2xl">Actions</div>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-3 gap-4 max-md:grid-cols-2 max-sm:grid-cols-1">
                             <DashboardBox count={applicationCount} link="/admin/tutors">Tutor Applications</DashboardBox>
                             <DashboardBox count={userCount} link="/admin/users">Users</DashboardBox>
                             <DashboardBox count={noteCount} link="/admin/notes"> Notes</DashboardBox>

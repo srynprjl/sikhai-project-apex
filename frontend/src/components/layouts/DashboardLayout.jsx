@@ -5,7 +5,7 @@ export default function DashboardLayout(props){
     const side = useMemo(() => <Sidebar />, [])
     return(
         <ProtectedRoute>
-        <div className="flex flex-col ">
+        <div className="flex flex-col">
                 {side}
                 <div className="w-full h-full text-white font-sans bg-dark-primary">
                     {props.children}

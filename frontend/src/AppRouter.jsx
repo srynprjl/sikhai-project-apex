@@ -61,6 +61,9 @@ import ClassroomBookedList from "./pages/tutor_booking/ClassroomBookedList";
 import { useEffect, useState } from "react";
 import api from "./api";
 import Dashboard from "./pages/home/Dashboard";
+import PrivacyPolicy from "./pages/landing_page/policy";
+// import TOS from "./pages/landing_page/TOS";
+
 
 
 const AppRouter = () => {
@@ -127,6 +130,9 @@ const AppRouter = () => {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="profiles" element={<UserProfile />} />
           <Route path="payment" element={<PaymentsStatus />} />
+          <Route path="privacy" element={<PrivacyPolicy />} />
+          {/* <Route path="tos" element={<TOS />} /> */}
+
         </Route>
 
         {/* <Route path="/report">
