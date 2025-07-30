@@ -31,7 +31,10 @@ export default function ManageUsers() {
     } catch {
       console.error("Failed getting data");
     }
+    
   }, []);
+
+
 
   function updateUser(id) {
     navigate(`/admin/users/update/${id}`);
@@ -43,7 +46,7 @@ export default function ManageUsers() {
   }
 
   const usersList = users.map((data, index) => {
-    return data.username.includes(search) ? (
+    return data.username.toLowerCase().includes(search.toLowerCase()) && (
       <AdminContainer
         id={index}
         key={data.id}
@@ -51,8 +54,12 @@ export default function ManageUsers() {
         updateSrc={() => updateUser(data.id)}
         deleteSrc={() => deleteUser(data.id)}
       />
-    ) : null;
+    ) ;
   });
+
+  useEffect(() => {
+    setCount(usersList.filter((k) => k).length);
+  }, [usersList]);
 
   return (
     <>

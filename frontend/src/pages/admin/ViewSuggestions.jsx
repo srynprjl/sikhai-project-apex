@@ -8,6 +8,7 @@ import DeleteModal from "../../components/modals/DeleteModal";
 
 export default function ViewSuggestions() {
     const [count, setCount] = useState(0)
+    const [search, setSearch] = useState("");
     const [modalOpen, setModalOpen] = useState(false);
     const [deleteId, setDeleteId] = useState(null)
     const [deleteTitle, setDeleteTitle] = useState(null)
@@ -55,14 +56,20 @@ async function handleDelete(id){
   navigate(0)
 }
 
-  const feedbackLists = feedbacks.map((data, index) => {
-    return <AdminContainer key={data.id} id={data.id} title={data.name} updateSrc={() => updateFeedbacks(data.id)} deleteSrc={() => openModal(data.id, data.name)}></AdminContainer>
+  const feedbackLists = feedbacks.map((data) => {
+    return data.name.toLowerCase().includes(search.toLowerCase()) && <AdminContainer key={data.id} id={data.id} title={data.name} updateSrc={() => updateFeedbacks(data.id)} deleteSrc={() => openModal(data.id, data.name)}           ></AdminContainer>
   })
+
+    useEffect(() => {
+    setCount(feedbackLists.filter((k) => k).length);
+  }, [feedbackLists]);
 
   return (
     <>
       <DashboardLayout>
-        <AdminView firstContainer searchVisible titleVisible title="feedbacks" count={count}>
+        <AdminView firstContainer searchVisible titleVisible title="feedbacks" count={count} onChange={(e) => {
+            setSearch(e.target.value);
+          }}>
           {feedbackLists}
         </AdminView>
         <DeleteModal modalOpen={modalOpen} deleteFunc={()=>handleDelete(deleteId)} cancelFunc={closeModal} title={deleteTitle} />

@@ -17,6 +17,12 @@ export default function Whiteboard() {
   const [appState, setAppState] = useState({});
   const [files, setFiles] = useState({});
   const [localUsage, setLocalUsage] = useState(false);
+  const [initialExcalidrawData, setInitialExcalidrawData] = useState({
+    elements: [],
+    appState: { theme: "dark" },
+    files: {},
+  });
+
 
   useEffect(() => {
     const fetchBoard = async () => {
@@ -25,6 +31,16 @@ export default function Whiteboard() {
         const loadedElements = data.elements || [];
         const loadedAppState = data.app_state || {};
         const loadedFiles = data.files || {};
+
+        setInitialExcalidrawData({
+          elements: loadedElements,
+          appState: {
+            ...loadedAppState,
+            theme: "dark" 
+          },
+          files: loadedFiles,
+        });
+
         setElements(loadedElements);
         setAppState(loadedAppState);
         setFiles(loadedFiles);
@@ -34,34 +50,35 @@ export default function Whiteboard() {
         const savedData = localStorage.getItem("sikhaiWhiteboardData");
         if (savedData) {
           const { elements, appState, files } = JSON.parse(savedData);
-          setElements(elements || []);
-          setAppState(appState || {});
-          setFiles(files || {});
+          const loadedElements = elements || [];
+          const loadedAppState = appState || {};
+          const loadedFiles = files || {};
+          setInitialExcalidrawData({
+            elements: loadedElements,
+            appState: {
+              ...loadedAppState,
+              theme: "dark"
+            },
+            files: loadedFiles,
+          });
+
+          setElements(loadedElements);
+          setAppState(loadedAppState);
+          setFiles(loadedFiles);
           setDataLoaded(true);
           setLocalUsage(true);
+        } else {
+            setInitialExcalidrawData(prev => ({
+                ...prev,
+                appState: { ...prev.appState, theme: "dark" }
+            }));
+            setDataLoaded(true);
         }
       }
     };
 
     fetchBoard();
   }, []);
-
-
-
-  useEffect(() => {
-    if (dataLoaded && excalidrawAPI) {
-      excalidrawAPI.updateScene({
-        elements,
-        appState: {
-          ...appState,
-          // viewBackgroundColor: "#18181a",
-          theme: "dark"          
-        },
-
-        files,
-      });
-    }
-  }, [dataLoaded, excalidrawAPI]);
 
   const handleExcalidrawChange = useCallback(
     async (updatedElements, updatedAppState, updatedFiles) => {
@@ -70,11 +87,9 @@ export default function Whiteboard() {
         elements: updatedElements,
         app_state: {
           ...updatedAppState,
-          // viewBackgroundColor: "#18181a",\
           theme: "dark",
           collaborators: [],
         },
-        
         files: updatedFiles || {},
       };
 
@@ -92,7 +107,7 @@ export default function Whiteboard() {
       setAppState(updatedAppState);
       setFiles(updatedFiles);
     },
-    []
+    [localUsage] 
   );
 
   const handleExport = async (type) => {
@@ -106,7 +121,7 @@ export default function Whiteboard() {
         mimeType: type === "svg" ? "image/svg+xml" : "image/png",
         quality: 1,
         exportPadding: 24,
-        darkmode: appState.theme === "dark",
+        darkmode: appState.theme === "dark", 
       });
 
       const url = URL.createObjectURL(blob);
@@ -124,30 +139,31 @@ export default function Whiteboard() {
 
   return (
     <DashboardLayout>
-          <div className="h-[89vh] w-full custom-styles">
-      <Excalidraw
-        ref={excalidrawRef}
-        onChange={handleExcalidrawChange}
-        excalidrawAPI={setExcalidrawAPI}
-      >
-        <WelcomeScreen>
-          <WelcomeScreen.Center>
-            <WelcomeScreen.Center.Heading>
-              Welcome to Sikhai's Whiteboard
-            </WelcomeScreen.Center.Heading>
-          </WelcomeScreen.Center>
-        </WelcomeScreen>
+      <div className="h-[89vh] w-full custom-styles">
+        <Excalidraw
+          ref={excalidrawRef}
+          onChange={handleExcalidrawChange}
+          excalidrawAPI={setExcalidrawAPI}
+          initialData={initialExcalidrawData}
+        >
+          <WelcomeScreen>
+            <WelcomeScreen.Center>
+              <WelcomeScreen.Center.Heading>
+                Welcome to Sikhai's Whiteboard
+              </WelcomeScreen.Center.Heading>
+            </WelcomeScreen.Center>
+          </WelcomeScreen>
 
-        <MainMenu>
-          <MainMenu.Item onSelect={() => handleExport("png")}>
-            Export as PNG
-          </MainMenu.Item>
-          <MainMenu.Item onSelect={() => handleExport("svg")}>
-            Export as SVG
-          </MainMenu.Item>
-        </MainMenu>
-      </Excalidraw>
-    </div>
+          <MainMenu>
+            <MainMenu.Item onSelect={() => handleExport("png")}>
+              Export as PNG
+            </MainMenu.Item>
+            <MainMenu.Item onSelect={() => handleExport("svg")}>
+              Export as SVG
+            </MainMenu.Item>
+          </MainMenu>
+        </Excalidraw>
+      </div>
     </DashboardLayout>
   );
 }

@@ -10,11 +10,12 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 export default function NoteView() {
 const [count, setCount] = useState(0);
 const [notes, setNotes] = useState([]);
+const [concat, setConcat] = useState([]);
 const [modalOpen, setModalOpen] = useState(false);
 const [deleteId, setDeleteId] = useState(null)
 const [deleteTitle, setDeleteTitle] = useState(null)
-  const [paidNotes, setPaidNotes] = useState([]);
-  const [search, setSearch] = useState("");
+const [paidNotes, setPaidNotes] = useState([]);
+const [search, setSearch] = useState("");
 const navigate = useNavigate()
 
     useEffect(() => {
@@ -23,10 +24,11 @@ const navigate = useNavigate()
             setNotes(data)
         }
 
-            async function fetchBoughtNotes(){
-      const {data} = await api.get("/api/get-purchased-notes/")
-      setPaidNotes(data)
-    }
+        async function fetchBoughtNotes(){
+          const res = await api.get("/api/get-purchased-notes/")
+          console.log(res.data)
+          setPaidNotes(res.data)
+        }
 
         fetchBoughtNotes();
         fetchData()
@@ -58,9 +60,7 @@ async function handleDelete(id){
   navigate(0)
 }
 
-  const notesList = notes.map((data, index)=> {
-    console.log(data.content.blocks.slice(0,2))
-    console.log(data.id)
+  const notesList = notes.map((data)=> {
     data.content = {
       ...data.content,
     blocks: data.content.blocks.slice(0, 1) 
@@ -71,16 +71,23 @@ async function handleDelete(id){
   })
 
     const boughtList = paidNotes.map((data) => {
-    return <NoteContainer key={data.id} id={data.note} name={data.note_title} onClick={() => navigatePage(data.note)}>
+      console.log(data)
+    return <NoteContainer key={data.id} id={data.note.id} name={data.note.title} onClick={() => navigatePage(data.note.id)} delete={() => alert("Cannot delete purchased notes")}>
       <p>Purchased</p>
     </NoteContainer>
   })
 
+  let concatList = notesList.concat(boughtList)
+
+  useEffect(()=> {
+    setCount(concatList.filter((d) => d.props.name.includes(search)).length)
+  }, [search, concatList])
+
   return (
     <DashboardLayout>
     <DashboardView searchFunc={(e) => setSearch(e.target.value)} searchVisible titleVisible firstContainer title="notes" count={count} btnName={"Note"} btnSrc={"/notes/create"} btnVisible={true}>
-      {notesList.length == 0 && boughtList.length == 0 ? <div>No notes Available. try creating one</div>: 
-      <>{boughtList}{notesList}</>
+      {count == 0 ? <div>No notes Available. try creating one</div>: 
+      <>{concatList.filter((d) => d.props.name.includes(search))}</>
       }
     </DashboardView>
 

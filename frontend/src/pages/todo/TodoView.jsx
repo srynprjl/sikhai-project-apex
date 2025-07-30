@@ -106,6 +106,8 @@ export default function TodoView() {
     setModalTaskOpen(false)
   }
 
+
+
     const todosList = todos.map((data) => {
     if (data.title.toLowerCase().includes(search.toLowerCase())) {
       return (
@@ -135,10 +137,16 @@ export default function TodoView() {
     }
   });
   
+
+      useEffect(() => {
+    setCount(todosList.filter((k) => k).length);
+  }, [todosList]);
+
   return (
     <DashboardLayout>
       <DashboardView
     searchVisible
+    searchFunc={(e) => setSearch(e.target.value)}
     titleVisible
       firstContainer
       btnName="Todo"

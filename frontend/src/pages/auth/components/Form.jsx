@@ -32,7 +32,7 @@ function Input(props) {
         <input
           type={props.type}
           placeholder={props.text}
-          className={"bg-dark-input p-2.5 text-sm text-white w-full outline-0 border-0 "}
+          className={"bg-dark-input p-2.5 text-sm text-black w-full outline-0 border-0 "}
           id={props.id}
           name={props.id}
           onChange={props.onChange}
@@ -51,7 +51,7 @@ function TextArea(props) {
         {props.children}
         <textarea
           placeholder={props.text}
-          className={"bg-dark-input p-2.5 text-sm text-white w-full outline-0 border-0 h-64"}
+          className={"bg-dark-input p-2.5 text-sm text-black w-full outline-0 border-0 h-64"}
           id={props.id}
           name={props.id}
           onChange={props.onChange}
@@ -85,7 +85,7 @@ function Button(props) {
       <div id={props.id + "-button"} className={props.divClass}>
         <button
           className={
-            "p-3 bg-accent w-full text-white font-semibold " +
+            "p-3 bg-accent w-full text-black font-semibold " +
             props.className
           }
           onClick={props.onClick}
@@ -100,7 +100,7 @@ function Button(props) {
 function Select(props) {
   return (
     <>
-      <select id={props.id} name={props.name} className={"bg-dark-input p-2.5 text-sm text-white w-full outline-0 border-0 "} disabled={props.disabled} value={props.value} onChange={props.onChange} >
+      <select id={props.id} name={props.name} className={"bg-dark-input p-2.5 text-sm text-black w-full outline-0 border-0 "} disabled={props.disabled} value={props.value} onChange={props.onChange} >
         {props.children}
       </select>
     </>
@@ -119,7 +119,7 @@ function FormLink(props) {
   return (
     <>
       <Link to={props.link}>
-        <span className="text-gray-400 text-sm hover:cursor-pointer">
+        <span className="text-gray-200 text-sm hover:cursor-pointer">
           {props.children}
         </span>
       </Link>

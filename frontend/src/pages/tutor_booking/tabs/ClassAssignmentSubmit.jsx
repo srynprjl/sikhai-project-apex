@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import api from '../../../api';
 import DashboardLayout from '../../../components/layouts/DashboardLayout';
+import { Download } from 'lucide-react';
 export default function ClassAssignmentSubmit({ classroomId, assignmentId }){
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,7 +11,6 @@ export default function ClassAssignmentSubmit({ classroomId, assignmentId }){
     const fetchSubmissions = async () => {
       try {
         const response = await api.get(`/api/classrooms/${classroomId}/assignments/${assignmentId}/submissions/`);
-        console.log(response.data)
         setSubmissions(response.data);
       } catch (err) {
         console.error('Failed to fetch submissions:', err);
@@ -45,7 +45,7 @@ export default function ClassAssignmentSubmit({ classroomId, assignmentId }){
     }
   };
 
-  if (loading) return <p className="text-gray-500">Loading submissions...</p>;
+  if (loading) return <p className="text-gray-300">Loading submissions...</p>;
 
   return (
     <div className="mt-4 p-4 rounded-md bg-dark-tertiary">
@@ -56,29 +56,19 @@ export default function ClassAssignmentSubmit({ classroomId, assignmentId }){
         <div className="space-y-4">
           {submissions.map((submission) => (
             <div key={submission.id} className="p-3 bg-dark-secondary">
-              <p className="font-medium text-white">Student: {submission.student}</p>
+              <p className="font-medium text-white">Student: {submission.username}</p>
               <p className="text-gray-200 text-sm">
                 Submitted: {new Date(submission.submitted_at).toLocaleString()}
               </p>
-              {submission.submission_file && (
+              {console.log(submission.submitted_file)}
+
+              {submission.submitted_file && (
                 <a
-                  href={submission.submission_file}
+                  href={"http://127.0.0.1:8000" + submission.submitted_file}
                   target="_blank"
-                  rel="noopener noreferrer"
                   className="text-white hover:underline text-sm flex items-center mb-3 gap-1"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 mr-1"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.414L14.586 5A2 2 0 0115 6.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
+                  <Download />
                   Download Submission
                 </a>
               )}

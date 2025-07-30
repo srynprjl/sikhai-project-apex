@@ -3,24 +3,24 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 export default function AdminView(props) {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(props.count);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const [title, setTitle] = useState(props.title);
 
   useEffect(() => {
     setCount(props.count);
-  }, [props.count]);
+  }, [count]);
 
   return (
     <div
       className={(props.firstContainer ? "p-8 " : "") + "flex flex-col gap-3"}
     >
-{props.searchVisible ? <input type="search"  placeholder="Search..."  className="text-lg font-sans outline-0 bg-dark-secondary p-2"/>
+{props.searchVisible ? <input type="search"  placeholder="Search..."  className="text-lg font-sans outline-0 bg-dark-secondary p-2" onChange={props.onChange}/>
         : null}
       <div className="flex justify-between">
         {props.titleVisible ? <div className="flex gap-2 items-center">
-          <span className="text-white text-4xl font-sans">{count}</span>
+          <span className="text-white text-4xl font-sans">{props.count}</span>
           <h1 className="font-sans text-lg">matching {title} found</h1>
           
         </div> : null}
@@ -34,7 +34,7 @@ export default function AdminView(props) {
           </button> : null}
         </div>
       </div>
-      <div className="grid grid-cols-1 w-full gap-6">{props.children}</div>
+      <div className="grid grid-cols-1 w-full gap-6 ">{props.children}</div>
     </div>
   );
 }

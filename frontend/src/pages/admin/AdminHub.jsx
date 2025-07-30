@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router"
 import { useEffect , useState} from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
-import AdminBox from "../../components/layouts/AdminBox"
+import DashboardBox from "../../components/layouts/DashboardBox"
 import api from "../../api";
 import { Bar } from 'react-chartjs-2';
 import {
@@ -73,14 +73,12 @@ export default function AdminHub(){
             setFeedbackCount(res.data.length)         
         }
         async function getAllTransactionsCount(){
-            const res = await api.get("/api/payments/total/"); 
-            setTranscationsCount(res.data.total_amount_paid) 
-            // console.log(res)           
+            const {data} = await api.get("/api/payments/total/"); 
+            setTranscationsCount(data.total_amount_paid)         
         }
 
         async function getDailyPayments(){
             const {data} = await api.get("/api/payments/daily/"); 
-            // console.log(data)
             const labels = data.map(item => item.date); // Dates for X-axis
             const amounts = data.map(item => parseFloat(item.total_amount)); 
             setChartData({
@@ -101,7 +99,6 @@ export default function AdminHub(){
         getAllApplications()
         getAllUserCount()
         getAllNoteCount()
-        // getAllReportCount()
         getAllFeedbackCount()
         getAllTransactionsCount()
         getDailyPayments()
@@ -138,27 +135,24 @@ export default function AdminHub(){
 
     const classes = "h-48 bg-dark-primary rounded-md flex justify-center items-center font-black text-2xl text-black hover:border-2 hover:border-black"
     return(<>
-        <DashboardLayout>
-                <div className="p-8 flex gap-4">
+                <div className="p-8">
                     <div className="flex flex-col gap-5">
-                    <div className="text-2xl">Actions</div>
-                    <div className="grid grid-cols-3 gap-4">
-                        <AdminBox count={applicationCount} link="/admin/tutors">Tutor Applications</AdminBox>
-                        <AdminBox count={userCount} link="/admin/users">Users</AdminBox>
-                        <AdminBox count={noteCount} link="/admin/notes"> Notes</AdminBox>
-                        <AdminBox count={feedbackCount} link="/admin/feedbacks">Feedbacks</AdminBox>
-                        <AdminBox count={"Rs. " + transcationsCount} >Transactions</AdminBox>
-                    </div>
+                        <div className="text-2xl">Actions</div>
+                        <div className="grid grid-cols-3 gap-4 max-md:grid-cols-2 max-sm:grid-cols-1">
+                            <DashboardBox count={applicationCount} link="/admin/tutors">Tutor Applications</DashboardBox>
+                            <DashboardBox count={userCount} link="/admin/users">Users</DashboardBox>
+                            <DashboardBox count={noteCount} link="/admin/notes"> Notes</DashboardBox>
+                            <DashboardBox count={feedbackCount} link="/admin/feedbacks">Feedbacks</DashboardBox>
+                            <DashboardBox count={"Rs." + transcationsCount} >Transactions</DashboardBox>
+                        </div>
 
-                    <div className="flex justify-between">
-                        <div className="text-2xl">Graph</div>
-                    </div>
-                    <div className="w-full h-full bg-dark-secondary ">
-                        <Bar data={chartData} options={options} />
+                        <div className="flex justify-between">
+                            <div className="text-2xl">Graph</div>
+                        </div>
+                        <div className="w-full h-full bg-dark-secondary ">
+                            <Bar data={chartData} options={options} />
+                        </div>
                     </div>
                 </div>
-                
-                </div>
-        </DashboardLayout>
     </>)
 }

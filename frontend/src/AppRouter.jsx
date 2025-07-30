@@ -60,6 +60,10 @@ import CreateUpdateSessionForm from "./pages/tutor_booking/CreateSession";
 import ClassroomBookedList from "./pages/tutor_booking/ClassroomBookedList";
 import { useEffect, useState } from "react";
 import api from "./api";
+import Dashboard from "./pages/home/Dashboard";
+import PrivacyPolicy from "./pages/landing_page/policy";
+// import TOS from "./pages/landing_page/TOS";
+
 
 
 const AppRouter = () => {
@@ -104,7 +108,7 @@ const AppRouter = () => {
 
         { /* admin */}
         <Route path="/admin">
-          <Route index element={<AdminHub isAdmin={isAdmin}/>} />
+          {/* <Route index element={<AdminHub isAdmin={isAdmin}/>} /> */}
           <Route path="tutors" element={<AcceptTutor isAdmin={isTutor}/>} />
           <Route path="users" element={<ManageUsers isAdmin={isAdmin}/>} />
           <Route path="notes" element={<ManageNotes isAdmin={isAdmin}/>} />
@@ -123,9 +127,12 @@ const AppRouter = () => {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="logout" element={<LogOut />} />
-          <Route path="dashboard" element={<DashboardLayout />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="profiles" element={<UserProfile />} />
           <Route path="payment" element={<PaymentsStatus />} />
+          <Route path="privacy" element={<PrivacyPolicy />} />
+          {/* <Route path="tos" element={<TOS />} /> */}
+
         </Route>
 
         {/* <Route path="/report">

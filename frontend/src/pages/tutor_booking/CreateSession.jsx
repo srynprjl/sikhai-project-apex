@@ -36,7 +36,7 @@ const SessionFormPage = () => {
 
             <button
             type="submit"
-            className="bg-accent text-white px-6 py-2  disabled:opacity-50 transition duration-300"
+            className="bg-accent text-black px-6 py-2  disabled:opacity-50 transition duration-300"
             >
           Create Session
         </button>

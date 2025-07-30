@@ -53,7 +53,7 @@ export default function Login() {
     
     return (
         <div className="flex">
-            <Container id="login-left" className="bg-dark-tertiary">
+            <Container id="login-left" className="bg-dark-tertiary  w-full">
                 
                     <Form className="gap-12" onSubmit={formSubmit}>
                         <CardHeader id="login-title">
@@ -81,7 +81,7 @@ export default function Login() {
             </Container>
 
 
-            <Container id="login-right" className="bg-dark-primary flex-col justify-between ">
+            <Container id="login-right" className="bg-dark-primary flex-col justify-between max-md:hidden">
                 <div className='text-5xl text-white font-logo'>SIKHAI</div>
                 <div><img src={LoginArt} alt="" /></div>
                 <div className='font-semibold text-white'>&copy; sysnefo {new Date().getFullYear()}</div>

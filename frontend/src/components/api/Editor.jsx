@@ -2,14 +2,22 @@ import { memo, useEffect, useRef} from 'react'
 import EditorJS from '@editorjs/editorjs'
 import { EDITOR_JS_TOOLS } from './Tools'
 
-const Editor = ({data, onChange, editorBlock, isPublic}) => {
-    const ref = useRef()
-
+const Editor = ({data, onChange, editorBlock, isPublic, initialBlockLimit, hasPaid}) => {
+        const ref = useRef()
     useEffect(() => {
         if (!ref.current) {
+            let initialData = data;
+            if(!hasPaid){
+                if (initialBlockLimit && data && Array.isArray(data.blocks)) {
+                initialData = {
+                    ...data,
+                    blocks: data.blocks.slice(0, initialBlockLimit)
+                };
+            }
+            }
             const editor = new EditorJS({
                 holder: editorBlock,
-                data: data,
+                data: initialData,
                 tools: EDITOR_JS_TOOLS,
                 async onChange(api, event) {
                     const data = await api.saver.save()

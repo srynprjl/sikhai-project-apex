@@ -27,6 +27,7 @@ export default function CreateUpdateUserForm(props) {
   const [editProfile, setEditProfile] = useState(
     props.mode === "create" ? true : false,
   );
+  const [select, setSelect] = useState()
 
   useEffect(() => {
     try {
@@ -39,6 +40,7 @@ export default function CreateUpdateUserForm(props) {
         setEmail(data.email);
         setIsTutor(data.is_tutor);
         setIsAdmin(data.is_superuser);
+        setSelect(data.is_superuser ? "admin" : (data.is_tutor ? "tutor" : "user")) 
       }
 
       fetchData();
@@ -56,7 +58,9 @@ export default function CreateUpdateUserForm(props) {
     await api.delete(props.apiUrl);
     navigate("/logout");
   }
-
+  function handleRoleChange(e){
+    setSelect(e.target.value)
+  }
   async function handleSubmit(e) {
     e.preventDefault();
     try {
@@ -66,14 +70,15 @@ export default function CreateUpdateUserForm(props) {
         username: username,
         first_name: first_name,
         last_name: last_name,
-        is_tutor: false,
+        is_tutor: (select=="tutor"),
+        is_superuser: (select=="admin")
       };
 
       if (password) {
         updatedData = { ...updatedData, password: password };
       }
 
-      console.log(updatedData);
+
 
       const response =
         props.mode === "create"
@@ -87,15 +92,17 @@ export default function CreateUpdateUserForm(props) {
   }
 
   return (
+    
     <>
-      <div className="flex justify-between items-center px-24 py-4">
+      <div className="flex justify-between items-center px-8 py-4 max-md:flex-col max-md:items-start ">
         <h1 className="text-3xl font-black">
           {props.mode == "update"
             ? `User Profile of ${username}`
             : "Create User"}
         </h1>
-        {props.mode === "update" ? (
-          <div className="flex gap-2">
+        <div className="flex gap-1">
+          {props.mode === "update" ? (
+          <div className="flex gap-1">
             <Button
               name="Delete"
               id="delete"
@@ -103,23 +110,26 @@ export default function CreateUpdateUserForm(props) {
               className="bg-red-400"
             />
             <Button
-              name={edit ? "Edit Profile" : "Cancel"}
+              name={!editProfile ? "Edit Profile" : "Cancel"}
               id="edit"
               onClick={edit}
             />
+
           </div>
         ) : null}
-        {editProfile ? (
+        {editProfile && (
           <Button
-            name={props.mode === "create" ? "Create" : "Update"}
+            name={props.mode == "create" ? "Create" : "Update"}
             id="update"
             onClick={handleSubmit}
           />
-        ) : null}
+        )}
+        </div>
+        
       </div>
       <div className="flex w-full">
         <div className="w-full">
-          <Form className="gap-10 px-24 py-0 max-w-full">
+          <Form className="gap-10 px-8 py-0 max-w-full">
             <div className="flex justify-between"></div>
             <FormControl className="gap-3">
               <FormGroup className="gap-3 justify-start ">
@@ -199,15 +209,14 @@ export default function CreateUpdateUserForm(props) {
                   </>
                 ) : null}
               </FormGroup>
-              <FormLabel className="font-semibold">Roles</FormLabel>
-              <Select
-                disabled={!editProfile}
-                defaultValue={isAdmin ? "admin" : isTutor ? "tutor" : "user"}
-              >
-                <Option name="User" value="user" />
-                <Option name="Tutor" value="tutor" />
-                <Option name="Admin" value="admin" />
-              </Select>
+              
+             {props.admin && <>
+             <FormLabel className="font-semibold">Roles</FormLabel><select className="bg-dark-input p-2.5 text-sm text-white w-full outline-0 border-0" value={select} onChange={handleRoleChange} disabled={!editProfile}>
+              <option value={"user"}>User</option>
+              <option value={"tutor"}>Tutor</option>
+              <option value={"admin"}>Admin</option>
+             </select>
+             </> }
             </FormControl>
           </Form>
         </div>

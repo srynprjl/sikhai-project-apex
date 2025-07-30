@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 export default function PaymentModal(props){
 
   let price = props.price ? props.price : 0.01;
+
   let platform = 0.01 * price;
   let subtotal = price + platform;
   let vat = 0.13 * subtotal;
@@ -40,28 +41,15 @@ export default function PaymentModal(props){
       return_url: "http://localhost:5173/payment",
       website_url: "http://localhost:5173/",
       amount: parseInt(total * 100),
-      purchase_order_id: "test12",
-      purchase_order_name: "test",
+      purchase_order_id: `${props.type}-${props.id}`,
+      purchase_order_name:`${props.type}-${props.title}`,
       customer_info: {
         name: `${user.username}`,
         email: `${user.email}`,
       },
-      // amount_breakdown: [
-      //   {
-      //     label: "Mark Price",
-      //     amount: parseInt(price * 100),
-      //   },
-      //   {
-      //     label: "Platform Charges",
-      //     amount: parseInt(platform * 100),
-      //   },
-      //   {
-      //     label: "VAT",
-      //     amount: parseInt(vat * 100),
-      //   },
-      // ],
       product_details: [
         {
+          type: props.type,
           identity: props.id,
           name: `${props.title}`,
           total_price: parseInt(total * 100),
@@ -82,7 +70,7 @@ export default function PaymentModal(props){
   }
 
     return(
-    <Modal isOpen={props.modalOpen} className="absolute top-1/2 left-1/2 right-auto bottom-auto bg-dark-secondary w-1/2 text-white p-16 flex flex-col gap-16" style={customStyles}> 
+    <Modal isOpen={props.modalOpen} className="absolute top-1/2 left-1/2 right-auto bottom-auto bg-dark-secondary md:w-1/2 text-white p-16 flex flex-col gap-16" style={customStyles}> 
   <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center">
@@ -116,29 +104,11 @@ export default function PaymentModal(props){
           Choose your payment method:
           <div className="flex gap-4 w-full">
             <button
-              className="bg-green-500 px-8 py-4 w-full font-bold text-white rounded-xl"
-              disabled
-            >
-              eSewa
-            </button>
-            <button
               className="bg-purple-800 px-8 py-4 w-full font-bold text-white rounded-xl"
               onClick={khaltiPaymentIntialize}
             >
               Khalti
               
-            </button>
-            <button
-              className="bg-blue-500 px-8 py-4  w-full font-bold text-white rounded-xl"
-              disabled
-            >
-              Paypal
-            </button>
-            <button
-              className="bg-purple-500 px-8 py-4 w-full font-bold text-white rounded-xl"
-              disabled
-            >
-              Stripe
             </button>
           </div>
         </div>

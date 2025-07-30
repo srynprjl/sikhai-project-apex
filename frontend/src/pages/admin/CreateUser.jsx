@@ -20,7 +20,7 @@ export default function CreateUser() {
   return (
     <>
       <DashboardLayout>
-        <CreateUpdateUserForm mode="create" apiUrl={`/api/users/`} />
+        <CreateUpdateUserForm mode="create" apiUrl={`/api/users/`} admin={true}/>
       </DashboardLayout>
     </>
   );

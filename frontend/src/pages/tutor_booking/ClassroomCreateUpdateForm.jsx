@@ -64,13 +64,13 @@ export default function ClassroomCreateUpdateForm(){
       </h1>
         <button
           type="submit"
-          className="bg-accent text-white px-6 py-2  disabled:opacity-50 transition duration-300"
+          className="bg-accent text-black px-6 py-2  disabled:opacity-50 transition duration-300"
         >
         {id ? "Update Classroom " : "Create Classroom"}
         </button>
         </div>
         <div>
-          <label htmlFor="name" className="block  text-sm font-bold mb-2">
+          <label htmlFor="name" className="block text-sm font-bold mb-2">
             Classroom Name:
           </label>
           <input
@@ -78,7 +78,7 @@ export default function ClassroomCreateUpdateForm(){
             id="name"
             name="name"
             value={name}
-            className="shadow appearance-none bg-dark-secondary rounded w-full py-2 px-3  leading-tight outline-0 "
+            className="shadow appearance-none bg-dark-secondary w-full py-2 px-3  leading-tight outline-0 "
             onChange={(e) => {setName(e.target.value)}}
             required
           />
@@ -108,7 +108,7 @@ export default function ClassroomCreateUpdateForm(){
             step="0.01"
             min="0"
             value={price}
-            className="shadow appearance-none bg-dark-secondary rounded w-full py-2 px-3  leading-tight outline-0 " 
+            className="shadow appearance-none bg-dark-secondary w-full py-2 px-3  leading-tight outline-0 " 
             onChange={(e) => {setPrice(e.target.value)}}           
             required
           />

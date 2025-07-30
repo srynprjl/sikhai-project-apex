@@ -25,7 +25,6 @@ export default function NoteContainer(props) {
         <div className="">
           <div className=" flex items-center justify-between">
             <div className="flex gap-4">
-              {console.log(props.bought)}
               {props.isPublic && props.author != user && !props.bought ? <><CirclePoundSterling  onClick={() => props.handlePurchase(props.id, props.name, props.price)} /> 
                 रु {props.price != null ? props.price : "0.00"}</>: (props.bought  ? "Already Bought": null)}
             </div>
