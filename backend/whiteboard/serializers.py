@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from .models import SikhaiWhiteboard
+from .models import Whiteboard
 
-class SikhaiSerializer(serializers.ModelSerializer):
+class WhiteboardSerializer(serializers.ModelSerializer):
     class Meta:
-        model = SikhaiWhiteboard
-        fields = ['id', 'user', 'title', 'elements', 'app_state', 'created_at']
-        read_only_fields = ['user', 'created_at']
+        model = Whiteboard
+        fields = ['id', 'user', 'data', 'created_at', 'updated_at']
+        read_only_fields = ['user', 'created_at', 'updated_at'] 
