@@ -78,7 +78,7 @@ export default function CreateUpdateUserForm(props) {
         updatedData = { ...updatedData, password: password };
       }
 
-      console.log(updatedData);
+
 
       const response =
         props.mode === "create"
@@ -92,6 +92,7 @@ export default function CreateUpdateUserForm(props) {
   }
 
   return (
+    
     <>
       <div className="flex justify-between items-center px-8 py-4 max-md:flex-col max-md:items-start ">
         <h1 className="text-3xl font-black">
@@ -99,7 +100,8 @@ export default function CreateUpdateUserForm(props) {
             ? `User Profile of ${username}`
             : "Create User"}
         </h1>
-        {props.mode === "update" ? (
+        <div className="flex gap-1">
+          {props.mode === "update" ? (
           <div className="flex gap-1">
             <Button
               name="Delete"
@@ -112,15 +114,17 @@ export default function CreateUpdateUserForm(props) {
               id="edit"
               onClick={edit}
             />
-            {editProfile ? (
+
+          </div>
+        ) : null}
+        {editProfile && (
           <Button
-            name={props.mode === "create" ? "Create" : "Update"}
+            name={props.mode == "create" ? "Create" : "Update"}
             id="update"
             onClick={handleSubmit}
           />
-        ) : null}
-          </div>
-        ) : null}
+        )}
+        </div>
         
       </div>
       <div className="flex w-full">

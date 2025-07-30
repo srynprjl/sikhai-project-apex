@@ -38,7 +38,7 @@ const AssignmentFormPage = () => {
             <div className="p-8 shadow-md">
       <form onSubmit={handleSubmit} className="space-y-4 ">
         <div className='flex items-center justify-between  mb-6'>
-        <h1 className="text-3xl font-bold text-white">Create New Assignment</h1>
+        <h1 className="text-3xl font-bold text-black">Create New Assignment</h1>
         <button
           type="submit"
           className="bg-accent text-white px-6 py-2  disabled:opacity-50 transition duration-300"

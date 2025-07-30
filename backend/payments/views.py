@@ -151,7 +151,7 @@ class KhaltiPaymentVerificationView(views.APIView):
                 return Response({"detail": "Order already completed."}, status=status.HTTP_200_OK)
             khalti_lookup_api_url = "https://dev.khalti.com/api/v2/epayment/lookup/" # 
             headers = {
-                "Authorization": f"Key ${settings.KHALTI_SECRET_KEY}",
+                "Authorization": f"Key {settings.KHALTI_SECRET_KEY}",
                 "Content-Type": "application/json",
             }
             lookup_payload = {
